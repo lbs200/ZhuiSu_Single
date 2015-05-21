@@ -1,0 +1,62 @@
+﻿@model LinqModel.Organization
+@{
+    Layout = null;
+}
+<div id="contact" class="content-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="section-title"><a href="@ViewBag.urlEnt" target="_blank">@Model.Name</a></h1>
+            </div> <!-- /.col-md-12 -->
+        </div> <!-- /.row -->
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 bigger-text">
+                @Html.Raw(Model.Intro.Replace("src=\"/", "src=\"" + System.Configuration.ConfigurationManager.AppSettings["UrlImg"] + "/"))
+            </div>
+
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+</div>
+@{
+    if (ViewBag.prodID != 0)
+    {
+        <div id="complaint" class="content-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1 class="section-title">我要投诉</h1>
+                    </div> <!-- /.col-md-12 -->
+                </div> <!-- /.row -->
+                <div class="row">
+                    <form id="form1" action="/Home/Contact" method="post">
+                        <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3">
+                            <div class="row contact-form">
+
+                                <input type="hidden" id="ewmNum" name="ewmNum" value="@ViewBag.ewmNum" />
+                                <input type="hidden" id="Prod_ID" name="Prod_ID" value="@ViewBag.prodID" />
+                                <input type="hidden" id="Prod_Code" name="Prod_Code" value="@ViewBag.ewm" />
+                                <fieldset class="col-md-6 col-sm-6">
+                                    <input id="Complaint_Customer" name="Complaint_Customer" placeholder="真实姓名" required>
+                                </fieldset>
+                                <fieldset class="col-md-6 col-sm-6">
+                                    <input type="tel" name="Complaint_Tel" id="Complaint_Tel" placeholder="有效电话" required>
+                                </fieldset>
+                                <fieldset class="col-md-12">
+                                    <input name="E_mail" id="E_mail" placeholder="邮箱" required type="email">
+                                </fieldset>
+                                <fieldset class="col-md-12">
+                                    <textarea name="Content" id="Content" placeholder="留言" required></textarea>
+                                </fieldset>
+                                <fieldset class="col-md-12 text-right">
+                                    <input type="submit" name="send" value="投诉" id="submit" class="button">
+                                </fieldset>
+
+                            </div> <!-- /.contact-form -->
+                        </div> <!-- /.col-md-6 -->
+                    </form>
+
+                </div> <!-- /.row -->
+            </div> <!-- /.container -->
+        </div>
+    }
+}
