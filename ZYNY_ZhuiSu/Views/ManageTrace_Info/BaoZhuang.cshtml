@@ -1,0 +1,210 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<LinqModel.Org_BaoZhuang>
+@{
+    ViewBag.Title = "BaoZhuang";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<br />
+<form id="form1" action="/ManageTrace_Info/BaoZhuang" method="post">
+
+    <div class="control-group">
+        <label class="control-label">选择包装规格 ：</label>
+        <div class="controls">
+            <select class="medium m-wrap" tabindex="1" name="Org_BaoZhuang" id="Org_BaoZhuang" onchange="GetGuiGe(this.value)">
+                @{
+                    foreach (var m in Model)
+                    {
+                        <option value="@m.ID">@m.Name</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">包装规格数据 ：</label>
+        <div class="controls" id="Org_BaoZhuang_GuiGe">
+
+        </div>
+    </div>
+    <br />
+    请扫描外包装追溯二维码：
+    <br />
+    <div>
+        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/BaoZhuang?rdm=1')" value="拍码扫描" />
+    </div>
+    <input type="text" id="EWM_ParentNum" name="EWM_ParentNum" value="@ViewBag.wai" style="width:300px;" required onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />*
+    <br />
+    请扫描内包装追溯二维码：
+    <div class="control-group">
+        <label class="control-label">扫描方式</label>
+        <div class="controls">
+            <label class="radio">
+                @{
+                    if (string.IsNullOrEmpty(ViewBag.es) && string.IsNullOrEmpty(ViewBag.ee))
+                    {
+                        <input type="radio" name="sType" value="d" checked onclick="ClickSelect(1)" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="sType" value="d" onclick="ClickSelect(1)" />
+                    }
+                }
+                逐个扫描
+            </label>
+            <label class="radio">
+                @{
+                    if (string.IsNullOrEmpty(ViewBag.es) && string.IsNullOrEmpty(ViewBag.ee))
+                    {
+                        <input type="radio" name="sType" value="f" onclick="ClickSelect(2)" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="sType" value="f" checked onclick="ClickSelect(2)" />
+                    }
+                }
+                批量扫描
+            </label>
+        </div>
+    </div>
+    @*<div class="alert">
+        起始码和终止码暂只支持间隔在 @ViewBag.BaoZhuangCount 以内。
+    </div>*@
+    @{
+        if (string.IsNullOrEmpty(ViewBag.es) && string.IsNullOrEmpty(ViewBag.ee))
+        {
+            <div id="dange" style="margin:10px; display:normal;">
+                <div>
+                    <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/BaoZhuang?rdm=2')" value="拍码扫描" />已扫描个数 <span id="sCount">@ViewBag.sCount</span>
+                </div>
+                <textarea rows="10" cols="200" id="EWM_Num" name="EWM_Num" style="width:300px;" onkeyup="GetCount()" >@ViewBag.dg</textarea>
+            </div>
+        }
+        else
+        {
+            <div id="dange" style="margin:10px; display:none;">
+                <div>
+                    <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/BaoZhuang?rdm=2')" value="拍码扫描" />已扫描个数 <span id="sCount">@ViewBag.sCount</span>
+                </div>
+                <textarea rows="10" cols="200" id="EWM_Num" name="EWM_Num" style="width:300px;" onkeyup="GetCount()" >@ViewBag.dg</textarea>
+            </div>
+        }
+        <input type="hidden" id="EWM_Num_Hidden" name="EWM_Num_Hidden" value="@ViewBag.dgHidden">
+
+    }
+    @{
+        if (string.IsNullOrEmpty(ViewBag.es) && string.IsNullOrEmpty(ViewBag.ee))
+        {
+            <div id="fenduan" style="margin:10px; display:none;">
+                <div>
+                    起始码：
+                    <div>
+                        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/BaoZhuang?rdm=31')" value="拍码扫描" />
+                    </div>
+                    <input type="text" id="EWM_Start" name="EWM_Start" value="@ViewBag.es" style="width:300px;" onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />
+                </div>
+                <div>
+                    终止码：
+                    <div>
+                        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/BaoZhuang?rdm=32')" value="拍码扫描" />
+                    </div>
+                    <input type="text" id="EWM_End" name="EWM_End" value="@ViewBag.ee" style="width:300px;" onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="fenduan" style="margin:10px; display:;">
+                <div>
+                    起始码：
+                    <div>
+                        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/BaoZhuang?rdm=31')" value="拍码扫描" />
+                    </div>
+                    <input type="text" id="EWM_Start" name="EWM_Start" value="@ViewBag.es" style="width:300px;" onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />
+                </div>
+                <div>
+                    终止码：
+                    <div>
+                        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/BaoZhuang?rdm=32')" value="拍码扫描" />
+                    </div>
+                    <input type="text" id="EWM_End" name="EWM_End" value="@ViewBag.ee" style="width:300px;" onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />
+                </div>
+            </div>
+        }
+    }
+
+    <input type="button" id="btnSubmit" class="btn blue" value="确定" />
+    <a href="/ManageTrace_Info/BaoZhuang?clear=1" class="btn blue">数据清空重扫</a>
+</form>
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").click(function () {
+            ajaxResult("/ManageTrace_Info/Add", $("#form1").serialize());
+
+        });
+    });
+    function GetGuiGe(obj) {
+        if (obj != "") {
+            $.get("/ManageTrace_Info/GetGuiGe?bzID=" + obj + "&rnd = " + Math.random(), function (data, textStatus) {
+                $("#Org_BaoZhuang_GuiGe").empty();
+                document.getElementById("Org_BaoZhuang_GuiGe").innerHTML = data;
+            });
+        }
+        else {
+            $("#Org_BaoZhuang_GuiGe").empty();
+        }
+    }
+    GetGuiGe(document.getElementById("Org_BaoZhuang").value);
+
+    function ClickSelect(obj) {
+        if (obj == 1) {
+            document.getElementById("dange").style.display = "";
+            document.getElementById("fenduan").style.display = "none";
+        }
+        else {
+            document.getElementById("dange").style.display = "none";
+            document.getElementById("fenduan").style.display = "";
+        }
+    }
+
+    function ReplaceStr(obj) {
+        var str = obj.value;
+        while (str.indexOf("http://t.fruit.ac.cn?ewm=") >= 0) {
+            str = str.replace("http://t.fruit.ac.cn?ewm=", "");
+        }
+        obj.value = str;
+    }
+
+    function GetCount() {
+        var tc = document.getElementById("EWM_Num").value;
+        var count = 0;
+        while (tc.indexOf("http://t.fruit.ac.cn?ewm=") >= 0) {
+            tc = tc.replace("http://t.fruit.ac.cn?ewm=", "");
+        }
+        document.getElementById("EWM_Num").value = tc;
+        while (tc.indexOf("\n") >= 0) {
+            tc = tc.replace("\n", "$");
+            count++;
+        }
+        if (count == 0 && tc != "") {
+            count = 1;
+        }
+        document.getElementById("EWM_Num_Hidden").value = tc;
+        document.getElementById("sCount").innerText = count;
+    }
+
+    function PaiMa(obj) {
+        //var wai = document.getElementById("EWM_ParentNum").value;
+        //var dg = document.getElementById("EWM_Num_Hidden").value;
+        //var es = document.getElementById("EWM_Start").value;
+        //var ee = document.getElementById("EWM_End").value;
+        //obj += "&wai=" + wai + "&dg=" + dg + "&es=" + es + "&ee=" + ee;
+        this.location = "/Public/QrEwm?url=" + encodeURIComponent(obj);
+    }
+
+    function ClearSubmit(e) {
+        if (e.keyCode == 13) {
+            return false;
+        }
+    }
+</script>

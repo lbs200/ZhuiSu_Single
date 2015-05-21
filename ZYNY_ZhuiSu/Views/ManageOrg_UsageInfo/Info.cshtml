@@ -1,0 +1,78 @@
+﻿@model LinqModel.View_Org_UsageInfo
+@{
+    ViewBag.Title = "Info";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">企业用途码查看</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">企业用途码查看</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+                            <button type="button" class="btn" onclick="history.go(-1);">返回</button>
+
+                            <h4>@Model.Name</h4>
+
+                            <table>
+                                @{
+                                    List<LinqModel.Org_UsageAttribute> list = new DAL.Org_UsageAttribute().GetList(ViewBag.ID);
+                                    if (list != null && list.Count > 0)
+                                    {
+                                        foreach (var m in list)
+                                        {
+                                            <tr>
+                                                <th style="text-align:left;">@m.AttributeName ：</th>
+                                                <td>@m.AttributeValue</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </table>
+
+                            <div style="padding:10px;">
+                                @Html.Raw(Model.Memo)
+                            </div>
+
+                            <button type="button" class="btn" onclick="history.go(-1);">返回</button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>

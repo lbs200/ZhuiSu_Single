@@ -1,0 +1,48 @@
+﻿@model List<LinqModel.Products>
+@using LinqModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+        <h3>【@ViewBag.orgName】追溯信息录入页面</h3>
+        请选择相应流程录入追溯信息：
+    </div>
+</div>
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        @{
+            var userid = ((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.ID;
+            foreach (var m in Model)
+            {
+                int count = 0;
+                PagedList.PagedList<LinqModel.View_Org_Flow_User> listFlow = new DAL.Org_Flow().GetList(userid, (int)m.Org_ID, m.ID, 1, int.MaxValue);
+                if (listFlow != null && listFlow.Count > 0)
+                {
+                    <label>产品【@m.Name 】追溯流程：</label>
+                    <div style="margin-bottom:30px;">
+                        @*<a href="javascript:alert('点击相应操作流程，进行追溯信息录入');" class="btn block green" style="margin-bottom:10px;">开始 →</a>*@
+                        @{
+                    foreach (var n in listFlow)
+                    {
+
+                        count++;
+                        @*<a href="/ManageTrace_Info/List?orgFlowID=@n.Org_Flow_ID&prodID=@m.ID" class="btn block">@count&nbsp;.&nbsp;@n.Flow_Name</a>*@
+                            <a href="/ManageTrace_Info/UpSepList?orgID=@ViewBag.orgID&orgFlowID=@n.Org_Flow_ID&prodID=@m.ID" class="btn block blue" style="margin-bottom:10px;">@n.Flow_Name </a>
+                    }
+                        }
+                        @*<a href="javascript:alert('点击相应操作流程，进行追溯信息录入');" class="btn block red" style="margin-bottom:10px;">结束</a>*@
+                    </div>
+                }
+            }
+        }
+
+    </div>
+
+</div>

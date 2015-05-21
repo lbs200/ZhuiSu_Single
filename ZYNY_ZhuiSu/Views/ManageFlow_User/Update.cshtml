@@ -1,0 +1,73 @@
+﻿@model LinqModel.Flow_User
+
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+ 
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Roles</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.Use_ID, "用户名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="controls">
+               
+                @{
+    LinqModel.User uu = new DAL.User().GetModel(Model.Use_ID);
+    <input id="Use_ID" name="Use_ID" type="text" readonly="readonly" value="@uu.UserName" />
+                }
+                @Html.ValidationMessageFor(model => model.Use_ID)
+            </div>
+
+        </div>
+        <div class="control-group">
+
+            @Html.LabelFor(model => model.Org_Flow_ID, "流程ID：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+            <div class="controls">
+                @{
+    if (((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 5 || ((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 2)
+    {
+        @Html.DropDownListFor(model => model.Org_Flow_ID, new DAL.Org_Flow().Getalls(Model.Org_Flow_ID))
+    }
+    else
+    {
+        @Html.DropDownListFor(model => model.Org_Flow_ID, new DAL.Org_Flow().Getallshengddlwiths(Model.Org_Flow_ID, (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID))
+    
+    }
+                }
+
+
+                @Html.ValidationMessageFor(model => model.Org_Flow_ID)
+
+
+                <span class="help-inline"></span>
+
+            </div>
+
+        </div>
+       
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存" onclick="return CheckClick();" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>

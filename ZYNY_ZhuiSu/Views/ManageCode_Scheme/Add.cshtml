@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">公共编码方案新增</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">公共编码方案新增</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @{
+                                if (ViewBag.error == 1)
+                                {
+                                    <div class="alert alert-error show">
+
+                                        <button class="close" data-dismiss="alert"></button>
+
+                                        <span>@ViewBag.errorMsg</span>
+
+                                    </div>
+                                }
+                            }
+                            <form action="/ManageCode_Scheme/Add" id="form1" class="form-horizontal" method="post">
+                                <div class="control-group">
+
+                                    <label class="control-label">方案名称</label>
+
+                                    <div class="controls">
+                                        <input type="text" class="m-wrap small" value="" maxlength="50" name="Name" id="Name" />
+
+                                        <span class="help-inline"></span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="control-group">
+
+                                    <label class="control-label">前缀缩写</label>
+
+                                    <div class="controls">
+                                        <input type="text" class="m-wrap small" value="" maxlength="1" name="Prefix" id="Prefix" />
+
+                                        <span class="help-inline">*一个字母表示</span>
+
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">码段分隔符</label>
+
+                                    <div class="controls">
+
+                                        <input type="text" class="m-wrap small" value="" maxlength="1" name="Separator" id="Separator" />
+
+                                        <span class="help-inline">*一个字符表示</span>
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">主从码分隔符</label>
+
+                                    <div class="controls">
+
+                                        <input type="text" class="m-wrap small" value="" maxlength="1" name="P_S_separator" id="P_S_separator" />
+
+                                        <span class="help-inline">*一个字符表示</span>
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">流水号号段位置</label>
+
+                                    <div class="controls">
+
+                                        <input type="text" class="m-wrap small" value="7" maxlength="50" name="SN_Position" id="SN_Position" />
+
+                                        <span class="help-inline"></span>
+                                    </div>
+
+                                </div>
+                                <div class="form-actions">
+
+                                    <button type="submit" class="btn blue" onclick="return CheckClick();"><i class="icon-ok"></i> 确定</button>
+
+                                    <button type="button" class="btn" onclick="history.go(-1);">取消</button>
+
+                                </div>
+
+                            </form>
+
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    function CheckClick() {
+        if (document.getElementById("Name").value == "") {
+            alert("请输入方案名称！");
+            return false;
+        }
+        if (document.getElementById("Prefix").value == "") {
+            alert("请输入编码前缀！");
+            return false;
+        }
+        if (document.getElementById("Separator").value == "") {
+            alert("请输入码段分隔符！");
+            return false;
+        }
+        if (document.getElementById("P_S_separator").value == "") {
+            alert("请输入主从码分隔符！");
+            return false;
+        }
+        if (document.getElementById("SN_Position").value == "" || isNaN(document.getElementById("SN_Position").value)) {
+            alert("流水号号段位置输入错误！");
+            return false;
+        }
+        return true;
+    }
+</script>
+

@@ -1,0 +1,100 @@
+﻿@model PagedList.IPagedList<LinqModel.Ent_Code_Scheme>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+ 
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>企业内部编码方案管理</div>
+
+                <div class="actions">
+                    <input type="hidden" id="orgID" name="orgID" value="@ViewBag.orgID" />
+                    <a href="/ManageEnt_Code_Scheme/Add?orgID=@ViewBag.orgID" class="btn blue"><i class="icon-pencil"></i> 新增</a>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>码前缀</th>
+
+                            <th>添加日期</th>
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.Scheme_ID)" id="@m.Scheme_ID" style="background-color: #@classname">
+                                    <td id="ext_@m.Scheme_ID">+</td>
+                                    <td>@m.Code_Before</td>
+
+                                    <td>@m.Date_Required</td>
+
+                                    <td class="hidden-480"><a href="/ManageEnt_Code_Scheme/Info_Pool?id=@m.Scheme_ID">查看编码池</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/ManageEnt_Code_Scheme/Update?id=@m.Scheme_ID&page=@ViewBag.page&txtSearch=@ViewBag.txtSearch">修改</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/ManageEnt_Code_Scheme/Del?id=@m.Scheme_ID&orgID= @ViewBag.orgID& page = @ViewBag.page & txtSearch = @ViewBag.txtSearch';} ">删除</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.Scheme_ID">
+                                    <td colspan="10">
+                                        <div style="margin-left:25px;">
+                                            <span><a href="/ManageEnt_Code_Scheme/Info_Pool?id=@m.Scheme_ID">查看编码池</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/ManageEnt_Code_Scheme/Update?id=@m.Scheme_ID & page = @ViewBag.page & txtSearch = @ViewBag.txtSearch">修改</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/ManageEnt_Code_Scheme/Del?id=@m.Scheme_ID &orgID= @ViewBag.orgID& page = @ViewBag.page & txtSearch = @ViewBag.txtSearch';}">删除</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch }))
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>

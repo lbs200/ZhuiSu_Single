@@ -1,0 +1,181 @@
+﻿@model List<LinqModel.Meta_Info>
+@{
+    ViewBag.Title = "Flow_Info";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="/Content/css/chosen.css" />
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">设置元流程信息元</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">设置元流程信息元</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            <div class="control-group">
+
+                                <label class="control-label">当前选择：【企业：@ViewBag.orgName】-【产品：@ViewBag.prodName】-【流程：@ViewBag.flowName】</label>
+
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">此流程已选择信息元：</label>
+                                <div class="controls">
+                                    <input type="hidden" id="id" name="id" value="@ViewBag.id" />
+                                    <input type="hidden" id="orgID" name="orgID" value="@ViewBag.orgID" />
+                                    <input type="hidden" id="prodID" name="prodID" value="@ViewBag.prodID" />
+                                    <div>
+                                        @ViewBag.multiSelect
+                                    </div>
+                                    @{
+                                        if (ViewBag.hidden != null && !ViewBag.hidden)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            <span style="color:red;">已添加追溯信息，无法再次修改！</span>
+                                        }
+                                    }
+                                    <a href="/ManageOrg_Info/Index?orgID=@ViewBag.orgID&orgFlowID=@ViewBag.id&prodID=@ViewBag.prodID" class="btn blue">管理信息元详细信息</a>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="control-group">
+
+                            <label class="control-label">信息元列表查询：</label>
+                            <div class="controls">
+                                <select id="groupID" name="groupID" onchange="ClickGroup()">
+                                    @{
+                                        foreach (var m in (List<LinqModel.MetaInfoGroup>)ViewBag.listGroup)
+                                        {
+                                            if (m.Group_ID == ViewBag.groupID)
+                                            {
+                                                <option value="@m.Group_ID" selected>@m.Group_Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@m.Group_ID">@m.Group_Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch" placeholder="信息元名称">
+                                <input class="btn green" type="button" value="查询" onclick="ClickSearch()" />
+                                <a href="/ManageOrg_Flow/Index?orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent" class="btn">返回企业定制追溯流程管理</a>
+                            </div>
+
+                        </div>
+                        <table class="table  table-bordered table-hover" id="sample_1">
+
+                            <thead>
+
+                                <tr>
+                                    <th>信息元名称</th>
+                                    <th>说明</th>
+                                    <th>是否公开</th>
+                                    <th>选择</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="metaInfos">
+                                @{
+                                    foreach (var m in Model)
+                                    {
+                                        <tr>
+                                            <td>@m.Info_Name</td>
+                                            <td><a href="javascript:void(0)" title="@m.Info_Description">点击查看</a></td>
+                                            <td><input type="checkbox" value="是否公开" id="ck_@m.Info_ID" /></td>
+                                            <td>
+                                                @{
+                                        if (ViewBag.hidden != null && !ViewBag.hidden)
+                                        {
+                                            <a href="javascript:ClickSelect(@m.Info_ID)">新增</a>
+                                        }
+                                        else
+                                        {
+                                            <span style="color:red;">无法新增</span>
+                                        }
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- END SAMPLE FORM PORTLET-->
+
+</div>
+<script type="text/javascript">
+    function ClickGroup() {
+        var groupID = document.getElementById("groupID").value;
+        var orgFlowID = document.getElementById("id").value;
+        var prodID = document.getElementById("prodID").value;
+        document.getElementById("txtSearch").value = "";
+        $.get("/ManageOrg_Flow/Get_Meta_Info?groupID=" + groupID + "&orgFlowID=" + orgFlowID + "&prodID=" + prodID + "&rnd = " + Math.random(), function (data, textStatus) {
+            $("#metaInfos").empty();
+            document.getElementById("metaInfos").innerHTML = data;
+        });
+    }
+
+    function ClickSelect(obj) {
+        var orgFlowID = document.getElementById("id").value;
+        var isPublic = 0;
+        if (document.getElementById("ck_" + obj).checked) {
+            isPublic = 1;
+        }
+        var prodID = document.getElementById("prodID").value;
+        var orgID = document.getElementById("orgID").value;
+        location.href = "/ManageOrg_Flow/Flow_InfoAddTraceInfo?orgFlowID=" + orgFlowID + "&infoID=" + obj + "&isPublic=" + isPublic + "&prodID=" + prodID + "&orgID=" + orgID;
+    }
+
+    function ClickSearch() {
+        var groupID = document.getElementById("groupID").value;
+        var orgFlowID = document.getElementById("id").value;
+        var prodID = document.getElementById("prodID").value;
+        var txtSearch = encodeURIComponent(document.getElementById("txtSearch").value);
+        $.get("/ManageOrg_Flow/Get_Meta_Info?groupID=" + groupID + "&orgFlowID=" + orgFlowID + "&prodID=" + prodID + "&txtSearch=" + txtSearch + "&rnd = " + Math.random(), function (data, textStatus) {
+            $("#metaInfos").empty();
+            document.getElementById("metaInfos").innerHTML = data;
+        });
+    }
+</script>

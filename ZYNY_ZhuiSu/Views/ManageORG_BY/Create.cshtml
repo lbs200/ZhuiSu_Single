@@ -1,0 +1,175 @@
+﻿@model LinqModel.ORG_BY
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+
+<script src="../../ckeditor/ckeditor.js" type="text/javascript"></script>
+<script src="../../ckfinder/ckfinder.js" type="text/javascript"></script>
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">增加标语LOGO</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">标语LOGO</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <form action="#" class="form-horizontal">
+
+
+                                    @Html.ValidationSummary(true)
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Org_ID, "机构名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+                                            @{
+                                if ((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 5 || (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 2)
+                                {
+                                        @Html.DropDownListFor(model => model.Org_ID, new DAL.Organization().GetDropdownlistItemWithOID((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Org_ID))
+
+                                }
+                                else if ((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 1)
+                                {
+                                        @Html.DropDownListFor(model => model.Org_ID, new DAL.Organization().GetDropdownlistItemwithid((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Org_ID))
+                                }
+                                            }
+                                            @Html.ValidationMessage("Org_ID", new { @style = "color: #f70e0e;" })
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.BYContent, "宣传标语", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.BYContent)
+                                            @Html.ValidationMessage("BYContent", new { @style = "color: #f70e0e;" })
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+                                        @Html.LabelFor(model => model.Logo, "LOGO（限制大小100x50)：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+
+                                            <img id="stuPic" width="300" height="200" /><br>
+
+                                            <input type="text" class="m-wrap small" id="Logo" name="Logo" value="" />
+                                            <input type="button" value=" 选择" onclick="BrowseServer('Logo');" /><input type="button" value=" 预览 " onclick="    Yulan();" />
+                                            @Html.ValidationMessage("Logo", new { @style = "color: #f70e0e;" })
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.LCSM, "流程说明", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                           
+                                            <textarea id="LCSM" name="LCSM"></textarea> 
+                                            @Html.ValidationMessage("LCSM", new { @style = "color: #f70e0e;" })
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="保存" onclick="return CheckClick();"  class="btn btn-default" />
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            }
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+
+
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>
+<script type="text/javascript">
+    function BrowseServer(inputId) {
+        var finder = new CKFinder();
+        finder.basePath = '/ckfinder/'; //导入CKFinder的路径 
+
+        finder.selectActionFunction = SetFileField; //设置文件被选中时的函数 
+        finder.selectActionData = inputId; //接收地址的input ID 
+        finder.Width = 142;
+        finder.Height = 21;
+        finder.popup();
+
+
+    }
+    function Yulan() {
+        $("#stuPic").attr("src", $("#Logo").val());
+    }
+    function SetFileField(fileUrl, data) {
+        document.getElementById(data["selectActionData"]).value = fileUrl;
+    }
+    function CheckClick() {
+        if (document.getElementById("CategoryName").value == "") {
+            alert("请输入名称！");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,220 @@
+﻿@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">追溯信息元新增</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">追溯信息元新增</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @{
+                                if (ViewBag.error == 1)
+                                {
+                                    <div class="alert alert-error show">
+
+                                        <button class="close" data-dismiss="alert"></button>
+
+                                        <span>@ViewBag.errorMsg</span>
+
+                                    </div>
+                                }
+                            }
+                            <form action="/ManageMeta_Info/Add" id="form1" class="form-horizontal" method="post">
+
+                                <div class="control-group">
+
+                                    <label class="control-label">名称</label>
+
+                                    <div class="controls">
+                                        <input type="hidden" value="" name="Info_ID" id="Info_ID" />
+                                        <input type="hidden" value="" name="Abbr" id="Abbr" />
+                                        <input type="hidden" value="" name="Mask" id="Mask" />
+                                        <input type="text" class="m-wrap small" value="" maxlength="50" name="Info_Name" id="Info_Name" />
+
+                                        <span class="help-inline"></span>
+
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">描述</label>
+
+                                    <div class="controls">
+
+                                        <textarea class="large m-wrap" rows="3" name="Info_Description" id="Info_Description"></textarea>
+
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">是否必填</label>
+
+                                    <div class="controls">
+
+                                        <label class="radio">
+
+                                            <input type="radio" name="Required" value="true" checked />
+
+                                            是
+
+                                        </label>
+
+                                        <label class="radio">
+
+                                            <input type="radio" name="Required" value="false" />
+
+                                            否
+
+                                        </label>
+
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">是否公开</label>
+
+                                    <div class="controls">
+
+                                        <label class="radio">
+
+                                            <input type="radio" name="Public" value="true" checked />
+
+                                            是
+
+                                        </label>
+
+                                        <label class="radio">
+
+                                            <input type="radio" name="Public" value="false" />
+
+                                            否
+
+                                        </label>
+
+                                    </div>
+
+                                </div>
+                                @*<div class="control-group">
+
+                                    <label class="control-label">是否检索点</label>
+
+                                    <div class="controls">
+
+                                        <label class="radio">
+
+                                            <input type="radio" name="Search_Point" value="true"  />
+
+                                            是
+
+                                        </label>
+
+                                        <label class="radio">
+
+                                            <input type="radio" name="Search_Point" value="false" checked />
+
+                                            否
+
+                                        </label>
+
+                                    </div>
+
+                                </div>*@
+                                <div class="control-group">
+
+                                    <label class="control-label">数据类型</label>
+
+                                    <div class="controls">
+
+                                        <select class="medium m-wrap" tabindex="1" name="Data_Type" id="Data_Type">
+                                            @{
+                                                foreach (var m in (List<Common.Argument.MetaInfoDataType>)ViewBag.listDataType)
+                                                {
+                                                    <option value="@m.Name">@m.Name</option>
+                                                }
+                                            }
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+                                @*<div class="control-group">
+
+                                    <label class="control-label">数据枚举值</label>
+
+                                    <div class="controls">
+
+                                        <textarea class="large m-wrap" rows="3" name="Data_Type_Value" id="Data_Type_Value"></textarea>
+                                        <span class="help-inline">每个值已英文逗号分隔</span>
+                                    </div>
+
+                                </div>*@
+                                <div class="form-actions">
+
+                                    <button type="submit" class="btn blue" onclick="return CheckClick();"><i class="icon-ok"></i> 确定</button>
+
+                                    <button type="button" class="btn" onclick="history.go(-1);">取消</button>
+
+                                </div>
+
+                            </form>
+
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    function CheckClick() {
+        if (document.getElementById("Info_Name").value == "") {
+            alert("请输入信息元名称！");
+            return false;
+        }
+        return true;
+    }
+</script>
+

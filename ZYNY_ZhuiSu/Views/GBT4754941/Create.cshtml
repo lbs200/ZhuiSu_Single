@@ -1,0 +1,200 @@
+﻿@model LinqModel.GBT475494
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<h2>添加</h2>
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">行业标准</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">行业标准</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <form action="#" class="form-horizontal">
+
+
+                                    @Html.ValidationSummary(true)
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.C1, "门类：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.C1)
+                                            @Html.ValidationMessageFor(model => model.C1)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.C2, "大类：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.C2)
+                                            @Html.ValidationMessageFor(model => model.C2)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.C3, "中类：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.C3)
+                                            @Html.ValidationMessageFor(model => model.C3)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.C4, "小类：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.C4)
+                                            @Html.ValidationMessageFor(model => model.C4)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="control-group">
+
+
+                                        @Html.LabelFor(model => model.Name, "名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.Name)
+                                            @Html.ValidationMessageFor(model => model.Name)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Remark, "备注：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+
+                                            @Html.EditorFor(model => model.Remark)
+                                            @Html.ValidationMessageFor(model => model.Remark)
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="保存" onclick="return CheckClick();" class="btn btn-default" />
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            }
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+
+
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>
+<script type="text/javascript">
+    function CheckClick() {
+        if (document.getElementById("Name").value == "") {
+            alert("请输入名称！");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

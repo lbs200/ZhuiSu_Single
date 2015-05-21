@@ -1,0 +1,73 @@
+﻿@model LinqModel.ComContent
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+ 
+
+<h3>确认删除？</h3>
+<div>
+    <h4>权限类别</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            机构名称：
+        </dt>
+        @{  LinqModel.Organization shangji = new DAL.Organization().GetModel(Convert.ToInt32(Model.Org_ID));
+
+        <dd> @shangji.Name </dd>}
+        <dt>
+            文章标题：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            文章内容：
+        </dt>
+        <dd>
+            <div class="display-field">@Html.Raw(@Model.Contents)</div>
+        </dd>
+        <dt>
+            所属栏目：
+        </dt>
+        @{
+            LinqModel.ContCatogary ccc = new DAL.ContCatogary().GetModel(Convert.ToInt32(Model.CategoryID));
+            <dd>
+                @ccc.Name
+            </dd>
+        }
+
+        <dt>
+            是否审核：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Assessment)
+        </dd>
+        <dt>
+            关键字：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Keywords)
+        </dd>
+        <dt>
+            发布日期：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            @Html.ActionLink("返回列表", "Index")
+        </div>
+    }
+</div>

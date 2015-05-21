@@ -1,0 +1,315 @@
+﻿@model PagedList.IPagedList<LinqModel.View_Trace_Info>
+
+@{
+    ViewBag.Title = "SearchPoint";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<style type="text/css">
+    .c {
+        width: 100%;
+        border: 1px solid green;
+        border-collapse: collapse;
+    }
+
+        .c td {
+            padding: 2px;
+            border: 1px solid green;
+        }
+</style>
+
+<style>
+    /* 打印的时候让打印按钮隐藏 */
+    @@media only print {
+        a {
+            display: none;
+        }
+    }
+</style>
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageTrace_Info/SearchPoint" class="form-search" method="get">
+            <div class="row-details">
+                产品：<select id="products" name="products" onchange="GetOrgFlow(this.value)">
+                    @{
+                        var listProducts = (List<LinqModel.Products>)ViewBag.products;
+                        if (listProducts != null && listProducts.Count > 0)
+                        {
+                            foreach (var m in listProducts)
+                            {
+                                <option value="@m.ID">@m.Name</option>
+                            }
+                        }
+                    }
+                </select>
+
+                &nbsp;&nbsp;流程：<select id="flows" name="flows" onchange="GetSearchPoint(this.value)">
+                    @{
+                        var listOrgFlow = (PagedList.IPagedList<LinqModel.View_Org_Flow>)ViewBag.flows;
+                        if (listOrgFlow != null && listOrgFlow.Count > 0)
+                        {
+                            foreach (var m in listOrgFlow)
+                            {
+                                <option value="@m.Org_Flow_ID">@m.Flow_Name</option>
+                            }
+                        }
+                    }
+                </select>
+                &nbsp;&nbsp;时间：<input type="text" style="width:80px;" id="timeS" name="timeS" value="@ViewBag.timeS" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+                -
+                <input type="text" style="width:80px;" id="timeE" name="timeE" value="@ViewBag.timeE" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+                &nbsp;&nbsp;是否结束：
+                <select id="IsOver" name="IsOver" style="width:100px;">
+                    <option value="true">已结束</option>
+                    <option selected value="false">进行中</option>
+                </select>
+                <hr />
+                &nbsp;&nbsp;<b>检索点：</b>
+                <br />
+                <div style="padding:10px;" id="IDsearchPoint">
+
+                </div>
+            </div>
+            <div class="row-details">
+                <input class="btn green" type="button" value="查询" onclick="GetList()" id="searchBtn" />
+            </div>
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i><text id="titleText"></text>追溯信息列表</div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>单据编号</th>
+                            @*<th>流程名称</th>
+                            <th class="hidden-480">产品名称</th>*@
+                            <th class="hidden-480">录入时间</th>
+                            <th class="hidden-480">是否结束</th>
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="IDlist">
+
+                        @*@{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.Trace_ID)" id="@m.Trace_ID" style="background-color: #@classname">
+                                    <td id="ext_@m.Trace_ID">+</td>
+                                    <td>@m.Flow_Num</td>
+                                    <td>@m.Flow_Name</td>
+                                    <td class="hidden-480">@m.Name</td>
+                                    <td>@m.Rec_Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td class="hidden-480">
+                                        @{
+                                if (m.FlowOver == true)
+                                {
+                                    @:已结束
+                                                    }
+                                else
+                                {
+                                    @:进行中
+                                                    }
+                                        }
+                                    </td>
+                                    <td class="hidden-480"><a href="javascript:void(0);">查看详情</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.Trace_ID">
+                                    <td colspan="10">
+                                        <div style="margin-left:25px;">
+                                            <a href="javascript:void(0);" onclick="preview(); return false;">打印</a>
+
+                                            &nbsp;&nbsp;
+                                            @if (m.FlowOver == false)
+                                            {
+                                                <span><a href="/ManageTrace_Info/CreateEWM?traceID=@m.Trace_ID&orgFlowID=@m.Org_Flow_ID&prodID=@m.Prod_ID">追溯信息激活</a></span>
+                                            }
+                                            <p>
+
+
+                                                <!--startprint-->
+                                                <table id="dayin1" border="1" width="500">
+
+                                                    <tr>
+                                                        <th width="80">单据编号：</th>
+                                                        <td>@m.Flow_Num</td>
+                                                        <td style="vertical-align:middle; text-align:center;" rowspan="3"><img src="/Public/ShowImg?ewm=@m.Flow_Num" width="80" height="80" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>流程名称：</th>
+                                                        <td>@m.Flow_Name </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>产品名称：</th>
+                                                        <td>@m.Name</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th> 录入时间：</th>
+                                                        <td colspan="2">@m.Rec_Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th> 是否结束：</th>
+                                                        <td colspan="2">
+                                                            @{
+                                if (m.FlowOver == true)
+                                {
+                                    @:已结束
+                                                    }
+                                else
+                                {
+                                    @:进行中
+                                                    }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th> 录入详情：</th>
+                                                        <td colspan="2">
+                                                            @{
+                                if (m.Trace_Info_Value.Descendants("info").Count() > 0)
+                                {
+                                    foreach (var mt in m.Trace_Info_Value.Descendants("info"))
+                                    {
+                                        <text>
+                                            @mt.Attribute("InfoName").Value：@mt.Attribute("InfoValue").Value
+                                        </text>
+                                                                <br />
+                                    }
+                                }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <!--endprint-->
+
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }*@
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>
+
+<script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    function PaiMa(obj) {
+        this.location = "/Public/QrEwm?url=" + encodeURIComponent(obj);
+    }
+    function GetSearchPoint(obj) {
+        if (obj != "") {
+            $.get("/ManageTrace_Info/GetSearchPoint?orgFlowID=" + obj + "&rnd = " + Math.random(), function (data, textStatus) {
+                $("#IDsearchPoint").empty();
+                document.getElementById("IDsearchPoint").innerHTML = data;
+            });
+        }
+        else {
+            $("#IDsearchPoint").empty();
+        }
+    }
+    function GetOrgFlow(obj) {
+        if (obj != "") {
+            $.get("/ManageTrace_Info/GetOrgFlow?prodID=" + obj + "&rnd = " + Math.random(), function (data, textStatus) {
+                var sid = document.getElementById("flows");
+                $("#flows").empty();
+                if (data.length == 0)
+                {
+                    sid.options[sid.options.length] = new Option("未设置流程信息", "0");
+                    $("#IDsearchPoint").empty();
+                } else {
+                    var n = 1;
+                    $.each(data, function () {
+                        sid.options[sid.options.length] = new Option(this["Flow_Name"], this["Org_Flow_ID"]);
+                        if (n == 1) {
+                            GetSearchPoint(this["Org_Flow_ID"]);
+                        }
+                        n++;
+                    });
+                }
+            });
+        } 
+    }
+
+
+    GetSearchPoint(document.getElementById("flows").value);
+
+    function GetList() {
+        var strSearchText = "";
+        var strSearchCheckBox = "";
+        var strSearchRadio = "";
+        var strSearchSelect = "";
+        var listInput = $("input");
+        var listSelect = $("select");
+        for (var i = 0; i < listInput.length; i++) {
+            if (!isNaN(listInput[i].id)) {
+                if (listInput[i].type == "checkbox" && listInput[i].checked) {
+                    strSearchCheckBox += "|" + listInput[i].id + "," + listInput[i].value;
+                }
+                else if (listInput[i].type == "radio" && listInput[i].checked) {
+                    strSearchRadio += "|" + listInput[i].id + "," + listInput[i].value;
+                }
+                else if (listInput[i].type != "checkbox" && listInput[i].type != "radio") {
+                    strSearchText += "|" + listInput[i].id + "," + listInput[i].value;
+                }
+            }
+        }
+        for (var i = 0; i < listSelect.length; i++) {
+            if (!isNaN(listSelect[i].id)) {
+                strSearchSelect += "|" + listSelect[i].id + "," + listSelect[i].value;
+            }
+        }
+        var prodID = document.getElementById("products").value;
+        var orgFlowID = document.getElementById("flows").value;
+        document.getElementById("titleText").innerText = "【"+document.getElementById("products").options[document.getElementById("products").options.selectedIndex].text+"】产品【"+document.getElementById("flows").options[document.getElementById("flows").options.selectedIndex].text+"】流程";
+        var timeS = document.getElementById("timeS").value;
+        var timeE = document.getElementById("timeE").value;
+        var isOver = document.getElementById("IsOver").value;
+        var strSearch = "/ManageTrace_Info/GetSearchPointResult?prodID=" + prodID + "&orgFlowID=" + orgFlowID + "&timeS=" + timeS + "&timeE=" + timeE + "&isOver=" + isOver + "&strText=" + strSearchText + "&strCheck=" + strSearchCheckBox + "&strRadio=" + strSearchRadio + "&strSelect=" + strSearchSelect + "&rnd = " + Math.random();
+        
+        $.get(encodeURI(strSearch), function (data, textStatus) {
+            $("#IDlist").empty();
+            document.getElementById("IDlist").innerHTML = data;
+        });
+    }
+</script>

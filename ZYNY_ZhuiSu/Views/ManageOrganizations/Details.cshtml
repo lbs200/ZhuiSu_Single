@@ -1,0 +1,169 @@
+﻿@model LinqModel.View_Org
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+<script src="../../ckeditor/ckeditor.js" type="text/javascript"></script>
+<script src="../../ckfinder/ckfinder.js" type="text/javascript"></script>
+<div>
+    <h4>机构详细信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            机构名称：
+        </dt>
+        @{
+
+        }
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            省份：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Expr1)
+        </dd>
+
+        <dt>
+            市：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Expr3)
+        </dd>
+
+        <dt>
+            区县：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Expr5)
+        </dd>
+
+        <dt>
+            地址：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            联系人：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Contact)
+        </dd>
+
+        <dt>
+            电话：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tel)
+        </dd>
+
+        <dt>
+            邮件：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.E_mail_)
+        </dd>
+
+        <dt>
+            网址：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Org_URL)
+            <br />
+            @{
+                if (string.IsNullOrEmpty(Model.EWMUrl))
+                {
+                    <img src="/Public/ShowImg?ewm=@Model.Org_URL" width="200" height="200" />
+                }
+                else
+                {
+                    <img src="/Public/ShowImg?ewm=@Model.EWMUrl" width="200" height="200" />
+                }
+            }
+        </dd>
+
+        <dt>
+            上级机构：
+        </dt>
+        @{
+            if (Model.Sup_Org == 0)
+            {
+                <dd>
+                    无上级
+                </dd>
+
+            }
+            else
+            {
+                LinqModel.Organization oo = new DAL.Organization().GetModel(Model.Sup_Org);
+
+                <dd>
+                    @oo.Name
+                </dd>
+            }
+
+
+        }
+
+
+
+        <dt>
+            简介：
+        </dt>
+
+        <dd>
+            <div class="display-field">@Html.Raw(Model.Intro)</div>
+        </dd>
+
+        <dt>
+            品牌：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Brand)
+        </dd>
+
+        <dt>
+            认证图片：
+        </dt>
+
+        <dd>
+            <img id="Cert" width="300" height="200" src="@Model.Cert" /><br>
+
+        </dd>
+
+        <dt>
+            机构编码：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Org_Code)
+        </dd>
+        <dt>
+            企业官网网址：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EWMUrl)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("编辑", "Update", new { id = Model.Org_ID }) |
+    @Html.ActionLink("返回列表", "Index")
+</p>

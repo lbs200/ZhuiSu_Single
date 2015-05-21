@@ -1,0 +1,69 @@
+﻿@model LinqModel.ContCatogary
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+ 
+
+<div>
+    <h4>权限类别</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            机构名称：
+        </dt>
+        @{  LinqModel.Organization shangji = new DAL.Organization().GetModel(Convert.ToInt32(Model.Org_ID));
+
+        <dd> @shangji.Name </dd>}
+        <dt>
+            栏目名称：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            上级栏目：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FatherID)
+        </dd>
+        <dt>
+            栏目描述：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            是否审核：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Assessment)
+        </dd>
+        <dt>
+            关键字：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Keywords)
+        </dd>
+        <dt>
+            备注：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            @Html.ActionLink("返回列表", "Index")
+        </div>
+    }
+</div>

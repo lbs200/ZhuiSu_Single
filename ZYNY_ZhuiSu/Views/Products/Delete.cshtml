@@ -1,0 +1,111 @@
+﻿@model LinqModel.Products
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+ 
+
+<h3>确认删除?</h3>
+<div>
+    <h4>产品</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            产品名称
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            产品缩写
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Abbr)
+        </dd>
+
+        <dt>
+            产品类别
+        </dt>
+        @{
+            LinqModel.Prod_category loz = new DAL.Pro_Category().GetModel(Model.Prod_Category);
+            <dd>
+                <label>@loz.Description</label>
+            </dd>
+
+        }
+
+
+
+        <dd class="hidden">
+            @Html.DisplayFor(model => model.Unit)
+        </dd>
+
+        <dt>
+            主副原料
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.material)
+        </dd>
+
+        <dt>
+            生产单位
+        </dt>
+        @{
+            LinqModel.Organization loz1 = new DAL.Organization().GetModel(Model.Company);
+            <dd>
+                <label>@loz1.Name</label>
+               
+            </dd>
+
+        }
+
+
+
+        <dt>
+            描述
+        </dt>
+
+        <dd>
+            <div class="display-field">@Html.Raw(Model.Description)</div>
+
+        </dd>
+
+        <dt>
+            宣传码
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Adv_Code)
+            @{
+                string shijiURL = System.Configuration.ConfigurationManager.AppSettings["ProURL"];
+                string shi = shijiURL = "?pid=" + Model.ID + "&oid=" + Model.Org_ID;
+                <img src="/Public/ShowImg?ewm=@shijiURL" width="100" height="100" />
+            }
+        </dd>
+        <dt>
+            图片：
+        </dt>
+
+        <dd>
+            <img id="Photo" width="300" height="200" src="@Model.Photo" /><br>
+        </dd>
+
+
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            @Html.ActionLink("返回列表", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,85 @@
+﻿@model PagedList.IPagedList<LinqModel.View_Trace_Info>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    Layout = null;
+}
+
+
+<style type="text/css">
+    .c {
+        width: 100%;
+        border: 1px solid green;
+        border-collapse: collapse;
+    }
+
+        .c td {
+            padding: 2px;
+            border: 1px solid green;
+        }
+</style>
+
+<style>
+    /* 打印的时候让打印按钮隐藏 */
+    @@media only print {
+        a {
+            display: none;
+        }
+    }
+</style>
+
+<a href="#" onclick="window.print();return false;">打印表格</a>
+<table class="c">
+    <thead>
+        <tr>
+            <th>单据编号：</th>
+            <th>二维码</th>
+            <th>流程名称：</th>
+            <th>产品名称：</th>
+            <th>录入时间：</th>
+            <th>是否结束：</th>
+            <th> 录入详情：</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>@m.Flow_Num</td>
+                <td rowspan="3"><img src="/Public/ShowImg?ewm=@m.Flow_Num" width="80" height="80" /></td>
+                <td>@m.Flow_Name</td>
+                <td>@m.Name</td>
+                <td>@m.Rec_Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>
+                    @{
+            if (m.FlowOver == true)
+            {
+                @:已结束
+                                                    }
+            else
+            {
+                @:进行中
+                                                    }
+                    }
+                </td>
+                <td>
+                    @{
+            if (m.Trace_Info_Value.Descendants("info").Count() > 0)
+            {
+                foreach (var mt in m.Trace_Info_Value.Descendants("info"))
+                {
+                    <text>
+                        @mt.Attribute("InfoName").Value：@mt.Attribute("InfoValue").Value
+                    </text>
+                        <br />
+                }
+            }
+                    }
+                </td>
+
+               
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="#" onclick="window.print();return false;">打印表格</a>

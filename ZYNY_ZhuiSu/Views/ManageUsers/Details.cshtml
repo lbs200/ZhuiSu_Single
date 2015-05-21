@@ -1,0 +1,92 @@
+﻿@model LinqModel.View_User
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+ 
+
+<div>
+   
+    <dl class="dl-horizontal">
+        <dt>
+            机构：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        @*<dt>
+            用户类型：
+        </dt>
+        @{
+            string sss = "未知用户";
+            if (Model.Type == '1')
+            {
+                sss = "政府用户";
+            }
+            if (Model.Type == '2')
+            {
+                sss = "企业/组织";
+            }
+            if (Model.Type == '3')
+            {
+                sss = "消费者";
+            }
+            if (Model.Type == '4')
+            {
+                sss = "系统用户";
+
+            }
+            <dd>@sss</dd>
+        }*@
+
+
+        <dt>
+            用户名：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            密码：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            图片：
+        </dt>
+
+        <dd>
+            <img id="Photo" width="300" height="200" src="@Model.Photo" /><br>
+        </dd>
+
+        @*<dt>
+          用户名片码：
+        </dt>
+
+        <dd>
+            @Html.DisplayNameFor(model => model.User_Code)
+        </dd>*@
+
+        <dt>
+            用户角色：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RoleName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("返回列表", "Index")
+</p>

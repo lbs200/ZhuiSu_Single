@@ -1,0 +1,127 @@
+﻿@model LinqModel.S_Tree
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+   
+ 
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Roles</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.NodeID)
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.Text, "节点名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Text)
+                @Html.ValidationMessageFor(model => model.Text)
+            </div>
+
+        </div>
+        <div class="control-group">
+
+            @Html.LabelFor(model => model.ParentID, "上级节点：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+            <div class="controls">
+
+                @Html.DropDownListFor(model => model.ParentID, new DAL.S_Tree().Getallshengddlwiths(Model.ParentID),new { @value = "0", @text = "无上级" })
+
+                @Html.ValidationMessageFor(model => model.ParentID)
+
+
+                <span class="help-inline"></span>
+
+            </div>
+
+        </div>
+        <div class="control-group">
+            
+            <div class="controls">
+                <input id="ParentPath" name="ParentPath" type="hidden" value="@Model.ParentPath" />
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Url, "链接：", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Url)
+                @Html.ValidationMessageFor(model => model.Url)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.comment, "备注：", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="controls">
+                @Html.EditorFor(model => model.comment)
+                @Html.ValidationMessageFor(model => model.comment)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.PermissionID, "权限：", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="controls">
+              
+                @Html.DropDownListFor(model => model.PermissionID, new DAL.Permission().GetAllPPwithselected(Model.PermissionID))
+                @Html.ValidationMessageFor(model => model.PermissionID)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.ImageUrl, "图片链接：", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="controls">
+                @Html.EditorFor(model => model.ImageUrl)
+                @Html.ValidationMessageFor(model => model.ImageUrl)
+            </div>
+        </div>
+       
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存" onclick="return CheckClick();" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>
+<script type="text/javascript">
+    function CheckClick() {
+        if (document.getElementById("Text").value == "") {
+            alert("请输入名称！");
+            return false;
+        }
+        if (document.getElementById("ParentID").value == "") {
+            alert("请选中上级节点！");
+            return false;
+        }
+
+        if (document.getElementById("Url").value == "") {
+            alert("请输入链接！");
+            return false;
+
+        }
+        if (document.getElementById("PermissionID").value == "") {
+            alert("请选中权限！");
+            return false;
+
+
+        }
+
+
+
+
+        return true;
+    }
+    </script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

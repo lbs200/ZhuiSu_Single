@@ -1,0 +1,40 @@
+﻿@model LinqModel.Roles
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+ 
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+           角色名称：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RoleName)
+        </dd>
+        <dt>
+            角色描述：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            级别：
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Jibie )
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.RoleId }) |
+    @Html.ActionLink("返回列表", "Index")
+</p>

@@ -1,0 +1,187 @@
+﻿@model List<LinqModel.Trace_Info_Pics_New>
+@{
+    ViewBag.Title = "InfoAnylasis";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<input type="button" class="btn blue" value="返回" onclick="history.go(-1);" />
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        <div id="products" class="content-section col-md-6 col-sm-12">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 text-center">
+                        <h1 class="section-title">流程追溯</h1>
+                    </div> <!-- /.col-md-12 -->
+                </div> <!-- /.row -->
+                <div class="row ">
+
+                                        @{
+        foreach (var m in Model)
+        {
+            var listCycle = (List<LinqModel.Trace_Info_Pics_New>)ViewBag.listCycle;
+            <h3 style="text-align:center; background-color:black; color:white; font-weight:bold; padding:5px; ">
+                @m.Flow_Name 追溯
+            </h3>
+
+                        <div style="text-align:center;">
+                            <div>
+                                @{
+            if (!string.IsNullOrEmpty(m.Pic_Path))
+            {
+                for (int i = 0; i < m.Pic_Path.Split('$').Count(); i++)
+                {
+                    if (!string.IsNullOrEmpty(m.Pic_Path.Split('$')[i]))
+                    {
+                        <div>
+                            <img src="@m.Pic_Path.Split('$')[i]" alt="">
+                            <div style="text-align:left;">@m.Pic_Description.Split('$')[i]</div>
+                        </div>
+                    }
+
+                }
+            }
+                                }
+                                <p style="clear:both;">
+                                    <table>
+                                        @{
+            if (m.Trace_Info_Value.Descendants("info").Count() > 0)
+            {
+                foreach (var mt in m.Trace_Info_Value.Descendants("info"))
+                {
+                    try
+                    {
+                        if (mt.Attribute("Type").Value == "链接")
+                        {
+                            <tr>
+                                <th style="text-align: left; width: 95px;">@mt.Attribute("InfoName").Value ：</th>
+                                <td style="text-align:left;"><a href="@mt.Attribute("InfoValue").Value.Split('|')[1]" target="_blank">@mt.Attribute("InfoValue").Value.Split('|')[0]</a> </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <th style="text-align: left; width: 95px;">@mt.Attribute("InfoName").Value ：</th>
+                                <td style="text-align:left;">@mt.Attribute("InfoValue").Value</td>
+                            </tr>
+                        }
+
+
+                    }
+                    catch { }
+                }
+            }
+                                        }
+                                    </table>
+                                </p>
+                            </div> <!-- /.product-item -->
+                        </div>
+
+          if (listCycle != null && listCycle.Count>0&& listCycle[0].Org_Flow_ID == m.Org_Flow_ID)
+            {
+                try
+                {
+                    <div>
+                        @{
+                    foreach (var mtemp2 in listCycle)
+                    {
+                        <div>
+                        <div>
+                            @{
+                if (!string.IsNullOrEmpty(mtemp2.Pic_Path))
+                {
+                    for (int i = 0; i < mtemp2.Pic_Path.Split('$').Count(); i++)
+                    {
+                        if (!string.IsNullOrEmpty(mtemp2.Pic_Path.Split('$')[i]))
+                        {
+                            <div>
+                                @{
+                            if (mtemp2.Pic_Path.Split('$')[i].StartsWith("http"))
+                            {
+                                <img style="width:98%;" src="@mtemp2.Pic_Path.Split('$')[i]" alt="">
+                            }
+                            else
+                            {
+                                string imgUrl = System.Configuration.ConfigurationManager.AppSettings["AURL"] + mtemp2.Pic_Path.Split('$')[i];
+                                <img style="width:98%;" src="@imgUrl" alt="">
+                            }
+                                }
+
+                                <div style="text-align:left;">@mtemp2.Pic_Description.Split('$')[i]</div>
+                            </div>
+                        }
+
+                    }
+                }
+                            }
+
+                            <p style="clear:both; padding:10px;">
+                                <table>
+                                    @{
+                        if (mtemp2.Trace_Info_Value.Descendants("info").Count() > 0)
+                {
+                    foreach (var mt in mtemp2.Trace_Info_Value.Descendants("info"))
+                    {
+                        try
+                        {
+                            if (mt.Attribute("Public").Value == "1")
+                            {
+                                if (mt.Attribute("Type").Value == "链接")
+                                {
+                                    <tr>
+                                        <th style="text-align: left; width: 95px;">@mt.Attribute("InfoName").Value ：</th>
+                                        <td style="text-align:left;"><a href="@mt.Attribute("InfoValue").Value.Split('|')[1]" target="_blank">@mt.Attribute("InfoValue").Value.Split('|')[0]</a> </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th style="text-align: left; width: 95px;">@mt.Attribute("InfoName").Value ：</th>
+                                        <td style="text-align:left;">@mt.Attribute("InfoValue").Value</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+                }
+                                    }
+                                </table>
+                            </p>
+                        </div> <!-- /.product-item -->
+                    </div>
+                    }
+                        }
+                    </div>
+                }
+                catch { }
+
+                @*<div>
+                    <p style="color:#4b4b4b;font-weight:bold;">其它流程循环操作记录：</p>
+                    @{
+                var listCycles = m.FlowCycles.Split(',');
+                foreach (var mc in listCycles)
+                {
+                    <p>
+                        @mc.Split('|')[1] ：@m.Flow_Name
+                    </p>
+                }
+                        
+                    }
+                </div>*@
+            }
+
+            <div style="clear:both;"></div>
+        }
+                    }
+
+                    <!-- /.col-md-3 -->
+                </div> <!-- /.row -->
+            </div> <!-- /.container -->
+        </div> <!-- /#products -->
+    }
+}
+
+
+
+

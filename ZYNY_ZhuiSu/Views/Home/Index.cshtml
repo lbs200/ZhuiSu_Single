@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta charset="utf-8">
+    <title>农产品质量安全社会化追溯平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="农产品质量安全社会化追溯平台">
+    <meta name="keywords" content="">
+    <!-- Site CSS -->
+    <link href="~/Content/css/homeIndex/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/css/homeIndex/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/css/homeIndex/homeIndex.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/assets/js/html5shiv.min.js?v=801791b415"></script>
+      <script src="/assets/js/respond.min.js?v=801791b415"></script>
+    <![endif]-->
+    <!-- Favicons -->
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand hidden-sm" href="/">农产品质量安全社会化追溯平台</a>
+            </div>
+            <div class="navbar-collapse collapse" role="navigation">
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/Home/Login">登录</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron masthead">
+        <div class="container">
+            <form id="form1" action="/Home/Index" method="get">
+                <h1>农产品质量安全</h1>
+                <h2>社会化追溯平台</h2>
+                <p>
+                    <input type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch" placeholder="产品追溯二维码" style="color:black; padding:15px; font-size:20px; width:320px;" maxlength="100" />
+                </p>
+                <p class="masthead-button-links">
+                    <input type="submit" value="查询" class="btn btn-lg btn-primary btn-shadow" role="button" />
+                    <a class="btn btn-lg btn-primary btn-shadow" href="javascript:PaiMa('/?rnd=1');" role="button">拍码查询</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div class="container projects">
+        <div class="projects-header page-header">
+            <h2>农产品质量安全社会化追溯平台</h2>
+            <p style="text-align:left;">通过对农产品供应链和生产链信息流的控制与关联，建立以农产品生产流程为线索的企业内部追溯体系，以及以农产品供应链为线索的外部追溯体系，并实现内外两大追溯体系信息流的无缝融合与透明追溯，达到农产品源头可追溯、流向可跟踪、信息可查询、产品可召回的目的。</p>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-4 ">
+                <div class="thumbnail">
+                    <img class="lazy" src="/Content/css/homeIndex/gov.png" width="300" height="150">
+                    <div class="caption">
+                        <h3>
+                            <a href="javascript:void(0)">政府用户</a>
+                        </h3>
+                        <p style="text-align:left;">
+                            注册管理下属农企、合作社、家庭农场，检索相关农产品全程追溯信息并监管农产品生产、流通、消费各个环节，监测消费者反馈与投诉，及早发现问题，解决问题，设定追溯关键控制点重要等级与公开程度，促进农产品生产标准化与规范化。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4 ">
+                <div class="thumbnail">
+                    <img class="lazy" src="/Content/css/homeIndex/ent.png" width="300" height="150" />
+                    <div class="caption">
+                        <h3>
+                            <a href="javascript:void(0)">农业企业/组织</a>
+                        </h3>
+                        <p style="text-align:left;">
+                            专业实施团队根据企业需求建立低成本最优追溯流程，以二维码为核心，基于农产品追溯工作流专利技术，实现农产品内部追溯流程与信息的灵活定制与最小工作量录入，保证企业追溯实施效率与可行性，完成农产品各级责任主体的链接与溯源。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-md-4 col-lg-4 ">
+                <div class="thumbnail">
+                    <img class="lazy" src="/Content/css/homeIndex/consumer.png" width="300" height="150" />
+                    <div class="caption">
+                        <h3>
+                            <a href="javascript:void(0)">消费者</a>
+                        </h3>
+                        <p style="text-align:left;">
+                            通过电脑、手机、平板电脑等任一终端设备，实现基于二维码的农产品全程追溯，了解农产品生产、流通、消费全过程关键追溯控制点信息及相关责任主体，在线检验产品真伪，反馈投诉信息，监督企业行为，保护自身权益。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container -->
+    <footer class="footer ">
+        <div class="container">
+            <div class="row footer-bottom">
+                <ul class="list-inline text-center">
+                    <li><a href="http://www.miibeian.gov.cn/" target="_blank">鲁ICP备11000253号-1</a></li>
+                    @*<li>京公网安备</li>*@
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/Content/css/homeIndex/jquery.min.js"></script>
+    <script src="/Content/css/homeIndex/bootstrap.min.js"></script>
+    <script src="/Content/css/homeIndex/jquery.unveil.min.js"></script>
+    <script src="/Content/css/homeIndex/jquery.scrollUp.min.js"></script>
+    <script src="/Content/css/homeIndex/toc.min.js"></script>
+    <script src="/Content/css/homeIndex/site.min.js"></script>
+    <script type="text/javascript">
+        function PaiMa(obj) {
+            this.location = "/Public/QrEwm?url=" + encodeURIComponent(obj);
+        }
+    </script>
+
+</body>
+</html>

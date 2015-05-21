@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "DownFlowInfo";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">企业定制追溯流程后续流程设定</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">企业定制追溯流程后续流程设定</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+
+                            <div class="control-group">
+
+                                <label class="control-label"><b>当前企业：</b></label>
+
+                                <div class="controls">
+                                    @ViewBag.orgName
+                                </div>
+
+                            </div>
+                            <div class="control-group">
+
+                                <label class="control-label"><b>当前产品：</b></label>
+
+                                <div class="controls">
+                                    @ViewBag.prodName
+                                </div>
+
+                            </div>
+                            <div class="control-group">
+
+                                <label class="control-label"><b>当前流程：</b></label>
+
+                                <div class="controls">
+                                    @ViewBag.currentFlow
+                                </div>
+
+                            </div>
+                            <div class="control-group">
+
+                                <label class="control-label"><b>后续流程：</b></label>
+
+                                <div class="controls">
+                                    @ViewBag.nextFlow
+                                </div>
+
+                            </div>
+
+                            <div>
+
+                                <button type="button" class="btn" onclick="history.go(-1);">返回企业定制追溯流程</button>
+
+                            </div>
+
+
+
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+

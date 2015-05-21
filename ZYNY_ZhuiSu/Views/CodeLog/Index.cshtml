@@ -1,0 +1,183 @@
+﻿@model PagedList.IPagedList<LinqModel.CodeLog>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/CodeLog/Index" class="form-search" method="get">
+
+            <div class="input-append">
+                <label class="control-label">机构名称:</label><select class="medium m-wrap" tabindex="1" name="CategoryDDL" id="CategoryDDL">
+                    @{
+                        var mdata = ViewBag.selectlist;
+                        if (@ViewBag.SelectCategory == "-1")
+                        {
+                            <option value="-1" selected="selected">---全部---</option>
+                        }
+                        else
+                        {
+                            <option value="-1">---全部---</option>
+                        }
+
+                        foreach (LinqModel.Organization mm in mdata)
+                        {
+                            if ((@ViewBag.SelectCategory == @mm.Org_ID.ToString()))
+                            {
+                                <option value=@mm.Org_ID selected="selected">@mm.Name</option>}
+                            else
+                            {
+                                <option value=@mm.Org_ID>@mm.Name</option>}
+
+
+                        }
+
+                    }
+                </select>
+
+                <label class="control-label">用户姓名:</label>
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch"><input class="btn green" type="submit" value="检索" />
+                <br />
+                <label class="control-label warning">重复下载请谨慎，自负损失！</label>
+            </div>
+        </form>
+        <div class="portlet box grey">
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>码段下载记录</div>
+
+
+
+            </div>
+            <div class="portlet-body">
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>
+                               机构名称
+                            </th>
+                            <th>
+                               产品名称
+                            </th>
+                            <th>
+                               用户姓名
+                            </th>
+                            <th>
+                               操作日期
+                            </th>
+                            <th>
+                               下载数量
+                            </th>
+                            <th>
+                               起始号
+                            </th>
+                            <th>
+                               终止号
+                            </th>
+                            <th class="hidden-480">
+                                备注
+                            </th>
+                           
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.ID)" id="@m.ID" style="background-color: #@classname">
+                                    <td id="ext_@m.ID">+</td>
+                                    @{  LinqModel.Organization shangji = new DAL.Organization().GetModel(Convert.ToInt32(@m.Org_ID));
+
+                                    <td> @shangji.Name </td>}
+                                    @{  LinqModel.Products ppn = new DAL.Products().GetModel(Convert.ToInt32(@m.Product_ID));
+
+                                    <td> @ppn.Name </td>}
+                                    <td>@m.UserName</td>
+                                    <td>@m.DateTime.ToString().Substring(0,11)</td>  
+                                    <td>@m.Count</td>
+                                    <td>@m.StartNO</td>
+                                    <td>@m.EndNO</td>
+                                    <td class="hidden-480">@m.Remark</td>
+                                   
+                                    @{
+                                        string filePath = "/txt/shangchuan" + m.Product_ID + "" + m.EndNO + "" + ".txt";//路径 
+                                        
+                                    }
+                                    <td class="hidden-480"><a href="/CodeLog/Download?path=@filePath">点击下载</a>&nbsp;&nbsp;</td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.ID">
+                                    <td colspan="7">
+                                        <div style="margin-left:25px;">
+
+                                            <span>备注：@m.Remark</span><br />
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, CategoryDDL = ViewBag.SelectCategory }))
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+    function DLT() {
+
+        var url = '/Products/DLTXT';
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                if (data == "success::") {
+                    window.location.href = "/Products/DIndex";
+
+                }
+                else { alert(data); }
+            }
+        });
+
+    }
+    function FileTransteller(name) {
+        window.open(name, 'newwindow', 'height=100, width=400, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no') //这句要写成一行
+    }
+</script>
+

@@ -1,0 +1,186 @@
+﻿@model PagedList.IPagedList<LinqModel.ComContent>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageComContent/Index" class="form-search" method="get">
+
+            <div class="input-append">
+                <label class="control-label">机构名称:</label><select class="medium m-wrap" tabindex="1" name="CategoryDDL" id="CategoryDDL">
+                    @{
+                        var mdata = ViewBag.selectlist;
+                        if (@ViewBag.SelectCategory == "-1")
+                        {
+                            <option value="-1" selected="selected">---全部---</option>
+                        }
+                        else
+                        {
+                            <option value="-1">---全部---</option>
+                        }
+
+                        foreach (LinqModel.Organization mm in mdata)
+                        {
+                            if ((@ViewBag.SelectCategory == @mm.Org_ID.ToString()))
+                            {
+                                <option value=@mm.Org_ID selected="selected">@mm.Name</option>}
+                            else
+                            {
+                                <option value=@mm.Org_ID>@mm.Name</option>}
+
+
+                        }
+
+                    }
+                </select>
+
+                <label class="control-label">文章标题:</label>
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch"><input class="btn green" type="submit" value="检索" />
+
+            </div>
+        </form>
+        <div class="portlet box grey">
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>文章列表</div>
+
+                <div class="actions">
+
+                    <a href="/ManageComContent/Create" class="btn blue"><i class="icon-pencil"></i> 新增文章</a>
+
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>
+                                所属机构
+                            </th>
+                            <th>
+                                题目
+                            </th>
+                            <th>
+                                栏目名称
+                            </th>
+                            <th>
+                                是否审核
+                            </th>
+                            <th>
+                                关键字
+                            </th>
+                            <th>
+                                发布日期
+                            </th>
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.ID)" id="@m.ID" style="background-color: #@classname">
+                                    <td id="ext_@m.ID">+</td>
+                                    @{  if (@m.Org_ID == 0)
+                                      {
+                                        <td>无上级 </td>
+                                      }
+                                      else
+                                      {
+                                          LinqModel.Organization shangji = new DAL.Organization().GetModel(Convert.ToInt32(@m.Org_ID));
+
+                                        <td> @shangji.Name </td>
+                                      }
+                                    }
+                                    <td>
+                                        @m.Title
+                                    </td>
+                                    @{
+                                if (m.CategoryID == 0 || m.CategoryID == null)
+                                {
+                                    <td>无上级</td>
+
+                                }
+                                else
+                                {
+                                    LinqModel.ContCatogary shangji = new DAL.ContCatogary().GetModel(Convert.ToInt32(@m.CategoryID));
+
+                                    <td> @shangji.Name </td>
+                                }
+
+
+                                    }
+                                    @{
+                                if (m.Assessment == 1)
+                                {
+                                    <td>已审核</td>
+
+                                }
+                                else
+                                {
+
+
+                                    <td> 未审核</td>
+                                }
+
+
+                                    }
+                                    <td>
+                                        @m.Keywords
+                                    </td>
+                                    <td>
+                                        @m.Remark
+                                    </td>
+                                    <td><a href="/ManageComContent/Edit?id=@m.ID">审核</a>&nbsp;&nbsp;|<a href="/ManageComContent/Details?id=@m.ID ">详细</a>|&nbsp;&nbsp;<a href="/ManageComContent/Delete?id=@m.ID ">删除</a></td>
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+
+                </table>
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, CategoryDDL = ViewBag.SelectCategory }))
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>

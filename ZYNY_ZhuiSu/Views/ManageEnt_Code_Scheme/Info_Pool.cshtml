@@ -1,0 +1,85 @@
+﻿@model LinqModel.Ent_Code_Pool
+@{
+    ViewBag.Title = "Info_Pool";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">企业内部编码池信息</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">企业内部编码池信息</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+
+                            <div class="control-group">
+
+                                <label class="control-label">不变号段编码：</label>
+
+                                <div class="controls">
+                                    @Model.Fix_Code_Seg
+                                </div>
+
+                            </div>
+                            <div class="control-group">
+
+                                <label class="control-label">当前最大流水号：</label>
+
+                                <div class="controls">
+                                    @Model.Max_SN
+                                </div>
+
+                            </div>
+                            <div class="form-actions">
+
+                                <button type="button" class="btn" onclick="history.go(-1);">返回</button>
+
+                            </div>
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+
+
+
+
+

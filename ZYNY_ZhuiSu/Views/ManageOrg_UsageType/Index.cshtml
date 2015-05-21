@@ -1,0 +1,78 @@
+﻿@model PagedList.IPagedList<LinqModel.Org_UsageType>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageOrg_UsageType/Index" class="form-search" method="get">
+
+            <div class="input-append">
+
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch" placeholder="名称"><input class="btn green" type="submit" value="查询" />
+
+            </div>
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>企业用途码类型管理</div>
+
+                <div class="actions">
+
+                    <a href="/ManageOrg_UsageType/Add" class="btn blue"><i class="icon-pencil"></i> 新增企业用途码类型</a>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th>名称</th>
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr style="background-color: #@classname">
+                                    <td>@m.TypeName</td>
+                                    <td class="hidden-480"><a href="/ManageOrg_UsageType/Update?id=@m.ID">修改</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/ManageOrg_UsageType/Del?id=@m.ID';} ">删除</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch }))
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>

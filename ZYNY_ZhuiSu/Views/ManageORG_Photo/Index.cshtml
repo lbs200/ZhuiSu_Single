@@ -1,0 +1,125 @@
+﻿@model PagedList.IPagedList<LinqModel.ORG_Photo>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageORG_Photo/Index" class="form-search" method="get">
+
+            <div class="input-append">
+
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch"><input class="btn green" type="submit" value="检索" />
+
+            </div>
+        </form>
+        <div class="portlet box grey">
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>图片列表</div>
+
+                <div class="actions">
+
+                    <a href="/ManageORG_Photo/Create" class="btn blue"><i class="icon-pencil"></i> 新增图片</a>
+
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>
+                                所属机构
+                            </th>
+                            
+                            <th>
+                                图片地址
+                            </th>
+                            <th>
+                                是否为背景
+                            </th>
+                            <th>
+                                描述
+                            </th>
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.ID)" id="@m.ID" style="background-color: #@classname">
+                                    <td id="ext_@m.ID">+</td>
+                                    @{  LinqModel.Organization shangji = new DAL.Organization().GetModel(Convert.ToInt32(@m.Org_ID));
+
+                                    <td> @shangji.Name </td>}
+                                        
+                                        <td>
+                                            @m.Photo
+                                        </td>
+                                  @{
+                                      if(m.Sque==1)
+                                      {
+                                          <td>背景</td>
+                                      }
+                                      else
+                                      {
+                                        <td>展示图片</td>
+
+                                      }
+}
+                                    <td>
+                                        @m.Remark
+                                    </td>
+                                        <td><a href="/ManageORG_Photo/Edit?id=@m.ID">修改</a>&nbsp;&nbsp;|<a href="/ManageORG_Photo/Details?id=@m.ID ">详细</a>|&nbsp;&nbsp;<a href="/ManageORG_Photo/Delete?id=@m.ID ">删除</a></td>
+                                    </tr>
+
+                                    }
+                                    }
+                                </tbody>
+
+                            </table>
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch }))
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+                            <script type="text/javascript">
+                                function RowClick(obj) {
+                                    var m = document.getElementById("detail_" + obj);
+
+                                    if (m.style.display == "none") {
+                                        document.getElementById("ext_" + obj).innerHTML = "-";
+                                        m.style.display = "";
+                                    }
+                                    else {
+                                        document.getElementById("ext_" + obj).innerHTML = "+";
+                                        m.style.display = "none";
+                                    }
+                                }
+                            </script>

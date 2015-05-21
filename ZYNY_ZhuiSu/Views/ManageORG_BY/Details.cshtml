@@ -1,0 +1,43 @@
+﻿@model LinqModel.ORG_BY
+
+@{
+    ViewBag.Title = "详情";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div>
+    <h4>权限类别</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+           机构名称：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Org_ID)
+        </dd>
+        <dt>
+            标语内容：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BYContent)
+        </dd>
+        <dt>
+            LOGO：
+        </dt>
+
+   
+           <dd>
+            <img id="Photo" width="300" height="200" src="@Model.Logo" /><br>
+        </dd>
+        <dt>
+            流程说明：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LCSM)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("返回列表", "Index")
+</p>

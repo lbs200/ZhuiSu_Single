@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "CycleCondition";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+    <div class="span12">
+        <div class="alert alert-error show">
+
+            <button class="close" data-dismiss="alert"></button>
+
+            <span>如果设置了循环跳出条件，则手动跳出功能失效！</span>
+
+        </div>
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">当前循环：</label>
+    <div class="controls">
+        @ViewBag.cycleInfo
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">设置循环次数 ：</label>
+    <div class="controls">
+        <input type="number" id="cycleNum" name="cycleNum" value="2" style="width:50px;" /><a onclick="ConditionCycleAdd()">添加</a>
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">设置循环节点结束条件 ：</label>
+    <div class="controls">
+        <select name="flowInfo" id="flowInfo" style="width:150px;" onchange="flowInfoChange(this.value)">
+            <option value="0">请选择信息元</option>
+            @{
+                var model = new DAL.Org_Flow_Cycle_Info().GetModel((int)ViewBag.id);
+                var list = new DAL.Org_Info().GetList((int)model.CycleEnd);
+                foreach (var m in list)
+                {
+                    <option value="@m.Info_ID">@m.Info_Name</option>
+                }
+            }
+        </select>
+        <select name="conditions" id="conditions" style="width:100px;">
+            <option value="1">等于</option>
+            <option value="2">大于</option>
+            <option value="3">大于等于</option>
+            <option value="4">小于</option>
+            <option value="5">小于等于</option>
+        </select>
+        <input type="text" id="conditionInfo" name="conditionInfo" style="width:150px;" />
+        <a onclick="ConditionAdd()">添加</a>
+        <br />
+        如果是日期的条件请输入正确的格式，如：2015-01-01
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">已设置循环条件 ：</label>
+    <div class="controls">
+        <input type="hidden" id="cycles" name="cycles" value="@ViewBag.conditioncycles" />
+        <input type="hidden" id="metaConditions" name="metaConditions" value="@ViewBag.conditionmetavalue" />
+        <div id="conditioncycles">
+            循环次数 ：  @ViewBag.conditioncycles
+        </div>
+        <div id="conditionmeta">
+            @ViewBag.conditionmeta
+        </div>
+    </div>
+</div>
+<a href="/ManageOrg_Flow/Cycle?orgID=@ViewBag.orgID&prodID=@ViewBag.prodID" class="btn blue">返回</a>
+
+<script type="text/javascript">
+    function flowInfoChange(obj) {
+        $.get("/ManageOrg_Flow/GetMeta_InfoType?metaInfoID=" + obj + "&rnd = " + Math.random(), function (data, textStatus) {
+            if (data == "0") {
+                $("#conditions")[0].innerHTML = "<option value=\"1\">等于</option><option value=\"2\">大于</option><option value=\"3\">大于等于</option><option value=\"4\">小于</option><option value=\"5\">小于等于</option>";
+            } else {
+                $("#conditions")[0].innerHTML = "<option value=\"1\">等于</option>";
+            }
+        });
+        $("#conditionInfo").val("");
+    }
+    function ConditionCycleAdd() {
+        if ($("#cycleNum").val() < 2) {
+            $("#cycleNum").val(2);
+            $("#cycles").val(0);
+            $("#conditioncycles")[0].innerHTML = "";
+            alert("循环次数小于2次，无需设置！");
+        }
+        else {
+            var xx = $("#cycleNum").val();
+            $("#cycles").val(xx);
+            $("#conditioncycles")[0].innerHTML = "循环次数 ：" + xx;
+        }
+    }
+    function ConditionAdd() {
+        if ($("#flowInfo").val() == "0") {
+            alert("请选择信息元！");
+        }
+        else if ($("#conditionInfo").val().trim() == "") {
+            $("#conditionInfo").val("");
+            alert("请填写循环节点结束条件值！");
+        }
+        else {
+            var str = $("#metaConditions").val();
+            var json = eval("({" + str + "})");
+            alert(json['id_' + $("#flowInfo").val() + "_" + $("#conditions").val()]);
+
+            alert($("#flowInfo").val() + "_" + $("#conditions").val() + "_" + $("#conditionInfo").val() + "_" + $("#flowInfo").find("option:selected").text());
+        }
+    }
+</script>

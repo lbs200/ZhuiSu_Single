@@ -1,0 +1,139 @@
+﻿@model LinqModel.Ent_Code_Scheme
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">企业内部编码方案修改</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">企业内部编码方案修改</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @{
+                                if (ViewBag.error == 1)
+                                {
+                                    <div class="alert alert-error show">
+
+                                        <button class="close" data-dismiss="alert"></button>
+
+                                        <span>@ViewBag.errorMsg</span>
+
+                                    </div>
+                                }
+                            }
+                            <form action="/ManageEnt_Code_Scheme/Update" id="form1" class="form-horizontal" method="post">
+
+                                <div class="control-group">
+
+                                    <label class="control-label">编码前缀</label>
+
+                                    <div class="controls">
+                                        <input type="hidden" value="@ViewBag.page" name="page" id="page" />
+                                        <input type="hidden" value="@ViewBag.txtSearch" name="txtSearch" id="txtSearch" />
+                                        <input type="hidden" value="@Model.Scheme_ID" name="Scheme_ID" id="Scheme_ID" />
+                                        <input type="hidden" value="@Model.Org_ID" name="Org_ID" id="Org_ID" />
+                                        <input type="hidden" value="@Model.Separator" name="Separator" id="Separator" />
+                                        <input type="hidden" value="@Model.P_S_separator" name="P_S_separator" id="P_S_separator" />
+                                        <input type="text" class="m-wrap small" value="@Model.Code_Before" maxlength="50" name="Code_Before" id="Code_Before" />
+
+                                        <span class="help-inline"></span>
+
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">是否添加日期段</label>
+
+                                    <div class="controls">
+
+                                        <label class="radio">
+
+                                            <input type="radio" name="Date_Required" value="true" @{ if ((bool)Model.Date_Required) { @: checked
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }} />
+
+                                            是
+
+                                        </label>
+
+                                        <label class="radio">
+
+                                            <input type="radio" name="Date_Required" value="false" @{ if (!(bool)Model.Date_Required) { @: checked
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           }} />
+
+
+
+                                            否
+
+                                        </label>
+                                        <span class="help-inline">如：SG_20140909_1</span>
+                                    </div>
+
+                                </div>
+                                <div class="form-actions">
+
+                                    <button type="submit" class="btn blue" onclick="return CheckClick();"><i class="icon-ok"></i> 确定</button>
+
+                                    <button type="button" class="btn" onclick="history.go(-1);">取消</button>
+
+                                </div>
+
+                            </form>
+
+
+
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    function CheckClick() {
+        if (document.getElementById("Code_Before").value == "") {
+            alert("请输入编码前缀！");
+            return false;
+        }
+        return true;
+    }
+</script>
+

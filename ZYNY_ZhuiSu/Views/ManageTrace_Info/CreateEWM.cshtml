@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "CreateEWM";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<a href="javascript:history.go(-1);">返回</a>
+<br />
+请输入要激活的二维码号段：
+<br />
+<form id="form1" action="/ManageTrace_Info/CreateEWM" method="post">
+    开始二维码编号流水号：
+    <br />
+    <input type="text" id="Prod_Code_Start" name="Prod_Code_Start" required />*
+    <br />
+    结束二维码编号流水号：
+    <br />
+    <input type="text" id="Prod_Code_End" name="Prod_Code_End" required />*
+    <br />
+    <div class="control-group">
+        <label class="control-label">此流程信息是否已结束 ：</label>
+        <div class="controls">
+            <label class="radio">
+                <input type="radio" name="upFlowOver" id="upFlowOver" value="false" checked />
+                否
+            </label>
+            <label class="radio">
+                <input type="radio" name="upFlowOver" id="upFlowOver" value="true" />
+                是
+            </label>
+        </div>
+    </div>
+    <br />
+    <input type="hidden" id="orgFlowID" name="orgFlowID" value="@ViewBag.orgFlowID" />
+    <input type="hidden" id="prodID" name="prodID" value="@ViewBag.prodID" />
+    <input type="hidden" id="traceID" name="traceID" value="@ViewBag.traceID" />
+    <input type="button" id="btnSubmit" class="btn blue" onclick="return Check();" value="确定激活" />
+</form>
+<script type="text/javascript">
+    //Load方法，乔典添加
+    $(function () {
+        $("#btnSubmit").click(function () {
+            ajaxResult("/ManageTrace_Info/CreateEWM", $("#form1").serialize());
+
+        });
+    });
+
+    function Check() {
+        if (confirm('确定要进行激活么？ \n请确定此段二维码没有被使用过，否则无法激活成功！')) {
+            if (isNaN(document.getElementById("Prod_Code_Start").value)) {
+                alert("开始二维码编号流水号必须输入数值！");
+                document.getElementById("Prod_Code_Start").focus();
+                return false;
+            }
+            if (isNaN(document.getElementById("Prod_Code_End").value)) {
+                alert("结束二维码编号流水号必须输入数值！");
+                document.getElementById("Prod_Code_End").focus();
+                return false;
+            }
+            if (document.getElementById("Prod_Code_End").value < document.getElementById("Prod_Code_Start").value) {
+                alert("结束流水号必须大于或等于开始流水号！");
+                document.getElementById("Prod_Code_End").focus();
+                return false;
+            }
+            var listradio = jQuery("input[type='radio']");
+            for (i = 0; i < listradio.length; i++) {
+                if (listradio[i].checked && listradio[i].value == "true") {
+                    if (!confirm("确定要结束上一流程信息么？")) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+</script>

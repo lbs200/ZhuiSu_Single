@@ -1,0 +1,287 @@
+﻿@model LinqModel.S_Tree
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">创建功能菜单</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">功能菜单</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <form action="#" class="form-horizontal">
+
+
+                                    @Html.ValidationSummary(true)
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Text, "节点名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.Text)
+                                            @Html.ValidationMessageFor(model => model.Text)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.ParentID, "上级节点：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+                                            @Html.DropDownListFor(model => model.ParentID, new DAL.S_Tree().GetDropdownlistItem(), new { @value = "0", @text = "无上级" })
+
+                                            @Html.ValidationMessageFor(model => model.ParentID)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                       
+
+
+                                        <div class="controls">
+
+
+                                            <input id="ParentPath" name="ParentPath" type="hidden" value="0" />
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Url, "链接：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.Url)
+                                            @Html.ValidationMessageFor(model => model.Url)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.comment, "备注：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.comment)
+                                            @Html.ValidationMessageFor(model => model.comment)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group ">
+                                        <input type="hidden" id="shengID" name="shengID" value="@ViewBag.CID" />
+                                        <input type="hidden" id="checkvalues" name="checkvalues" value="@ViewBag.CVL" />
+                                        <label class="control-label">权限类型:</label>
+                                        <select class="medium m-wrap" tabindex="1" name="CategoryDDL" id="CategoryDDL" onchange="GetAddressShi(this.value)">
+
+                                            <option value="*">---请选择---</option>
+                                            @{
+                                                var mdata = ViewBag.selectlist;
+                                                foreach (LinqModel.Category mm in mdata)
+                                                {
+                                                   
+                                                        <option value="@mm.CategoryID">@mm.CategoryName</option>
+                                                   
+
+                                                }
+
+                                            }
+
+
+                                        </select>
+
+                                    </div>
+                                    <div id="quanxian" class="control-group">
+                                       
+                                       
+                                        <div class="controls">
+                                            <div id="qxlb" class="editor-field">
+                                              <label class="control-label">权限名称:</label>
+                                                <select class="medium m-wrap" tabindex="1" name="PermissionID" id="PermissionID">
+                                                    <option value="*">---请选择---</option>
+                                                </select>
+                                            </div>
+
+                                            @Html.ValidationMessageFor(model => model.PermissionID)
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.ImageUrl, "图片链接：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.ImageUrl, new { @value = "icon-bar-chart" })
+                                            @Html.ValidationMessageFor(model => model.ImageUrl)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="保存" onclick="return CheckClick();" class="btn btn-default" />
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            }
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+
+
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>
+<script type="text/javascript">
+    function CheckClick() {
+        if (document.getElementById("Text").value == "") {
+            alert("请输入名称！");
+            return false;
+        }
+        if (document.getElementById("ParentID").value == "") {
+            alert("请选中上级节点！");
+            return false;
+        }
+     
+        if (document.getElementById("Url").value == "") {
+            alert("请输入链接！");
+            return false;
+
+        }
+        if (document.getElementById("PermissionID").value == "") {
+            alert("请选中权限！");
+            return false;
+
+
+        }
+      
+
+
+
+        return true;
+    }
+    function GetAddressShi(obj) {
+       
+
+        document.getElementById("shengID").value = obj;
+
+
+        if (obj != "*") {
+
+
+
+
+            $.get("/S_Tree/GetP?cid=" + obj, function (data, textStatus) {
+                //alert("11");
+                var sid = document.getElementById("PermissionID");
+                $("#PermissionID").empty();
+                sid.options[sid.options.length] = new Option("---请选择---", "*");
+                $.each(data, function () {
+                    sid.options[sid.options.length] = new Option(this["PermissionName"], this["PermissionID"]);
+                });
+               
+
+            });
+        }
+
+    }
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

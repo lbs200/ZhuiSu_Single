@@ -1,0 +1,95 @@
+﻿@model PagedList.IPagedList<LinqModel.View_Org_Flow>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageFlow_Pics/Index" class="form-search" method="get">
+
+            <div class="row-details">
+                <input type="hidden" id="orgID" name="orgID" value="@ViewBag.orgID" />
+                <select id="prods" name="prods" style="width:100px;">
+                    @{
+                        foreach (var m in ViewBag.prods as List<LinqModel.Products>)
+                        {
+                            if (m.ID == ViewBag.prodsCurrent)
+                            {
+                                <option value="@m.ID" selected>@m.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@m.ID">@m.Name</option>
+                            }
+                        }
+                    }
+                </select>
+                @*<input class="m-wrap small" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch">*@<input class="btn green" type="submit" value="查询" />
+
+            </div>
+        </form>
+        【@ViewBag.prodName】产品现行流程：<br />
+        @Html.Raw(ViewBag.listFlow)
+        <br />
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>【@ViewBag.prodName】产品追溯流程列表</div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th>名称</th>
+
+                            <th>序号</th>
+
+                            <th>操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr style="background-color: #@classname">
+                                    <td>@m.Flow_Name</td>
+
+                                    <td>@m.Seq_No</td>
+
+                                    <td><a href="/ManageFlow_Pics/ListFlowPics?orgFlowID=@m.Org_Flow_ID&prodID=@ViewBag.prodsCurrent&page=@ViewBag.page">流程图片上传与管理</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, orgID = ViewBag.orgID, prods = ViewBag.prodsCurrent }))
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>

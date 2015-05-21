@@ -1,0 +1,355 @@
+﻿@model PagedList.IPagedList<LinqModel.View_Trace_Info>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "ListFlow";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<style type="text/css">
+    .c {
+        width: 100%;
+        border: 1px solid green;
+        border-collapse: collapse;
+    }
+
+        .c td {
+            padding: 2px;
+            border: 1px solid green;
+        }
+</style>
+
+<style>
+    /* 打印的时候让打印按钮隐藏 */
+    @@media only print {
+        a {
+            display: none;
+        }
+    }
+</style>
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageTrace_Info/ListFlow" class="form-search" method="get">
+            <div class="row-details">
+                产品：<select id="products" name="products" onchange="GetOrgFlow(this.value)">
+                    @{
+                        var listProducts = (List<LinqModel.Products>)ViewBag.products;
+                        if (listProducts != null && listProducts.Count > 0)
+                        {
+                            foreach (var m in listProducts)
+                            {
+                                if (m.ID.ToString() == ViewBag.productCurrent)
+                                {
+                                    <option value="@m.ID" selected>@m.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@m.ID">@m.Name</option>
+                                }
+                            }
+                        }
+                    }
+                </select>
+
+                &nbsp;&nbsp;流程：<select id="flows" name="flows">
+                    @{
+                        var listOrgFlow = (PagedList.IPagedList<LinqModel.View_Org_Flow>)ViewBag.flows;
+                        if (listOrgFlow != null && listOrgFlow.Count > 0)
+                        {
+                            foreach (var m in listOrgFlow)
+                            {
+                                if (m.Org_Flow_ID.ToString() == ViewBag.flowCurrent)
+                                {
+                                    <option value="@m.Org_Flow_ID" selected>@m.Flow_Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@m.Org_Flow_ID">@m.Flow_Name</option>
+                                }
+                            }
+                        }
+                    }
+                </select>
+                &nbsp;&nbsp;时间：<input type="text" style="width:80px;" id="timeS" name="timeS" value="@ViewBag.timeS" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+                -
+                <input type="text" style="width:80px;" id="timeE" name="timeE" value="@ViewBag.timeE" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+                &nbsp;&nbsp;是否结束：
+                <select id="IsOver" name="IsOver" style="width:100px;">
+                    @{
+                        if (ViewBag.IsOver == "true")
+                        {
+                            <option selected value="true">已结束</option>
+                            <option value="false">进行中</option>
+
+                        }
+                        else
+                        {
+                            <option value="true">已结束</option>
+                            <option selected value="false">进行中</option>
+                        }
+                    }
+                </select>
+                &nbsp;&nbsp;单据编号：<input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch">
+                <input class="btn green" type="submit" value="查询" />
+
+                <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/ListFlow?rdm=1')" value="拍码查询" />
+            </div>
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>@ViewBag.title2 追溯信息列表</div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>单据编号</th>
+                            @*<th>流程名称</th>
+                                <th class="hidden-480">产品名称</th>*@
+                            <th class="hidden-480">录入时间</th>
+                            <th class="hidden-480">是否结束</th>
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.Trace_ID)" id="@m.Trace_ID" style="background-color: #@classname">
+                                    <td id="ext_@m.Trace_ID">+</td>
+                                    <td>@m.Flow_Num</td>
+                                    @*<td>@m.Flow_Name</td>
+                                        <td class="hidden-480">@m.Name</td>*@
+                                    <td class="hidden-480">@m.Rec_Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td class="hidden-480">
+                                        @{
+                                if (m.FlowOver == true)
+                                {
+                                    @:已结束
+                                                    }
+                                else
+                                {
+                                    @:进行中
+                                                    }
+                                        }
+                                    </td>
+                                    <td class="hidden-480"><a href="javascript:void(0);">查看详情</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.Trace_ID">
+                                    <td colspan="10">
+                                        <div style="margin-left:25px;">
+                                            <div>
+                                                <span><a href="javascript:void(0);" onclick="previewY(@count);">移动打印</a></span>&nbsp;&nbsp;
+                                                <span><a href="javascript:void(0);" onclick="preview(@count);">电脑打印</a></span>&nbsp;&nbsp;
+                                                @if (m.FlowOver == false)
+                                                {
+                                                    <span><a href="/ManageTrace_Info/CreateEWM?traceID=@m.Trace_ID&orgFlowID=@m.Org_Flow_ID&prodID=@m.Prod_ID">追溯信息激活</a></span>
+                                                }
+                                            </div>
+
+                                            <p>
+
+
+                                                <!--startprint @count-->
+                                                <table id="dayin1" border="1" style="width:98%">
+                                                    <tr>
+                                                        <th width="80">单据编号：</th>
+                                                        <td colspan="2">@m.Flow_Num</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>流程名称：</th>
+                                                        <td>@m.Flow_Name </td>
+                                                        <td style="vertical-align:middle; text-align:center;" rowspan="2"><img src="/Public/ShowImg?ewm=@m.Flow_Num" width="80" height="80" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>产品名称：</th>
+                                                        <td>@m.Name</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th> 录入时间：</th>
+                                                        <td colspan="2">@m.Rec_Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th> 是否结束：</th>
+                                                        <td colspan="2">
+                                                            @{
+                                if (m.FlowOver == true)
+                                {
+                                    @:已结束
+                                                    }
+                                else
+                                {
+                                    @:进行中
+                                                    }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th> 录入详情：</th>
+                                                        <td colspan="2">
+                                                            @{
+                                if (m.Trace_Info_Value.Descendants("info").Count() > 0)
+                                {
+                                    foreach (var mt in m.Trace_Info_Value.Descendants("info"))
+                                    {
+                                        if (mt.Attribute("InfoValue") != null)
+                                        {
+                                                            <label><b>@mt.Attribute("InfoName").Value：</b>@mt.Attribute("InfoValue").Value</label><br />
+                                        }
+                                        else
+                                        {
+                                                            <label>
+                                                                <b>
+                                                                    @mt.Attribute("InfoName").Value：
+                                                                </b>
+                                                                @{
+                                            foreach (var mtt in mt.Descendants("value"))
+                                            {
+                                                            <text>@mtt.Value ，</text>
+                                            }
+                                                                }
+                                                            </label><br />
+                                        }
+                                    }
+                                }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="vertical-align:top;">操作图片：</th>
+                                                        <td colspan="2">
+                                                            @{
+                                if (m.Trace_Info_Value.Descendants("img").Count() > 0)
+                                {
+                                    foreach (var mt in m.Trace_Info_Value.Descendants("img"))
+                                    {
+                                        <img src="@mt.Attribute("InfoValue").Value" width="300" height="200" />
+                                    }
+                                }
+                                                            }
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <!--endprint @count-->
+
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("ListFlow", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, timeS = ViewBag.timeS, timeE = ViewBag.timeE }))
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function myrefresh() {
+        window.location.reload();
+    }
+    // setTimeout('myrefresh()', 1000); //指定1秒刷新一次
+
+    function previewY(obj) {
+        var s = window.document.body.innerHTML;
+
+        bdhtml = window.document.body.innerHTML;
+        sprnstr = "<!--startprint " + obj + "-->";
+        eprnstr = "<!--endprint " + obj + "-->";
+        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+        demo.printString(prnhtml);
+    }
+
+    function preview(obj) {
+        var s = window.document.body.innerHTML;
+
+        bdhtml = window.document.body.innerHTML;
+        sprnstr = "<!--startprint " + obj + "-->";
+        eprnstr = "<!--endprint " + obj + "-->";
+        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+        window.document.body.innerHTML = prnhtml;
+
+        // *****************************************************
+        //var css = '＜style type="text/css" media=all＞' +
+        //'p { line-height: 120%}' +
+        //'.ftitle { line-height: 120%; font-size: 18px; color: #000000}' +
+        //'td { font-size: 10px; color: #000000}' +
+        //'＜/style＞';
+        // *****************************************************
+        // *****************************************************
+        //var body = '＜table width="640" border="0" cellspacing="0" cellpadding="5"＞' +
+        //' ＜tr＞ ' +
+        //' ＜td class="fbody"＞ ' +
+        //' ＜div align="center" class=ftitle＞' + prnhtml + '＜/div＞' +
+        //' ＜/td＞' +
+        //' ＜/tr＞' +
+        //'＜/table＞';
+        // ******************************************************
+        //document.body.innerHTML = '＜div align="center" class="span5"＞' + prnhtml + '＜/div＞';
+        window.print();
+        window.document.body.innerHTML = s;
+        // window.history.go(0);
+
+    }
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>
+
+<script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    function PaiMa(obj) {
+        this.location = "/Public/QrEwm?url=" + encodeURIComponent(obj);
+    }
+
+    function GetOrgFlow(obj) {
+        if (obj != "") {
+            $.get("/ManageTrace_Info/GetOrgFlow?prodID=" + obj, function (data, textStatus) {
+                var sid = document.getElementById("flows");
+                $("#flows").empty();
+                $.each(data, function () {
+                    sid.options[sid.options.length] = new Option(this["Flow_Name"], this["Org_Flow_ID"]);
+                });
+
+            });
+        }
+    }
+</script>

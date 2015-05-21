@@ -1,0 +1,189 @@
+﻿@model PagedList.IPagedList<LinqModel.View_Trace_Info>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "ListFlowEWM";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageTrace_Info/ListFlowEWM" class="form-search" method="get">
+            <div class="row-details">
+                时间：<input type="text" style="width:80px;" id="timeS" name="timeS" value="@ViewBag.timeS" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+                -
+                <input type="text" style="width:80px;" id="timeE" name="timeE" value="@ViewBag.timeE" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+                产品追溯二维码：<input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch">
+                <input class="btn green" type="submit" value="查询" />
+            </div>
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>追溯二维码信息列表</div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>追溯二维码前缀</th>
+                            <th>追溯名称</th>
+                            <th class="hidden-480">产品名称</th>
+                            <th class="hidden-480">录入时间</th>
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                string zhuisUrl = "/ManageTrace_Info/InfoAnylasis?ewm=" + m.Prod_Code_Start + "&prodID=" + m.Prod_ID;
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.Trace_ID)" id="@m.Trace_ID" style="background-color: #@classname">
+                                    <td id="ext_@m.Trace_ID">+</td>
+                                    <td>@m.Prod_Code_Before</td>
+                                    <td>@m.Flow_Name 追溯信息激活</td>
+                                    <td class="hidden-480">@m.Name</td>
+                                    <td class="hidden-480">@m.Rec_Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td class="hidden-480"><a href="javascript:void(0);">查看详情</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.Trace_ID">
+                                    <td colspan="10">
+                                        <div style="margin-left:25px;">
+                                            <div>
+                                                <span><a href="javascript:void(0);" onclick="previewY(@count);">移动打印</a></span>&nbsp;&nbsp;
+                                                <span><a href="javascript:void(0);" onclick="preview(@count);">电脑打印</a></span>&nbsp;&nbsp;
+                                                <span><a href="@zhuisUrl">查询追溯信息详情</a></span>
+                                            </div>
+                                            <p>
+                                                <!--startprint @count-->
+                                                <table  border="1" style="width:98%">
+                                                    <tr>
+                                                        <th style="width:120px;">追溯二维码前缀：</th>
+                                                        <td colspan="2">@m.Prod_Code_Before</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>追溯名称：</th>
+                                                        <td>@m.Flow_Name 追溯信息激活</td>
+                                                        <td rowspan="2"><img src="/Public/ShowImg?ewm=@m.Flow_Num" width="80" height="80" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>产品名称：</th>
+                                                        <td>@m.Name</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th> 录入时间：</th>
+                                                        <td colspan="2">@m.Rec_Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th> 录入详情：</th>
+                                                        <td colspan="2">
+                                                            @{
+                                if (m.Trace_Info_Value.Descendants("info").Count() > 0)
+                                {
+                                    foreach (var mt in m.Trace_Info_Value.Descendants("info"))
+                                    {
+                                        if (mt.Attribute("InfoValue") != null)
+                                        {
+                                            <label><b>@mt.Attribute("InfoName").Value：</b>@mt.Attribute("InfoValue").Value</label><br />
+                                        }
+                                        else
+                                        {
+                                            <label>
+                                                <b>
+                                                    @mt.Attribute("InfoName").Value：
+                                                </b>
+                                                @{
+                                            foreach (var mtt in mt.Descendants("value"))
+                                            {
+                                                <text>@mtt.Value ，</text>
+                                            }
+                                                }
+                                            </label><br />
+                                        }
+                                    }
+                                }
+}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <!--endprint @count-->
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("ListFlowEWM", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, timeS = ViewBag.timeS, timeE = ViewBag.timeE }))
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function previewY(obj) {
+        var s = window.document.body.innerHTML;
+
+        bdhtml = window.document.body.innerHTML;
+        sprnstr = "<!--startprint " + obj + "-->";
+        eprnstr = "<!--endprint " + obj + "-->";
+        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+        demo.printString(prnhtml);
+    }
+
+    function preview(obj) {
+        var s = window.document.body.innerHTML;
+
+        bdhtml = window.document.body.innerHTML;
+        sprnstr = "<!--startprint "+obj+"-->";
+        eprnstr = "<!--endprint "+obj+"-->";
+        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+        window.document.body.innerHTML = prnhtml;
+
+        window.print();
+        window.document.body.innerHTML = s;
+
+
+    }
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>
+
+<script src="/Scripts/My97DatePicker/WdatePicker.js"></script>

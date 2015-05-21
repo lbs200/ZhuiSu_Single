@@ -1,0 +1,176 @@
+﻿@model PagedList.IPagedList<LinqModel.S_Tree>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/S_Tree/Index" class="form-search" method="get">
+
+            <div class="input-append">
+                <label>节点名称：</label>
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch"><input class="btn green" type="submit" value="检索" />
+
+            </div>
+        </form>
+
+
+        <div class="portlet box grey">
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>功能菜单列表</div>
+
+                <div class="actions">
+
+                    <a href="/S_Tree/Create" class="btn blue"><i class="icon-pencil"></i> 新增节点</a>
+
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>
+                                节点名称
+                            </th>
+                            <th>
+                                上级菜单
+                            </th>
+                            <th class="hidden">
+                                父路径
+                            </th>
+                            <th>
+                                链接
+                            </th>
+                            <th class="hidden-480">
+                                备注
+                            </th>
+                            <th class="hidden-480">
+                                图片链接
+                            </th>
+                            <th>
+                                权限
+                            </th>
+
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.NodeID)" id="@m.NodeID" style="background-color: #@classname">
+                                    <td id="ext_@m.NodeID">+</td>
+                                    <td>
+                                        @m.Text
+                                    </td>
+                                    @{
+                                if (m.ParentID == 0)
+                                {
+                                    <td>无上级</td>
+
+                                }
+                                else
+                                {
+                                    LinqModel.S_Tree sheng = new DAL.S_Tree().GetModel(Convert.ToInt32(@m.ParentID));
+
+                                    <td> @sheng.Text </td>
+                                }
+
+
+                                    }
+                                    <td class="hidden">
+                                        @m.ParentPath
+                                    </td>
+                                    <td>
+                                        @m.Url
+                                    </td>
+                                    <td class="hidden-480">
+                                        @m.comment
+                                    </td>
+                                    <td class="hidden-480">
+                                        @m.ImageUrl
+                                    </td>
+                                    @{ LinqModel.Permission quanxian = new DAL.Permission().GetModel(Convert.ToInt32(@m.PermissionID));
+
+                                    <td> @quanxian.PermissionName </td>}
+
+                                    <td class="hidden-480"><a href="/S_Tree/Edit?id=@m.NodeID">修改</a>&nbsp;&nbsp;|<a href="/S_Tree/Details?id=@m.NodeID ">详情</a>|&nbsp;&nbsp;<a href="/S_Tree/Delete?id=@m.NodeID ">删除</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.NodeID">
+                                    <td colspan="7">
+                                        <div style="margin-left:25px;">
+                                            <span>
+                                                @m.Text
+                                            </span>
+                                            <br />
+                                           
+                                            
+                                            <br />
+                                            <span>
+                                                @m.Url
+                                            </span>
+                                            <br />
+                                            <span>
+                                                @m.comment
+                                            </span>
+                                            <br />
+                                            <span>
+                                                @m.ImageUrl
+                                            </span>
+                                            <br />
+
+                                            <span><a href="/S_Tree/Edit?id=@m.NodeID">修改</a>&nbsp;&nbsp;|<a href="/S_Tree/Details?id=@m.NodeID ">详情</a>|&nbsp;&nbsp;<a href="/S_Tree/Delete?id=@m.NodeID ">删除</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch }))
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>

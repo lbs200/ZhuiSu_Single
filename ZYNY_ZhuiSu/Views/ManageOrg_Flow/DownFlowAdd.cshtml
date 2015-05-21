@@ -1,0 +1,93 @@
+﻿@model List<LinqModel.View_Org_Flow>
+@{
+    ViewBag.Title = "DownFlowAdd";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="/Content/css/chosen.css" />
+<div class="row-fluid">
+
+    <div class="span12">
+        <div class="control-group">
+
+            <label class="control-label">【企业：@ViewBag.orgName】-【产品：@ViewBag.prodName】-【流程：@ViewBag.flowName】</label>
+
+        </div>
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageOrg_Flow/DownFlowAdd" class="form-search" method="get">
+
+            <div class="row-details">
+                <input type="hidden" value="@ViewBag.id" id="id" name="id" />
+                <input type="hidden" value="@ViewBag.orgID" id="orgID" name="orgID" />
+                <input type="hidden" value="@ViewBag.prodsCurrent" id="prodID" name="prodID" />
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch" placeholder="元流程名称"><input class="btn green" type="submit" value="查询" />
+
+            </div>
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>追溯信息元流程列表</div>
+                <div class="actions">
+
+                    <a href="/ManageOrg_Flow/Index?orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent" class="btn blue"><i class="icon-pencil"></i> 返回企业定制追溯流程管理</a>
+
+                </div>
+            </div>
+
+            <div class="portlet-body">
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th>元流程名称</th>
+
+                            <th>描述</th>
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr id="@m.Org_Flow_ID" style="background-color: #@classname">
+                                    <td>@m.Flow_Name</td>
+
+                                    <td><a href="javascript:void(0);" title="@m.Flow_Description">查看描述</a> </td>
+
+                                    <td class="hidden-480"><a href="javascript:DownFlowAddMethod(@ViewBag.id,@m.Org_Flow_ID,@ViewBag.orgID)">设置为后续流程</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+        
+</div>
+<script type="text/javascript">
+    function DownFlowAddMethod(obj1, obj2, obj3) {
+        
+        jQuery.get("/ManageOrg_Flow/DownFlowAddMethod?id=" + obj1 + "&nextID=" + obj2 + "&orgID=" + obj3 + "&r=" + Math.random(), function (data, textStatus) {
+            alert(data);
+            location.reload();
+        });
+        
+    }
+</script>
+

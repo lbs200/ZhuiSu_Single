@@ -1,0 +1,169 @@
+﻿@model LinqModel.AdministrationRegion
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">行政区划</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">行政区划增加</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <form action="#" class="form-horizontal">
+
+                                    @Html.ValidationSummary(true)
+
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.City, "所属区域：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="controls">
+                                            <select class="medium m-wrap" tabindex="1" name="City" id="City" onchange="GetAddressShi(this.value)">
+
+                                                <option value="0">省级</option>
+                                                @{
+                                var listP = new DAL.Region().GetAllSheng();
+                                foreach (var m in listP)
+                                {
+                                    <option value="@m.ID">@m.Province</option>
+                                }
+                                                }
+
+                                            </select>
+                                            <select class="medium m-wrap" tabindex="1" name="City2" id="City2">
+
+                                                <option value="0">省级</option>
+                                                @{
+
+                                                }
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Province, "名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="controls">
+                                            @Html.EditorFor(model => model.Province)
+                                            @Html.ValidationMessageFor(model => model.Province)
+                                            <span class="help-inline"></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Postal_Code, "邮编：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            @Html.EditorFor(model => model.Postal_Code)
+                                            @Html.ValidationMessageFor(model => model.Postal_Code)
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="保存" onclick="return CheckClick();" class="btn btn-default" />
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            }
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+
+
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>
+<script type="text/javascript">
+    function CheckClick() {
+        if (document.getElementById("Province").value == "") {
+            alert("请输入名称！");
+            return false;
+        }
+        return true;
+    }
+    function GetAddressShi(obj) {
+        if (obj != "*") {
+            var sid = document.getElementById("City2");
+            $("#City2").empty();
+            if (obj != "0") {
+                $.get("/ManageOrganizations/GetP?cid=" + obj, function (data, textStatus) {
+                    sid.options[sid.options.length] = new Option("市级", "0");
+                    $.each(data, function () {
+                        sid.options[sid.options.length] = new Option(this["Province"], this["ID"]);
+                    });
+
+                });
+            }
+            else {
+                sid.options[sid.options.length] = new Option("省级", "0");
+            }
+        }
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

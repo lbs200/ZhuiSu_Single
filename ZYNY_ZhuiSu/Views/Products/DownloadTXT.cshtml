@@ -1,0 +1,276 @@
+﻿@model LinqModel.Products
+
+@{
+    ViewBag.Title = "DownloadTXT";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+<script src="jquery.form.js" type="text/javascript"></script>
+<script language="javascript" src="../../Scripts/uploadPreview.js"></script>
+<script src="../../ckeditor/ckeditor.js" type="text/javascript"></script>
+<script src="../../ckfinder/ckfinder.js" type="text/javascript"></script>
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">下载追溯码码段</span>
+
+                </div>
+
+            </div>
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">追溯码生成与下载</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <form action="#" class="form-horizontal">
+                                    <h4>产品</h4>
+                                    <hr />
+                                    @Html.ValidationSummary(true)
+                                    @Html.HiddenFor(model => model.ID)
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Org_ID, "机构名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @{
+                                LinqModel.Organization oza = new DAL.Organization().GetModel(Model.Org_ID);
+                                <label>@oza.Name</label>
+                                <input id="Org_ID" name="Org_ID" class="uneditable-input " type="hidden" value="@Model.Org_ID" />
+                                            }
+                                           
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Name, "产品名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <label>@Model.Name</label>
+                                            <input id="Name" name="Name" class="uneditable-input"  type="hidden" value="@Model.Name" />
+
+                                            @Html.ValidationMessageFor(model => model.Name)
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Abbr, "产品缩写：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <label>@Model.Abbr</label>
+                                            <input id="Abbr" name="Abbr" class="uneditable-input"  type="hidden" value="@Model.Abbr" />
+                                            @Html.ValidationMessageFor(model => model.Abbr)
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.Prod_Category, "产品类别：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="controls">
+                                            @{
+                                LinqModel.Prod_category pc = new DAL.Pro_Category().GetModel(Model.Prod_Category);
+                                <label>@pc.Description</label>
+                                <input id="Prod_Category" name="Prod_Category" class="uneditable-input" type="hidden" value="@Model.Prod_Category" />
+                                            }
+                                            
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.material, "主副原料：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <label>@Model.material</label>
+                                            <input id="material" name="material" class="uneditable-input " type="hidden" value="@Model.material" />
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.Company, "生产机构：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @{
+                                LinqModel.Organization oza1 = new DAL.Organization().GetModel(Model.Org_ID);
+                                <label>@oza1.Name</label>
+                                <input id="Company" name="Company" class="uneditable-input "  type="hidden" value="@Model.Company" />
+                                            }
+                                           
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group hidden">
+
+                                        <div class="col-md-10">
+                                            <label>@Model.NET</label>
+                                            <input id="NET" name="NET" class="uneditable-input hidden" type="hidden" value="@Model.NET" />
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group hidden">
+
+                                        <div class="col-md-10">
+                                            <label>@Model.Count</label>
+                                            <input id="Count" name="Count" class="uneditable-input hidden" type="hidden" value="@Model.Count" />
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.Description, "产品描述：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                       
+                                        <input id="Description" name="Description" class="uneditable-input hidden" type="hidden" value="@Model.Description" />
+                                        <div class="display-field">@Html.Raw(Model.Description)</div>
+                                    </div>
+
+                                    <div class="control-group hidden">
+
+                                        @Html.LabelFor(model => model.Adv_Code, "宣传码", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <label>@Model.Adv_Code</label>
+                                            <input id="Adv_Code" name="Adv_Code" type="hidden" class="uneditable-input" value="@Model.Adv_Code" />
+                                            @{
+                                string shijiURL = System.Configuration.ConfigurationManager.AppSettings["ProURL"];
+                                string shi = shijiURL + "?pid=" + Model.ID + "&oid=" + Model.Org_ID;
+                                <img src="/Public/ShowImg?ewm=@shi" width="100" height="100" />
+    <input id="Photo" name="Photo" type="hidden" class="uneditable-input" value="@Model.Photo" />
+}
+
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.Max_SN, "当前最大码段", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @{
+                                if (Model.Max_SN != null)
+                                {
+                                    <label>@Model.Max_SN</label>
+                                    <input id="Max_SN" name="Max_SN" class="uneditable-input " type="hidden" value="@Model.Max_SN" />
+
+
+                                }
+                                else
+                                {
+                                    <label>0</label>
+                                    <input id="Max_SN" name="Max_SN" class="uneditable-input "  type="hidden" value="0" />
+
+                                }
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <div class="control-group hidden">
+
+                                        @Html.LabelFor(model => model.CodeScheme, "编码方案", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <label>@Model.CodeScheme</label>
+                                            <input id="CodeScheme" name="CodeScheme" type="hidden" class="uneditable-input hidden"  value="@Model.CodeScheme" />
+
+
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="control-group">
+                                            <label>请输入生成数量（10000以内）</label>
+                                            <div class="col-md-10">
+
+                                                <input id="Dcount" name="Dcount" type="text" value="0" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="生成及下载" onclick=" CheckClick()" class="btn btn-default" />
+                                        </div>
+                                        <div id="jxxz">
+
+                                        </div>
+                                    </div>
+                                </form>
+                            }
+                            <!-- END FORM-->
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+
+    </div>
+</div>
+<div>
+    @Html.ActionLink("返回列表", "DIndex")
+    <a href="/Products/DownloadTXT?id=@Model.ID">继续下载</a>
+</div>
+<script type="text/javascript">
+
+    function CheckClick() {
+       
+        $("#Dcount").attr({ readonly: 'true' });
+        if (document.getElementById("Dcount").value == "") {
+            alert("请输入数量！");
+            return false;
+        }
+        if (document.getElementById("Dcount").value > 10000) {
+            alert("请输入10000以内数字！");
+            return false;
+        }
+        if (isNaN(document.getElementById("Dcount").value)) {
+            alert("请输入数字！");
+            return false;
+        }
+       
+        return true;
+    }
+    function DLT() {
+
+        var url = '/Products/DLTXT';
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                if (data == "success::") {
+                    window.location.href = "/Products/DIndex";
+
+                }
+                else { alert(data); }
+            }
+        });
+
+    }
+
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

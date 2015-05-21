@@ -1,0 +1,118 @@
+﻿@model List<LinqModel.Meta_Flow>
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageOrg_Flow/Add" class="form-search" method="get">
+            <div class="row-details">
+                @ViewBag.titleFlow  设置流程
+            </div>
+            <br />
+            【@ViewBag.prodName】产品已设置追溯流程：<span id="flowInfo"></span><br />
+            <div class="input-append">
+                <input type="hidden" value="@ViewBag.orgID" id="orgID" name="orgID" />
+                <input type="hidden" value="@ViewBag.prodID" id="prodID" name="prodID" />
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch" placeholder="元流程名称"><input class="btn green" type="submit" value="查询" />
+
+            </div>
+
+
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>候选追溯信息元流程列表</div>
+                <div class="actions">
+
+                    <a href="/ManageOrg_Flow/Index?orgID=@ViewBag.orgID&prodID=@ViewBag.prodID" class="btn blue"><i class="icon-pencil"></i> 返回企业定制追溯流程管理</a>
+
+                </div>
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>元流程名称</th>
+
+                            <th>描述</th>
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.Flow_ID)" id="@m.Flow_ID" style="background-color: #@classname">
+                                    <td id="ext_@m.Flow_ID">+</td>
+                                    <td>@m.Flow_Name</td>
+
+                                    <td>@m.Flow_Description</td>
+
+                                    <td class="hidden-480"><a href="javascript:ManageOrg_Flow_Add(@m.Flow_ID,@ViewBag.orgID)">增加</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.Flow_ID">
+                                    <td colspan="10">
+                                        <div style="margin-left:25px;">
+                                            <span><a href="javascript:ManageOrg_Flow_Add(@m.Flow_ID,@ViewBag.orgID)">增加</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+    function ManageOrg_Flow_Add(obj, obj2) {
+        $.get("/ManageOrg_Flow/AddMethod?id=" + obj + "&prodID=" + document.getElementById("prodID").value + "&orgID=" + obj2 + "&r=" + Math.random(), function (data, textStatus) {
+            $.get("/ManageOrg_Flow/GetFlow?prodID=" + document.getElementById("prodID").value + "&orgID=" + obj2 + "&r=" + Math.random(), function (data, textStatus) {
+                document.getElementById("flowInfo").innerHTML=data;
+            });
+            alert(data);
+        });
+    }
+    $.get("/ManageOrg_Flow/GetFlow?prodID=" + document.getElementById("prodID").value + "&orgID=" + document.getElementById("orgID").value + "&r=" + Math.random(), function (data, textStatus) {
+        document.getElementById("flowInfo").innerHTML=data;
+    });
+</script>

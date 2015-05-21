@@ -1,0 +1,453 @@
+﻿@model LinqModel.User
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+<script src="../../Scripts/swfobject.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.uploadify.v2.1.4.js" type="text/javascript"></script>
+<link href="../../Content/uploadify.css" rel="stylesheet" type="text/css" />
+<script src="../../Content/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.validate.js" type="text/javascript"></script>
+
+<script src="jquery.form.js" type="text/javascript"></script>
+<script language="javascript" src="../../Scripts/uploadPreview.js"></script>
+<script src="../../ckeditor/ckeditor.js" type="text/javascript"></script>
+<script src="../../ckfinder/ckfinder.js" type="text/javascript"></script>
+<script src="../../Scripts/YZ.js" type="text/javascript"></script>
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+        <div class="portlet box grey tabbable">
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">编辑用户信息</span>
+
+                </div>
+
+            </div>
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">用户</a></li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="portlet_tab1">
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <form action="#" class="form-horizontal">
+                                    <h4>用户</h4>
+                                    <hr />
+                                    @Html.ValidationSummary(true)
+                                    @Html.HiddenFor(model => model.ID)
+
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.Org_ID, "机构名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="controls">
+                                            @{
+                                if ((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 5 || (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 2)//系统管理员、实施人员
+                                {
+                                    @Html.DropDownListFor(model => model.Org_ID, new DAL.Organization().GetDropdownlistItemWithOID(Convert.ToInt32(Model.Org_ID)))
+
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.Org_ID, new DAL.Organization().GetDropdownlistItemwithid(Convert.ToInt32(Model.Org_ID)))
+                                }
+
+
+
+
+
+
+                                            }
+                                            @Html.ValidationMessage("Org_ID", new { @style = "color: #f70e0e;" })
+
+
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group hidden">
+                                        @Html.LabelFor(model => model.Type, "用户类型：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="controls" style="margin-left:20px">
+                                            <label class="radio ">
+                                                @Html.RadioButtonFor(model => model.Type, 1) 政府部门
+                                            </label>
+                                            <label class="radio ">
+                                                @Html.RadioButtonFor(model => model.Type, 2, new { @checked = "checked" }) 企业/组织
+                                            </label>
+                                            <label class="radio ">
+                                                @Html.RadioButtonFor(model => model.Type, 3) 消费者
+                                            </label>
+                                            <label class="radio ">
+                                                @Html.RadioButtonFor(model => model.Type, 4) 系统用户
+                                            </label>
+
+                                            @Html.ValidationMessage("Type", new { @style = "color: #f70e0e;" })
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.UserName, "用户名：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="controls">
+                                            <input id="UserName" name="UserName" value="@Model.UserName" type="text" readonly="readonly" />
+                                            @Html.ValidationMessage("UserName", new { @style = "color: #f70e0e;" })
+
+
+
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.Password, "密码：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="controls">
+                                            <input id="Password" name="Password" type="password" value="@Model.Password" />
+                                            @Html.ValidationMessage("Password", new { @style = "color: #f70e0e;" })
+
+
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Password, "确认密码：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            <input id="qrmm" name="qrmm" type="password" value="@Model.Password" /><span id="qrmmti" class="alert-error"></span>
+                                            @Html.ValidationMessage("Password", new { @style = "color: #f70e0e;" })
+
+
+
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+
+
+                                        @Html.LabelFor(model => model.Photo, "用户图片：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+                                            <img id="stuPic" width="290" height="290" /><br>
+
+                                            <input type="text" class="m-wrap small" id="Photo" name="Photo" value="@Model.Photo" />
+                                            <input type="button" value=" 预览 " onclick="    Yulan();" /><input type="button" value=" 选择" onclick="BrowseServer('Photo');" />
+                                            @Html.ValidationMessage("Photo", new { @style = "color: #f70e0e;" })
+
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="control-group">
+
+                                        <div class="controls">
+                                            <input id="User_Code" name="User_Code" type="hidden" class="uneditable-input" value="@Model.User_Code" />
+                                            @Html.ValidationMessageFor(model => model.User_Code)
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+
+
+
+                                        @{
+
+                                int rid = (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID;
+                                LinqModel.Roles rr = new DAL.Role().GetModel(rid);
+                                if (rr.Jibie.Contains("系统级"))
+                                {  @Html.LabelFor(model => model.Role_ID, "角色：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="controls" style="margin-left:20px">
+                                                @{
+                                    var rs = new DAL.Role().GetAll();
+                                    foreach (LinqModel.Roles md in rs)
+                                    {
+
+                                        string dddd = @md.RoleId == @Model.Role_ID ? "checked" : "";
+                                        <label class='checkbox'><input name='Role_ID' type='radio' value='@md.RoleId' @dddd />@md.RoleName</label>
+
+
+
+
+                                    }
+                                    @Html.ValidationMessage("Role_ID", new { @style = "color: #f70e0e;" })
+
+
+
+                                                }
+
+
+
+
+                                            </div>
+                                }
+                                else if (rr.Jibie.Contains("实施级"))
+                                {
+                                    @Html.LabelFor(model => model.Role_ID, "角色：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="controls" style="margin-left:20px">
+                                                @{
+                                    var rs = new DAL.Role().GetAll();
+                                    foreach (LinqModel.Roles md in rs)
+                                    {
+
+                                        if (Model.Role_ID != 5)
+                                        {
+                                            string dddd = @md.RoleId == @Model.Role_ID ? "checked" : "";
+                                            <label class='checkbox'><input name='Role_ID' type='radio' value='@md.RoleId' @dddd />@md.RoleName</label>
+
+                                        }
+
+                                    }
+                                    @Html.ValidationMessage("Role_ID", new { @style = "color: #f70e0e;" })
+
+
+
+                                                }
+
+
+
+
+                                            </div>
+                                }
+                                else if (rr.RoleId == 1)
+                                {@Html.LabelFor(model => model.Role_ID, "角色：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="controls" style="margin-left:20px">
+                                                @{
+                                    var rs = new DAL.Role().GetAll();
+                                    foreach (LinqModel.Roles md in rs)
+                                    {
+
+                                        if (md.Jibie.Contains("企业级"))
+                                        {
+                                            string dddd = @md.RoleId == @Model.Role_ID ? "checked" : "";
+                                            <label class='checkbox'><input name='Role_ID' type='radio' value='@md.RoleId' @dddd />@md.RoleName</label>
+                                        }
+
+                                    }
+                                    @Html.ValidationMessage("Role_ID", new { @style = "color: #f70e0e;" })
+
+
+
+                                                }
+
+
+
+
+                                            </div>
+                                }
+                                else if (rr.RoleId == 3)
+                                {
+                                    @Html.LabelFor(model => model.Role_ID, "角色：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="controls" style="margin-left:20px">
+                                                @{
+                                    var rs = new DAL.Role().GetAll();
+                                    foreach (LinqModel.Roles md in rs)
+                                    {
+
+                                        if (md.Jibie.Contains("政府级"))
+                                        {
+                                            string dddd = @md.RoleId == @Model.Role_ID ? "checked" : "";
+                                            <label class='checkbox'><input name='Role_ID' type='radio' value='@md.RoleId' @dddd />@md.RoleName</label>
+                                        }
+
+                                    }
+                                    @Html.ValidationMessage("Role_ID", new { @style = "color: #f70e0e;" })
+
+
+
+                                                }
+
+
+
+
+                                            </div>
+                                }
+                                else
+                                {
+                                   
+                                            <div class="controls" style="margin-left:20px">
+                                                @{
+                                                    <input id="Role_ID" name="Role_ID" value="@Model.Role_ID" type="hidden" />
+                                                    @Html.ValidationMessage("Role_ID", new { @style = "color: #f70e0e;" })
+
+
+
+                                                }
+
+
+
+
+                                            </div>
+                                }
+
+                                        }
+
+
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="保存" onclick="return CheckClick();" class="btn btn-default" />
+                                        </div>
+                                    </div>
+
+                                </form>
+                            }
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END SAMPLE FORM PORTLET-->
+    </div>
+</div>
+
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>
+<script type="text/javascript">
+    $('#qrmm').blur(function () {
+        if ($(this).val() == '') {
+            $('#qrmmti').text('重新输入密码');
+            $(this).focus();
+        }
+        else {
+
+            if ($(this).val() != $('#Password').val()) {
+                $('#qrmmti').text('两次密码不一致，请重新输入');
+
+                $(this).focus();
+            }
+            else {
+                $('#qrmmti').text('');
+                // $('#spinfo').append('<img src=images/onSuccess.gif/>');
+                state = true;
+            }
+
+
+        }
+    })
+    //$(document).ready(function () {
+    //    $("#uploadify").uploadify({
+    //        'uploader': '/content/uploadify.swf',
+    //        'script': '/ManageOrganizations/Upload',
+    //        'cancelImg': '/content/cancel.png',
+    //        'folder': 'UploadFile',
+    //        'queueID': 'fileQueue',
+    //        'auto': false,
+    //        'multi': true,
+    //        'onComplete': function (event, ID, fileObj, response, data) {
+
+    //            $('#div_img').after("<img src=" + response + " alt='' height='100' width='100' />")
+    //            $('#Photo').val(response)
+    //        }
+    //    });
+    //    $("#uploadify").uploadifyClearQueue({
+    //        'uploader': '/content/uploadify.swf',
+    //        'script': '/ManageOrganizations/Upload',
+    //        'cancelImg': '/content/cancel.png',
+    //        'folder': 'UploadFile',
+    //        'queueID': 'fileQueue',
+    //        'auto': false,
+    //        'multi': true,
+    //        'onComplete': function (event, ID, fileObj, response, data) {
+
+    //            $('#div_img').after("")
+    //            $('#Photo').val("")
+    //        }
+    //    });
+    //});
+    function BrowseServer(inputId) {
+        var finder = new CKFinder();
+        finder.basePath = '/ckfinder/'; //导入CKFinder的路径
+
+        // finder.baseDir = resolveUrl(finder.BaseUrl);
+        finder.selectActionFunction = SetFileField; //设置文件被选中时的函数
+        finder.selectActionData = inputId; //接收地址的input ID
+        finder.Width = 29;
+        finder.Height = 29;
+        finder.popup();
+
+
+    }
+    function Yulan() {
+        $("#stuPic").attr("src", $("#Photo").val());
+    }
+    function SetFileField(fileUrl, data) {
+        document.getElementById(data["selectActionData"]).value = fileUrl;
+    }
+    function CheckClick() {
+        if (document.getElementById("Org_ID").value == "") {
+            alert("请选中机构名称！");
+            return false;
+        }
+        if (document.getElementById("Type").value == "") {
+            alert("请选中用户类型！");
+            return false;
+        }
+        if (document.getElementById("Role_ID").value == "") {
+            alert("请选择角色！");
+            return false;
+        }
+        if (document.getElementById("UserName").value == "") {
+            alert("请输入用户名！");
+            return false;
+        }
+        if (document.getElementById("Password").value == "") {
+            alert("请输入密码！");
+            return false;
+        }
+        if (document.getElementById("User_Code").value == "") {
+            alert("请输入名片码！");
+            return false;
+        }
+        if (document.getElementById("qrmm").value != document.getElementById("Password").value) {
+            alert("请确认密码！");
+            return false;
+        }
+
+
+
+        return true;
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

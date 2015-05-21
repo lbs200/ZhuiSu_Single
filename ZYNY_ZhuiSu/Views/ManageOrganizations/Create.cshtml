@@ -1,0 +1,625 @@
+﻿@model LinqModel.Organization
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+
+
+<script src="../../Scripts/swfobject.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.uploadify.v2.1.4.js" type="text/javascript"></script>
+<link href="../../Content/uploadify.css" rel="stylesheet" type="text/css" />
+<script src="../../Content/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.validate.js" type="text/javascript"></script>
+<script src="../../ckeditor/ckeditor.js" type="text/javascript"></script>
+<script src="../../ckfinder/ckfinder.js" type="text/javascript"></script>
+
+<script src="jquery.form.js" type="text/javascript"></script>
+<script language="javascript" src="../../Scripts/uploadPreview.js"></script>
+<script src="../../Scripts/YZ.js" type="text/javascript"></script>
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">企业机构注册</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">机构信息</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <form action="#" class="form-horizontal" name="zhuyemian">
+
+                                    <div class="alert alert-error hide">
+
+                                        <button class="close" data-dismiss="alert"></button>
+
+
+
+                                    </div>
+                                    @Html.ValidationSummary(true)
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Name, "机构名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                                        <div class="controls">
+
+
+                                            @Html.EditorFor(model => model.Name, new { @nValidate = "{required:true,messages:{required:'机构名称不能为空'}}" })
+                                            @Html.ValidationMessage("Name", new { @style = "color: #f70e0e;" })
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="control-group ">
+                                        <input type="hidden" id="shengID" name="shengID" />
+                                        <input type="hidden" id="shiID" name="shiID" />
+                                        <input type="hidden" id="ZIPID" name="ZIPID" />
+                                        <input type="hidden" id="LSH" name="LSH" value="@ViewBag.ZIP" />
+                                        <input type="hidden" id="qz" name="qz" value="@ViewBag.QZ" />
+                                        <input type="hidden" id="fgf" name="fgf" value="@ViewBag.FGF" />
+                                        <label class="control-label">省份:</label>
+                                        <select class="medium m-wrap" tabindex="1" name="Province" id="Province" onchange="GetAddressShi(this.value)">
+
+                                            <option value="*">---请选择---</option>
+                                            @{
+                                var mdata = ViewBag.selectlist;
+                                foreach (LinqModel.AdministrationRegion mm in mdata)
+                                {
+
+                                    <option value="@mm.ID">@mm.Province</option>
+
+
+                                }
+
+                                            }
+
+
+                                        </select>
+                                        @Html.ValidationMessage("Province", new { @style = "color: #f70e0e;" })
+
+
+
+                                    </div>
+                                    <div id="shijidiv1" class="control-group">
+
+
+                                        <div class="controls">
+                                            <div id="shijidiv" class="editor-field">
+                                                <label class="control-label">市:</label>
+                                                <select class="medium m-wrap" tabindex="1" name="City" id="City" onchange="GetXian(this.value)">
+                                                    <option value="*">---请选择---</option>
+                                                </select>
+                                            </div>
+                                            @Html.ValidationMessage("City", new { @style = "color: #f70e0e;" })
+                                        </div>
+
+
+
+                                    </div>
+                                    <div id="xianjidiv1" class="control-group">
+
+
+                                        <div class="controls">
+                                            <div id="xianjidiv" class="editor-field">
+                                                <label class="control-label">区县:</label>
+                                                <select class="medium m-wrap" tabindex="1" name="District" id="District" onchange="GetZIP(this.value)">
+                                                    <option value="*">---请选择---</option>
+                                                </select>
+                                            </div>
+                                            @Html.ValidationMessage("District", new { @style = "color: #f70e0e;" })
+
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                    <div class="control-group">
+
+                                        @Html.LabelFor(model => model.Address, "地址：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            @Html.EditorFor(model => model.Address)
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+
+                                        @Html.LabelFor(model => model.Contact, "联系人：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            @Html.EditorFor(model => model.Contact)
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+
+                                        @Html.LabelFor(model => model.Tel, "电话：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            @Html.EditorFor(model => model.Tel, new { @nValidate = "{rangelength:[11,12]}" })
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+
+                                        @Html.LabelFor(model => model.E_mail_, "邮件：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <span id="spinfo"></span><br />
+                                        <div class="controls">
+                                            @Html.EditorFor(model => model.E_mail_, new { @nValidate = "{required:true,email:true,messages:{email:'请输入正确邮件格式且不能为空'}}" })
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+                                        <div class="controls">
+
+                                            <input id="Org_URL" name="Org_URL" type="text" class="uneditable-input hidden" readonly="readonly" value="0" />
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+
+                                        @Html.LabelFor(model => model.Sup_Org, "上级机构：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            @Html.DropDownListFor(model => model.Sup_Org, new DAL.Organization().GetDropdownlistItem())
+
+                                            @Html.ValidationMessage("Sup_Org", new { @style = "color: #f70e0e;" })
+
+
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+
+                                        @Html.LabelFor(model => model.Intro, "简介：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            <textarea id="Intro" name="Intro"></textarea>
+                                            @Html.ValidationMessage("Intro", new { @style = "color: #f70e0e;" })
+
+
+                                            <script type="text/javascript">
+                                                var editor = CKEDITOR.replace('Intro');
+                                                CKFinder.SetupCKEditor(editor, '/ckfinder/');
+
+                                            </script>
+
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+                                        @Html.LabelFor(model => model.Brand, "品牌：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            @Html.EditorFor(model => model.Brand)
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+                                        @Html.LabelFor(model => model.Cert, "证书图片：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div id="div_img">
+                                        </div>
+
+
+                                        <div class="controls">
+
+                                            <img id="stuPic" width="300" height="200" /><br>
+
+                                            <input type="text" class="m-wrap small" id="Cert" name="Cert" value="" />
+                                            <input type="button" value=" 选择" onclick="BrowseServer('Cert'); " /><input type="button" value=" 预览 " onclick=" Yulan();" />
+                                            @*<input id="Cert" name="Cert" type="text" value="" />*@
+
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+
+                                        @Html.Label("编码方案：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            @Html.DropDownList("BMFA", ViewData["BMFA"] as SelectList, "--请选择--", new { @class = "my-select-css-class", @onchange = "Huoqubm(this.value)" })
+
+                                            @Html.ValidationMessage("BMFA", new { @style = "color: #f70e0e;" })
+
+
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="control-group">
+
+
+
+                                        @Html.Label("行业分类：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            @Html.DropDownList("Category", ViewData["Categories"] as SelectList, "--请选择--", new { @class = "my-select-css-class", @onchange = "Shengcheng(this.value)" })
+
+                                            @Html.ValidationMessage("Category", new { @style = "color: #f70e0e;" })
+
+
+
+
+                                            <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="control-group">
+
+
+                                        @Html.LabelFor(model => model.Org_Code, "机构编码：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            <input id="Org_Code" name="Org_Code" type="text" readonly="readonly" class="uneditable-textarea" value="" />
+                                            @*@Html.EditorFor(model => model.Org_Code)*@
+                                            @Html.ValidationMessageFor(model => model.Org_Code) <span class="help-inline"></span>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="control-group">
+
+
+                                        @Html.LabelFor(model => model.EWMUrl, "企业官网网址：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <div class="controls">
+                                            <input id="EWMUrl" name="EWMUrl" type="text" value="" />
+                                            全地址以‘http://’或者‘https://’开头
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="保存" onclick="return CheckClick();" class="btn btn-default" />
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            }
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+
+
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>
+<script type="text/javascript">
+
+
+    function BrowseServer(inputId) {
+        var finder = new CKFinder();
+        finder.basePath = '/ckfinder/'; //导入CKFinder的路径
+        // finder.BaseUrl = '/ckfinder/jigou/';
+        // finder.baseDir = resolveUrl(finder.BaseUrl);
+        finder.selectActionFunction = SetFileField; //设置文件被选中时的函数
+        finder.selectActionData = inputId; //接收地址的input ID
+        finder.Width = 600;
+        finder.Height = 425;
+        finder.popup();
+
+
+    }
+    function Yulan() {
+        $("#stuPic").attr("src", $("#Cert").val());
+    }
+    //文件选中时执行
+    function SetFileField(fileUrl, data) {
+        document.getElementById(data["selectActionData"]).value = fileUrl;
+    }
+
+    function getFullPath(obj) {    //得到图片的完整路径
+        if (obj) {
+            //ie
+            if (window.navigator.userAgent.indexOf("MSIE") >= 1) {
+                obj.select();
+                return document.selection.createRange().text;
+            }
+                //firefox
+            else if (window.navigator.userAgent.indexOf("Firefox") >= 1) {
+                if (obj.files) {
+                    return obj.files.item(0).getAsDataURL();
+                }
+                return obj.value;
+            }
+            return obj.value;
+        }
+    }
+    $("#Cert").change(function () {
+        var strSrc = $("#Cert").val();
+
+    });
+    function SCPIC() {
+        //上传图片
+
+
+        $.post("/ManageOrganizations/UploadFile.ashx", { upfile: getPath($("#imgfile")) }, function (json) {
+            alert("ddddd");
+            //json.result为upload.ashx文件返回的值
+            alert(json.result);
+        }, "json");
+        $('#Cert').val(getPath($("#imgfile")))
+        //图片预览
+        $("#div_img").uploadPreview({ imgDiv: "#imgDiv", imgType: ["bmp", "gif", "png", "jpg"], maxwidth: 250, maxheight: 250 });
+    }
+    function GetAddressShi(obj) {
+
+        document.getElementById("shengID").value = obj;
+        if (obj != "*") {
+            $.get("/ManageOrganizations/GetP?cid=" + obj, function (data, textStatus) {
+                //alert("11");
+                var sid = document.getElementById("City");
+                $("#City").empty();
+                sid.options[sid.options.length] = new Option("---请选择---", "*");
+                $.each(data, function () {
+                    sid.options[sid.options.length] = new Option(this["Province"], this["ID"]);
+                });
+
+            });
+        }
+    }
+    function GetZIP(obj) {
+
+        document.getElementById("ZIPID").value = obj;
+        if (obj != "*") {
+            $.get("/ManageOrganizations/GetZIP?cid=" + obj, function (data, textStatus) {
+                //alert("11");
+
+                $.each(data, function () {
+                    document.getElementById("ZIPID").value = this["ZIP"];
+                });
+
+            });
+        }
+    }
+    function Huoqubm(obj) {
+
+
+        if (obj != "") {
+            // alert(obj);
+            $.get("/ManageOrganizations/GetBM?cid=" + obj, function (data, textStatus) {
+
+
+                $.each(data, function () {
+
+                    document.getElementById("qz").value = this["Prefix"];
+                    document.getElementById("fgf").value = this["Separator"];
+                });
+
+            });
+        }
+    }
+    function Shengcheng(obj) {
+        if (document.getElementById("ZIPID").value == "") {
+            document.getElementById("District").focus();
+            $("#Category").val("");
+            alert("请选择区县信息！");
+        } else {
+            if (document.getElementById("qz").value == "") {
+                document.getElementById("BMFA").focus();
+                $("#Category").val("");
+                alert("请选择编码方案！");
+            } else {
+                document.getElementById("Org_Code").value = document.getElementById("qz").value + document.getElementById("fgf").value + obj + document.getElementById("fgf").value + document.getElementById("ZIPID").value + document.getElementById("fgf").value;
+            }
+        }
+    }
+    function GetXian(obj) {
+        document.getElementById("shiID").value = obj;
+        if (obj != "*") {
+            $.get("/ManageOrganizations/GetP?cid=" + obj, function (data, textStatus) {
+                //alert("11");
+                var sid = document.getElementById("District");
+                $("#District").empty();
+                sid.options[sid.options.length] = new Option("---请选择---", "*");
+                $.each(data, function () {
+                    sid.options[sid.options.length] = new Option(this["Province"], this["ID"]);
+                });
+
+            });
+        }
+
+    }
+
+    $('#E_mail_').blur(function () {
+        if ($(this).val() == '') {
+            $('#spinfo').text('建议填写邮箱');
+            $(this).focus();
+        }
+        else {
+            if (/^\w+([-+.]\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test($(this).val()) == false) {
+                $('#spinfo').text('邮箱格式不正确，请重新输入');
+
+                $(this).focus();
+            }
+            else {
+                $('#spinfo').text('');
+                // $('#spinfo').append('<img src=images/onSuccess.gif/>');
+                state = true;
+            }
+
+
+        }
+    })
+
+
+    function CheckClick() {
+        if (document.getElementById("Name").value == "") {
+            document.getElementById("Name").focus();
+            alert("请输入机构名称！");
+            return false;
+        }
+        if (document.getElementById("Province").value == "*") {
+            document.getElementById("Province").focus();
+            alert("请选择省！");
+            return false;
+        }
+        if (document.getElementById("City").value == "*") {
+            document.getElementById("City").focus();
+            alert("请选择市！");
+            return false;
+        }
+        if (document.getElementById("District").value == "*") {
+            document.getElementById("District").focus();
+            alert("请选择区县！");
+            return false;
+        }
+        if (document.getElementById("Address").value == "") {
+            document.getElementById("Address").focus();
+            alert("请填写地址信息！");
+            return false;
+        }
+        if (document.getElementById("Contact").value == "") {
+            document.getElementById("Contact").focus();
+            alert("请填写联系人信息！");
+            return false;
+        }
+        if (document.getElementById("Tel").value == "") {
+            document.getElementById("Tel").focus();
+            alert("请填写电话信息！");
+            return false;
+        }
+        if (!isNumberOr_Letter(document.getElementById("Tel").value) && !isNull(document.getElementById("Tel").value)) {
+            document.getElementById("Tel").focus();
+            alert("您输入的电话格式不正确！");
+            return false
+        }
+        if (document.getElementById("E_mail_").value == "") {
+            document.getElementById("E_mail_").focus();
+            alert("请填写Email地址信息！");
+            return false;
+        }
+        if (!checkEmail(document.getElementById("E_mail_").value) && !isNull(document.getElementById("E_mail_").value)) {
+            document.getElementById("E_mail_").focus();
+            alert("您输入的Email地址格式不正确！");
+            return false
+
+        }
+        if (document.getElementById("Sup_Org").value == "-1") {
+            document.getElementById("Sup_Org").focus();
+            alert("请选择上级机构！");
+            return false;
+        }
+        if (document.getElementById("Brand").value == "") {
+            document.getElementById("Brand").focus();
+            alert("请填写品牌信息！");
+            return false;
+        }
+        if (document.getElementById("Category").value == "") {
+            document.getElementById("Category").focus();
+            alert("请选择行业分类！");
+            return false;
+        }
+        if (document.getElementById("EWMUrl").value != "") {
+            if (document.getElementById("EWMUrl").value.substring(0, 7) == "http://" || document.getElementById("EWMUrl").value.substring(0, 8) == "https://") {
+            }
+            else {
+                alert("企业官网网址格式不正确！");
+                return false;
+            }
+        }
+        return true;
+    }
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

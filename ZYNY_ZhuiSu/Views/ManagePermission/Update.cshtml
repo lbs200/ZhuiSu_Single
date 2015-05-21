@@ -1,0 +1,136 @@
+﻿@model LinqModel.Permission
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">修改权限</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">修改权限</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @{
+                                if (ViewBag.error == 1)
+                                {
+                                    <div class="alert alert-error show">
+
+                                        <button class="close" data-dismiss="alert"></button>
+
+                                        <span>@ViewBag.errorMsg</span>
+
+                                    </div>
+                                }
+                            }
+                            <form action="/ManagePermission/Update" id="form1" class="form-horizontal" method="post">
+                                <div class="control-group">
+
+                                    <label class="control-label">权限类别</label>
+
+                                    <div class="controls">
+                                        @Html.DropDownListFor(model => model.CategoryID, new DAL.Permission().GetDropdownlistItemWithid(Model.CategoryID))
+                                        <a href="/ManageCategories/Create">添加权限类别</a>
+                                        <span class="help-inline"></span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="control-group">
+
+                                    <label class="control-label">名称</label>
+
+                                    <div class="controls">
+                                        <input type="hidden" value="@Model.PermissionID" name="PermissionID" id="PermissionID" />
+                                        <input type="hidden" value="@Model.CategoryID" name="CategoryID" id="CategoryID" />
+                                        <input type="text" class="m-wrap small" value="@Model.PermissionName" maxlength="50" name="PermissionName" id="PermissionName" />
+
+                                        <span class="help-inline"></span>
+
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">Controller</label>
+
+                                    <div class="controls">
+                                        <input type="text" class="m-wrap small" value="@Model.Controller" maxlength="50" name="Controller" id="Controller" />
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">Action</label>
+
+                                    <div class="controls">
+                                        <input type="text" class="m-wrap small" value="@Model.Action" maxlength="50" name="Action" id="Action" />
+                                    </div>
+
+                                </div>
+                                <div class="form-actions">
+
+                                    <button type="submit" class="btn blue" onclick="return CheckClick();"><i class="icon-ok"></i> 确定</button>
+
+                                    <button type="button" class="btn" onclick="history.go(-1);">取消</button>
+
+                                </div>
+
+                            </form>
+
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    function CheckClick()
+    {
+        if(document.getElementById("PermissionName").value=="")
+        {
+            alert("请输入功能项名称！");
+            return false;
+        }
+        return true;
+    }
+</script>

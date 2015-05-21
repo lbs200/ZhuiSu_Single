@@ -1,0 +1,209 @@
+﻿@{
+    ViewBag.Title = "CaiGouRuKu";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<script type="text/javascript" src="/Scripts/autoComplete/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="/Scripts/autoComplete/jquery.autocomplete.css" />
+<script type="text/javascript">
+    $().ready(function () {
+        function log(event, data, formatted) {
+            $("#txtSelectName").val(data.name);
+            $("#txtSelectValue").val(data.value);
+        }
+
+        var objects = [{ "name": "天昆百果", "value": "7" }];
+        $.get("/ManageOrg_Info/GetAutoComplete", function (data, textStatus) {
+            objects = data;
+            //objects为json数据源对象
+            $("#txtSelectName").autocomplete(objects, {
+                minChars: 0, //表示在自动完成激活之前填入的最小字符
+                max: 5, //表示列表里的条目数
+                autoFill: true, //表示自动填充
+                mustMatch: false, //表示必须匹配条目,文本框里输入的内容,必须是data参数里的数据,如果不匹配,文本框就被清空
+                matchContains: true, //表示包含匹配,相当于模糊匹配
+                scrollHeight: 200, //表示列表显示高度,默认高度为180
+
+                formatItem: function (row) {
+                    return row.name;
+                },
+                formatMatch: function (row) {
+                    return row.name;
+                },
+                formatResult: function (row) {
+                    return row.value;
+                }
+            });
+        });
+       
+        $(":text, textarea").result(log).next("#txtSelectValue").click(function () {
+            $(this).prev().search();
+        });
+    });
+</script>
+<form id="form1" action="/ManageTrace_Info/PaiMaRuKu" method="post">
+    <div class="control-group">
+        <label class="control-label">所属企业：</label>
+        <div class="controls">
+            <input type="text" id="txtSelectName" name="txtSelectName" placeholder="企业完整名称" style="width:300px;" onkeydown="return ClearSubmit(event)" required />
+            <input type="hidden" id="txtSelectValue" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">扫描方式：</label>
+        <div class="controls">
+            <label class="radio">
+                @{
+                    if (string.IsNullOrEmpty(ViewBag.es) && string.IsNullOrEmpty(ViewBag.ee))
+                    {
+                        <input type="radio" name="sType" value="d" checked onclick="ClickSelect(1)" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="sType" value="d" onclick="ClickSelect(1)" />
+                    }
+                }
+                逐个扫描
+            </label>
+            <label class="radio">
+                @{
+                    if (string.IsNullOrEmpty(ViewBag.es) && string.IsNullOrEmpty(ViewBag.ee))
+                    {
+                        <input type="radio" name="sType" value="f" onclick="ClickSelect(2)" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="sType" value="f" checked onclick="ClickSelect(2)" />
+                    }
+                }
+                批量扫描
+            </label>
+        </div>
+    </div>
+    @*<div class="alert">
+            起始码和终止码暂只支持间隔在 @ViewBag.BaoZhuangCount 以内。
+        </div>*@
+    @{
+        if (string.IsNullOrEmpty(ViewBag.es) && string.IsNullOrEmpty(ViewBag.ee))
+        {
+            <div id="dange" style="margin:10px; display:normal;">
+                <div>
+                    <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/PaiMaRuKu?rdm=2')" value="拍码扫描" />已扫描个数 <span id="sCount">@ViewBag.sCount</span>
+                </div>
+                <textarea rows="10" cols="200" id="EWM_Num" name="EWM_Num" style="width:300px;" onkeyup="GetCount()">@ViewBag.dg</textarea>
+            </div>
+        }
+        else
+        {
+            <div id="dange" style="margin:10px; display:none;">
+                <div>
+                    <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/PaiMaRuKu?rdm=2')" value="拍码扫描" />已扫描个数 <span id="sCount">@ViewBag.sCount</span>
+                </div>
+                <textarea rows="10" cols="200" id="EWM_Num" name="EWM_Num" style="width:300px;" onkeyup="GetCount()">@ViewBag.dg</textarea>
+            </div>
+        }
+        <input type="hidden" id="EWM_Num_Hidden" name="EWM_Num_Hidden" value="@ViewBag.dgHidden">
+
+    }
+    @{
+        if (string.IsNullOrEmpty(ViewBag.es) && string.IsNullOrEmpty(ViewBag.ee))
+        {
+            <div id="fenduan" style="margin:10px; display:none;">
+                <div>
+                    起始码：
+                    <div>
+                        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/PaiMaRuKu?rdm=31')" value="拍码扫描" />
+                    </div>
+                    <input type="text" id="EWM_Start" name="EWM_Start" value="@ViewBag.es" style="width:300px;" onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />
+                </div>
+                <div>
+                    终止码：
+                    <div>
+                        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/PaiMaRuKu?rdm=32')" value="拍码扫描" />
+                    </div>
+                    <input type="text" id="EWM_End" name="EWM_End" value="@ViewBag.ee" style="width:300px;" onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="fenduan" style="margin:10px; display:;">
+                <div>
+                    起始码：
+                    <div>
+                        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/PaiMaRuKu?rdm=31')" value="拍码扫描" />
+                    </div>
+                    <input type="text" id="EWM_Start" name="EWM_Start" value="@ViewBag.es" style="width:300px;" onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />
+                </div>
+                <div>
+                    终止码：
+                    <div>
+                        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/PaiMaRuKu?rdm=32')" value="拍码扫描" />
+                    </div>
+                    <input type="text" id="EWM_End" name="EWM_End" value="@ViewBag.ee" style="width:300px;" onkeydown="return ClearSubmit(event)" onkeyup="ReplaceStr(this)" />
+                </div>
+            </div>
+        }
+    }
+
+    <input type="submit" class="btn blue" value="确定" onclick="return Check();" />
+    <a href="/ManageTrace_Info/PaiMaRuKu?clear=1" class="btn blue">数据清空重扫</a>
+</form>
+<script type="text/javascript">
+    function ClickSelect(obj) {
+        if (obj == 1) {
+            document.getElementById("dange").style.display = "";
+            document.getElementById("fenduan").style.display = "none";
+            document.getElementById("EWM_Start").value = "";
+            document.getElementById("EWM_End").value = "";
+        }
+        else {
+            document.getElementById("dange").style.display = "none";
+            document.getElementById("fenduan").style.display = "";
+            document.getElementById("EWM_Num").value = "";
+        }
+    }
+
+    function ReplaceStr(obj) {
+        var str = obj.value;
+        while (str.indexOf("http://t.fruit.ac.cn?ewm=") >= 0) {
+            str = str.replace("http://t.fruit.ac.cn?ewm=", "");
+        }
+        obj.value = str;
+    }
+
+    function GetCount() {
+        var tc = document.getElementById("EWM_Num").value;
+        var count = 0;
+        while (tc.indexOf("http://t.fruit.ac.cn?ewm=") >= 0) {
+            tc = tc.replace("http://t.fruit.ac.cn?ewm=", "");
+        }
+        document.getElementById("EWM_Num").value = tc;
+        while (tc.indexOf("\n") >= 0) {
+            tc = tc.replace("\n", "$");
+            count++;
+        }
+        if (count == 0 && tc != "") {
+            count = 1;
+        }
+        document.getElementById("EWM_Num_Hidden").value = tc;
+        document.getElementById("sCount").innerText = count;
+    }
+
+    function Check() {
+        if (document.getElementById("txtSelectName").value == "") {
+            alert("请输入企业名称！");
+            return false;
+        }
+        return true;
+    }
+
+    function PaiMa(obj) {
+        this.location = "/Public/QrEwm?url=" + encodeURIComponent(obj);
+    }
+
+    function ClearSubmit(e) {
+        if (e.keyCode == 13) {
+            return false;
+        }
+    }
+</script>

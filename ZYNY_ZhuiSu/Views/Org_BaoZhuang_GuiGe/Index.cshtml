@@ -1,0 +1,100 @@
+﻿@model PagedList.IPagedList<LinqModel.Org_BaoZhuang_GuiGe>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/Org_BaoZhuang_GuiGe/Index" class="form-search" method="get">
+
+            <div class="input-append">
+                <input type="hidden" value="@ViewBag.bzID" id="bzID" name="bzID" />
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch" placeholder="名称"><input class="btn green" type="submit" value="查询" /> 　
+                <a href="/Org_BaoZhuang/Index" class="btn blue"><i class="icon-pencil"></i> 返回包装规格列表</a>
+            </div>
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>【@ViewBag.bzName】包装规格数据列表</div>
+
+                <div class="actions">
+
+                    <a href="/Org_BaoZhuang_GuiGe/Add?bzID=@ViewBag.bzID" class="btn blue"><i class="icon-pencil"></i> 新增包装规格数据</a>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>名称</th>
+                            <th>默认值</th>
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.ID)" id="@m.ID" style="background-color: #@classname">
+                                    <td id="ext_@m.ID">+</td>
+                                    <td>@m.NameGuiGe</td>
+                                    <td>@m.ValueGuiGe</td>
+                                    <td class="hidden-480"><a href="/Org_BaoZhuang_GuiGe/Update?id=@m.ID&bzID=@ViewBag.bzID">修改</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/Org_BaoZhuang_GuiGe/Del?id=@m.ID&bzID=@ViewBag.bzID';} ">删除</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.ID">
+                                    <td colspan="10">
+                                        <div style="margin-left:25px;">
+                                            <span><a href="/Org_BaoZhuang_GuiGe/Update?id=@m.ID&bzID=@ViewBag.bzID">修改</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/Org_BaoZhuang_GuiGe/Del?id=@m.ID&bzID=@ViewBag.bzID';}">删除</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>
+

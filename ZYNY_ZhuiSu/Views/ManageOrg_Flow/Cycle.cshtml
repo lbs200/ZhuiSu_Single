@@ -1,0 +1,92 @@
+﻿@model List<LinqModel.Org_Flow_Cycle_Info>
+@{
+    ViewBag.Title = "Cycle";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+    <div class="span12">
+        <div class="alert alert-error show">
+
+            <button class="close" data-dismiss="alert"></button>
+
+            <span>请确定流程设置完毕后再设置循环节点，否则流程设置的任何操作都会删除已设置循环节点！</span>
+
+        </div>
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">【@ViewBag.prodName 】已设置循环 ：</label>
+    <div class="controls">
+        @{
+            PagedList.PagedList<LinqModel.View_Org_Flow> listFlow = (PagedList.PagedList<LinqModel.View_Org_Flow>)ViewBag.listFlow;
+            int count =1;
+            foreach (var m in Model)
+            {
+                <div>
+                    <div>
+                        @count 、
+                        【@listFlow.FirstOrDefault(x => x.Org_Flow_ID == m.CycleStart).Flow_Name 】
+                        开始 &nbsp;&nbsp;-> &nbsp;&nbsp;
+                        【@listFlow.FirstOrDefault(x => x.Org_Flow_ID == m.CycleEnd).Flow_Name 】
+                        结束
+                        
+                        &nbsp;&nbsp;
+                        <a href="/ManageOrg_Flow/CycleDel?id=@m.Org_Flow_Cycle_Info_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodID">删除</a>
+                    </div>
+
+                </div>
+                count++;
+            }
+        }
+    </div>
+</div>
+
+<form id="form1" action="/ManageOrg_Flow/Cycle" method="post">
+    <input type="hidden" name="Org_ID" id="Org_ID" value="@ViewBag.orgID" />
+    <input type="hidden" name="Prod_ID" id="Prod_ID" value="@ViewBag.prodID" />
+    <div class="control-group">
+        <label class="control-label">选择循环开始节点 ：</label>
+        <div class="controls">
+            <select class="medium m-wrap" tabindex="1" name="CycleStart" id="CycleStart">
+                @{
+                    if (listFlow.Count > 0)
+                    {
+                        foreach (var m in listFlow)
+                        {
+                            <option value="@m.Org_Flow_ID">@m.Flow_Name</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">选择循环结束节点 ：</label>
+        <div class="controls">
+            <select class="medium m-wrap" tabindex="1" name="CycleEnd" id="CycleEnd">
+                @{
+                    if (listFlow.Count > 0)
+                    {
+                        foreach (var m in listFlow)
+                        {
+                            <option value="@m.Org_Flow_ID">@m.Flow_Name</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <input type="button" id="btnSubmit" class="btn blue" value="新增循环" />
+    <a href="/ManageOrg_Flow/Index?orgID=@ViewBag.orgID" class="btn green">返回</a>
+
+</form>
+<script>
+    //乔典添加，Load加载方法
+    $(function () {
+        $("#btnSubmit").click(function () {
+            ajaxResult("/ManageOrg_Flow/Cycle", $("#form1").serialize());
+
+        });
+    });
+</script>

@@ -1,0 +1,242 @@
+﻿@model LinqModel.UserPermission
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">分配权限</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">分配权限</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <form action="#" class="form-horizontal">
+
+                                    @Html.ValidationSummary(true)
+
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.RoleId, "用户角色：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="controls">
+                                            
+
+                                                @{
+                                var rs = new DAL.Role().GetAll();
+                                foreach (LinqModel.Roles md in rs)
+                                {
+
+                                    <label for="radio_@md.RoleId" class="radio">
+                                        <input id="radio_@md.RoleId" type="radio" name="RoleId" value="@md.RoleId" property="Status" onchange="shuaxin()" />
+
+                                        @*@Html.RadioButtonFor(model => model.RoleId, md.RoleId, new { @name = "RoleId", @property = "Status", @onchange = "shuaxin()" })*@
+                                        @md.RoleName
+                                    </label>
+                                }
+                                                }
+
+                                           
+                                            @Html.ValidationMessageFor(model => model.RoleId)
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <div class="control-group ">
+                                        <input type="hidden" id="shengID" name="shengID" value="@ViewBag.CID" />
+                                        <input type="hidden" id="checkvalues" name="checkvalues" value="@ViewBag.CVL" />
+                                        <label class="control-label">权限类型:</label><select class="medium m-wrap" tabindex="1" name="CategoryDDL" id="CategoryDDL" onchange="GetAddressShi(this.value)">
+
+                                            <option value="*">---请选择---</option>
+                                            @{
+                                var mdata = ViewBag.selectlist;
+                                foreach (LinqModel.Category mm in mdata)
+                                {
+                                    if ((@ViewBag.SelectCategory == @mm.CategoryID.ToString()))
+                                    {
+                                        <option value=@mm.CategoryID selected="selected">@mm.CategoryName</option>}
+                                    else
+                                    {
+                                        <option value=@mm.CategoryID>@mm.CategoryName</option>}
+
+
+                                }
+
+                                            }
+
+
+                                        </select><input class="btn green hidden" type="button" value="绑定类别" onclick="create" />
+
+                                    </div>
+
+
+
+                                    <div id="quanxian" class="control-group">
+                                        <input type="hidden" id="shengID" name="shengID" value="@ViewBag.ShengID" />
+                                        @Html.LabelFor(model => model.PermissionID, "权限列表：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                        <hr style="FILTER: alpha(opacity=10,finishopacity=0,style=1)">
+                                        <div id="qxlb" class="controls" style="margin-left:50px">
+
+
+
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.PermissionID)
+
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="确定" class="btn btn-default" />
+                                        </div>
+                                    </div>
+                                </form>
+                            }
+
+
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+
+
+
+<div>
+    @Html.ActionLink("返回列表", "Create")
+</div>
+<script type="text/javascript">
+    function shuaxin() {
+        $("#qxlb").html("")
+
+        document.getElementById("checkvalues").value = "";
+
+    }
+    function GetAddressShi(obj) {
+        var BidCategory = $("input[property='Status']:checked").val();
+       
+        document.getElementById("shengID").value = obj;
+
+      
+        if (obj != "*") {
+
+
+
+
+            $.get("/ManageUserPermissions/GetP?cid=" + obj, function (data, textStatus) {
+                //alert("11");
+                $('#qxlb').html('');
+                $('#qxlb').append("<label class='checkbox' ><input type='checkbox' name='chk_all' id='chk_all'/> 全选    </label>   ");
+                $('#qxlb').append("<label class='checkbox' ><input type='checkbox' name='unchk_all' id='unchk_all'/> 取消全选  </label></br>");
+                $('#qxlb').append("<HR style='FILTER: alpha(opacity=10,finishopacity=0,style=1)'></br>");
+                $.each(data, function () {
+                    $('#qxlb').append(" <label class='checkbox' ><input id= 'checkb_" + this['PermissionID'] + "' name='PermissionID' type='checkbox' value='" + this['PermissionID'] + "' property='mycheck' />" + this['PermissionName'] + "  </label>");
+                    //alert(document.getElementById(this['PermissionID']).value());
+                });
+                $.get("/ManageUserPermissions/GetAllP?rid=" + BidCategory, function (data, textStatus) {
+
+
+                    $.each(data, function () {
+                        $("input[id='checkb_" + this['PermissionID'] + "']").attr("checked", true);
+
+
+                    });
+
+                });
+                $('#qxlb').append("<HR style='FILTER: alpha(opacity=10,finishopacity=0,style=1)' color=#987cb9 >");
+                $('#qxlb').append("</br></br>");
+                $('#qxlb').append("<input id='tijiao' class='btn blue' type='button' value='添加权限' class=‘btn btn-default’ onclick='hh()' />");
+                $('#qxlb').append("<HR style='FILTER: alpha(opacity=10,finishopacity=0,style=1)' color=#987cb9 ></br>");
+                $("#chk_all").click(function () {
+                    $("input[name='PermissionID']").attr("checked", $(this).attr("checked"));
+                    $("input[name='unchk_all']").attr("checked", false);
+                });
+                $("#unchk_all").click(function () {
+                    $("input[name='PermissionID']").attr("checked", false);
+                    $("input[name='chk_all']").attr("checked", false);
+                });
+
+               
+            });
+        }
+
+    }
+    function create() {
+
+        var board = document.getElementById("qxlb");
+        board.innerHTML = "<lable><input type='checkbox' />333</lable>"; alert("jjjj");
+        var e = createElement_x("input", "cpname");
+        e.type = "checkbox";
+        e.id = "chid";
+        e.value = "123";
+        board.appendChild(e);
+        //设置选中
+        e.setAttribute("checked", "checked");
+
+    }
+    function hh() {
+        //获取到所有name为'chk_list'并选中的checkbox(集合)
+        var arrChk = $("input[name='PermissionID']:checked");
+        //遍历得到每个checkbox的value值
+        $(arrChk).each(function () {
+            document.getElementById("checkvalues").value += this.value + "*";
+        });
+        //$("#keleyi").attr("href", "http://www.jb51.net");
+
+        $("input[id='tijiao']").attr("disabled", true);
+        $("input[id='tijiao']").attr("value", "已提交");
+    }
+   
+
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

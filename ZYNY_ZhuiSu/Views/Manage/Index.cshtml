@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12" style="text-align:center;">
+
+       <h1>欢迎进入
+        @{
+            if(!string.IsNullOrEmpty(ViewBag.orgName))
+            {
+                @ViewBag.orgName
+            }
+            else
+            {
+                @:农产品质量安全社会化
+            }
+        }
+        追溯平台！</h1>
+
+    </div>
+
+</div>

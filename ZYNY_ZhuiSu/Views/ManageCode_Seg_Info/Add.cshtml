@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">编码段位信息新增</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab3" data-toggle="tab">编码段位信息新增</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @{
+                                if (ViewBag.error == 1)
+                                {
+                                    <div class="alert alert-error show">
+
+                                        <button class="close" data-dismiss="alert"></button>
+
+                                        <span>@ViewBag.errorMsg</span>
+
+                                    </div>
+                                }
+                            }
+                            <form action="/ManageCode_Seg_Info/Add" id="form1" class="form-horizontal" method="post">
+
+                                <div class="control-group">
+
+                                    <label class="control-label">段位序号</label>
+
+                                    <div class="controls">
+                                        <input type="hidden" value="@ViewBag.Scheme_ID" name="Scheme_ID" id="Scheme_ID" />
+                                        <input type="text" class="m-wrap small" value="" maxlength="50" name="Seg_No" id="Seg_No" />
+
+                                        <span class="help-inline"></span>
+
+                                    </div>
+
+                                </div>
+                                <div class="control-group">
+
+                                    <label class="control-label">意义</label>
+
+                                    <div class="controls">
+                                        <textarea class="large m-wrap" rows="3" name="Meaning" id="Meaning"></textarea>
+                                        <span class="help-inline"></span>
+                                    </div>
+
+                                </div>
+                                <div class="form-actions">
+
+                                    <button type="submit" class="btn blue" onclick="return CheckClick();"><i class="icon-ok"></i> 确定</button>
+
+                                    <button type="button" class="btn" onclick="history.go(-1);">取消</button>
+
+                                </div>
+
+                            </form>
+
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    function CheckClick() {
+        if (document.getElementById("Meaning").value == "") {
+            alert("请输入意义！");
+            return false;
+        }
+        if (document.getElementById("Seg_No").value == "" || isNaN(document.getElementById("Seg_No").value)) {
+            alert("段位序号输入错误！");
+            return false;
+        }
+        return true;
+    }
+</script>
+

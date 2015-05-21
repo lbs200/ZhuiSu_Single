@@ -1,0 +1,202 @@
+﻿@model PagedList.IPagedList<LinqModel.Products>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "DIndex";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/Products/DIndex" class="form-search" method="get">
+
+            <div class="input-append">
+                <label class="control-label">机构名称:</label><select class="medium m-wrap" tabindex="1" name="CategoryDDL" id="CategoryDDL">
+                    @{
+                        var mdata = ViewBag.selectlist;
+                        if (@ViewBag.SelectCategory == "-1")
+                        {
+                            <option value="-1" selected="selected">---全部---</option>
+                        }
+                        else
+                        {
+                            <option value="-1">---全部---</option>
+                        }
+
+                        foreach (LinqModel.Organization mm in mdata)
+                        {
+                            if ((@ViewBag.SelectCategory == @mm.Org_ID.ToString()))
+                            {
+                                <option value=@mm.Org_ID selected="selected">@mm.Name</option>}
+                            else
+                            {
+                                <option value=@mm.Org_ID>@mm.Name</option>}
+
+
+                        }
+
+                    }
+                </select>
+
+                <label class="control-label">产品名称:</label>
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch"><input class="btn green" type="submit" value="检索" />
+
+            </div>
+        </form>
+        <div class="portlet box grey">
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>产品列表</div>
+
+               
+
+            </div>
+            <div class="portlet-body">
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>
+                                机构名称
+                            </th>
+                            <th>
+                                产品名称
+                            </th>
+                            <th>
+                                产品名称缩写
+                            </th>
+                            <th>
+                                产品类别
+                            </th>
+                            <th class="hidden">
+                                产品等级
+                            </th>
+                            <th class="hidden">
+                                产品规格
+                            </th>
+                            <th class="hidden">
+                                单位
+                            </th>
+                            <th class="hidden-480">
+                                主副原料
+                            </th>
+                            <th class="hidden-480">
+                                生产机构
+                            </th>
+                            <th class="hidden">
+                                净重
+                            </th>
+                            <th class="hidden">
+                                数量或度量
+                            </th>
+
+                            <th class="hidden-480">
+                                宣传码
+                            </th>
+                            <th class="hidden-480">
+                                最大码段
+                            </th>
+
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.ID)" id="@m.ID" style="background-color: #@classname">
+                                    <td id="ext_@m.ID">+</td>
+                                    @{  LinqModel.Organization shangji = new DAL.Organization().GetModel(Convert.ToInt32(@m.Org_ID));
+
+                                    <td> @shangji.Name </td>}
+                                    <td>@m.Name</td>
+                                    <td>@m.Abbr</td>
+                                    @{  LinqModel.Prod_category leibie = new DAL.Pro_Category().GetModel(Convert.ToInt32(@m.Prod_Category));
+
+                                    <td> @leibie.Description </td>}
+                                    <td class="hidden">@m.Class</td>
+                                    <td class="hidden">@m.Spec</td>
+                                    <td class="hidden">@m.Unit</td>
+                                    <td class="hidden-480">@m.material</td>
+
+                                    @{  LinqModel.Organization compony = new DAL.Organization().GetModel(Convert.ToInt32(@m.Company));
+
+                                    <td class="hidden-480"> @shangji.Name </td>}
+                                    <td class="hidden">@m.NET</td>
+                                    <td class="hidden">@m.Count</td>
+
+                                    <td class="hidden-480">@m.Adv_Code</td>
+                                    <td class="hidden-480">@m.Max_SN</td>
+                                    <td class="hidden-480"><a href="/Products/DownloadTXT?id=@m.ID">生成码段下载</a>&nbsp;&nbsp;</td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.ID">
+                                    <td colspan="7">
+                                        <div style="margin-left:25px;">
+
+                                            <span>原材料： @m.material</span><br />
+
+                                            <span>宣传码： @m.Adv_Code</span><br />
+                                            
+                                            <span><a href="/Products/DownloadTXT?id=@m.ID">生成码段下载</a>&nbsp;</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("DIndex", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, CategoryDDL = ViewBag.SelectCategory }))
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+    function DLT() {
+
+        var url = '/Products/DLTXT';
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                if (data == "success::") {
+                    window.location.href = "/Products/DIndex";
+
+                }
+                else { alert(data); }
+            }
+        });
+
+    }
+</script>

@@ -1,0 +1,181 @@
+﻿@model PagedList.IPagedList<LinqModel.View_Trace_Info>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<a href="/ManageTrace_Info/UpSepList?orgID=@ViewBag.orgID&orgFlowID=@ViewBag.orgFlowID&prodID=@ViewBag.prodID">@ViewBag.flowName 信息录入</a>
+&nbsp;&nbsp;
+<a href="/ManageTrace_Info/Index">返回</a>
+<br />
+<br />
+<form id="form1" action="/ManageTrace_Info/List" class="form-search" method="get">
+    <div class="alert alert-error show">
+
+        <button class="close" data-dismiss="alert"></button>
+
+        <span>@ViewBag.flowName 追溯流程信息查询</span>
+
+    </div>
+    <div class="row-details">
+        时间：<input type="text" style="width:80px;" id="timeS" name="timeS" value="@ViewBag.timeS" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+        -
+        <input type="text" style="width:80px;" id="timeE" name="timeE" value="@ViewBag.timeE" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+
+
+        <input type="hidden" id="orgID" name="orgID" value="@ViewBag.orgID" />
+        <input type="hidden" id="orgFlowID" name="orgFlowID" value="@ViewBag.orgFlowID" />
+        <input type="hidden" id="prodID" name="prodID" value="@ViewBag.prodID" />
+
+        单据编号：<input type="text" style="width:160px;" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch" />
+        <input class="btn green" type="submit" value="查询" />
+        <input class="btn blue" type="button" onclick="PaiMa('/ManageTrace_Info/List?timeS=@ViewBag.timeS&timeE=@ViewBag.timeE&orgID=@ViewBag.orgID&orgFlowID=@ViewBag.orgFlowID&prodID=@ViewBag.prodID')" value="拍码查询" />
+    </div>
+</form>
+@{
+    if (Model.Count > 0)
+    {
+        int count = 0;
+        foreach (var m in Model)
+        {
+            count++;
+            <div class="right">
+                <span><a href="javascript:void(0);" onclick="previewY(@count);">移动打印</a></span>&nbsp;&nbsp;
+                <span><a href="javascript:void(0);" onclick="preview(@count);">电脑打印</a></span>&nbsp;&nbsp;
+                @{
+            if (m.Prod_Code_Start == 0 && m.Prod_Code_End == 0)
+            {
+                <a href="/ManageTrace_Info/CreateEWM?traceID=@m.Trace_ID&orgFlowID=@ViewBag.orgFlowID&prodID=@ViewBag.prodID">追溯信息激活</a>
+            }}
+            </div>
+    <!--startprint @count-->
+            <table border="1" cellpadding="5" style="width:98%">
+                <tr>
+                    <th width="80"> 单据编号：</th>
+                    <td colspan="2">@m.Flow_Num</td>
+                </tr>
+                <tr>
+                    <th>操作时间：</th>
+                    <td>@m.Rec_Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td rowspan="2"><img src="/Public/ShowImg?ewm=@m.Flow_Num" width="80" height="80" /></td>
+                </tr>
+                <tr>
+                    <th>产品名称：</th>
+                    <td>@m.Name</td>
+                </tr>
+                <tr>
+                    <th>追溯流程：</th>
+                    <td colspan="2">
+                        @m.Flow_Name
+                        @{
+            if (m.Prod_Code_Start > 0)
+            {
+                @:追溯信息激活
+                    }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th style="vertical-align:top;">追溯信息：</th>
+                    <td colspan="2">
+                        @{
+            if (m.Trace_Info_Value.Descendants("info").Count() > 0)
+            {
+                foreach (var mt in m.Trace_Info_Value.Descendants("info"))
+                {
+                    if (mt.Attribute("InfoValue") != null)
+                    {
+                        <label><b>@mt.Attribute("InfoName").Value：</b>@mt.Attribute("InfoValue").Value</label><br />
+                    }
+                    else
+                    {
+                        <label>
+                            <b> @mt.Attribute("InfoName").Value：</b>
+                            @{
+                        foreach (var mtt in mt.Descendants("value"))
+                        {
+                        <span>@mtt.Value ，</span>
+                        }
+                            }
+                        </label><br />
+                    }
+                }
+            }
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <th style="vertical-align:top;">操作图片：</th>
+                    <td colspan="2">
+                        @{
+            if (m.Trace_Info_Value.Descendants("img").Count() > 0)
+            {
+                foreach (var mt in m.Trace_Info_Value.Descendants("img"))
+                {
+                    <img src="@mt.Attribute("InfoValue").Value" width="300" height="200" />
+                }
+            }
+                        }
+
+                    </td>
+                </tr>
+            </table>
+    <!--endprint @count-->
+
+            @*if (m.Trace_Info_Value.Descendants("img").Count() > 0)
+                {
+                    <img src="@m.Trace_Info_Value.Descendants("img").FirstOrDefault().Attribute("src").Value" width="200" />
+                }*@
+        }
+    }
+    else if (ViewBag.search > 0)
+    {
+        <div class="alert alert-error show">
+
+            <button class="close" data-dismiss="alert"></button>
+
+            <span>未查到复合条件的流程单据，请确认单据编号正确无误！</span>
+        </div>
+    }
+}
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("List", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, orgFlowID = ViewBag.orgFlowID, prodID = ViewBag.prodID, orgID = ViewBag.orgID, timeS = ViewBag.timeS, timeE = ViewBag.timeE }))
+                <script type="text/javascript">
+                    function previewY(obj) {
+                        var s = window.document.body.innerHTML;
+
+                        bdhtml = window.document.body.innerHTML;
+                        sprnstr = "<!--startprint " + obj + "-->";
+                        eprnstr = "<!--endprint " + obj + "-->";
+                        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+                        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+                        demo.printString(prnhtml);
+                    }
+
+                    function preview(obj) {
+                        var s = window.document.body.innerHTML;
+
+                        bdhtml = window.document.body.innerHTML;
+                        sprnstr = "<!--startprint " + obj + "-->";
+                        eprnstr = "<!--endprint " + obj + "-->";
+                        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+                        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+                        window.document.body.innerHTML = prnhtml;
+
+                        window.print();
+                        window.document.body.innerHTML = s;
+
+
+                    }
+
+                </script>
+                <script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+
+                <script type="text/javascript">
+                    function PaiMa(obj) {
+                        this.location = "/Public/QrEwm?url=" + encodeURIComponent(obj);
+                    }
+                </script>

@@ -1,0 +1,126 @@
+﻿@model LinqModel.View_Org_Info
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+        <form action="/ManageOrg_Info/Update" id="form1" class="form-horizontal" method="post">
+            <div class="control-group">
+
+                <label class="control-label">当前操作企业</label>
+
+                <div class="controls">
+                    @ViewBag.orgName
+                </div>
+
+            </div><div class="control-group">
+
+                <label class="control-label">当前操作产品</label>
+
+                <div class="controls">
+                    @ViewBag.prodName
+                </div>
+
+            </div><div class="control-group">
+
+                <label class="control-label">当前操作追溯流程</label>
+
+                <div class="controls">
+                    @ViewBag.orgFlowName
+                </div>
+
+            </div><div class="control-group">
+
+                <label class="control-label">当前操作信息元</label>
+
+                <div class="controls">
+                    @Model.Info_Name
+                </div>
+
+            </div>
+            <div class="control-group">
+                <label class="control-label">是否必填</label>
+                <div class="controls">
+
+                    @{
+                        if (Model.Required.HasValue)
+                        {
+                            if ((bool)Model.Required)
+                            {
+                                <label class="radio"><input type="radio" name="Required" value="true" checked /> 是</label>
+                                <label class="radio"><input type="radio" name="Required" value="false" /> 否</label>
+                            }
+                            else
+                            {
+                                <label class="radio"><input type="radio" name="Required" value="true" /> 是</label>
+                                <label class="radio"><input type="radio" name="Required" value="false" checked /> 否</label>
+                            }
+                        }
+                        else
+                        {
+                            <label class="radio"><input type="radio" name="Required" value="true" /> 是</label>
+                            <label class="radio"><input type="radio" name="Required" value="false" checked /> 否</label>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">是否检索点</label>
+                <div class="controls">
+
+                    @{
+                        if (Model.Search_Point.HasValue)
+                        {
+                            if ((bool)Model.Search_Point)
+                            {
+                                <label class="radio"><input type="radio" name="Search_Point" value="true" checked /> 是</label>
+                                <label class="radio"><input type="radio" name="Search_Point" value="false" /> 否</label>
+                            }
+                            else
+                            {
+                                <label class="radio"><input type="radio" name="Search_Point" value="true" /> 是</label>
+                                <label class="radio"><input type="radio" name="Search_Point" value="false" checked /> 否</label>
+                            }
+                        }
+                        else
+                        {
+                            <label class="radio"><input type="radio" name="Search_Point" value="true" /> 是</label>
+                            <label class="radio"><input type="radio" name="Search_Point" value="false" checked /> 否</label>
+                        }
+                    }
+                </div>
+            </div>
+            @{
+                if (Model.Data_Type == "下拉框" || Model.Data_Type == "多选框" || Model.Data_Type == "单选框")
+                {
+                    <div class="control-group">
+
+                        <label class="control-label">定制信息元值</label>
+
+                        <div class="controls">
+                            <textarea class="large m-wrap" rows="3" name="Data_Type_Value" id="Data_Type_Value" maxlength="500">@Model.Data_Type_Value</textarea>
+                            <span class="help-inline">如果有多个值信息，每个值已英文逗号分隔</span>
+                        </div>
+
+                    </div>
+                }
+            }
+
+            <div class="form-actions">
+                <input type="hidden" id="id" name="id" value="@ViewBag.id" />
+                <input type="hidden" id="orgID" name="orgID" value="@ViewBag.orgID" />
+                <input type="hidden" id="prodID" name="prodID" value="@ViewBag.prodID" />
+                <input type="hidden" id="orgFlowID" name="orgFlowID" value="@ViewBag.orgFlowID" />
+                <button type="submit" class="btn blue"><i class="icon-ok"></i> 确定</button>
+
+                <a href="/ManageOrg_Info/Index?orgID=@ViewBag.orgID&orgFlowID=@ViewBag.orgFlowID&prodID=@ViewBag.prodID" class="btn blue">返回</a>
+
+
+            </div>
+        </form>
+    </div>
+</div>
+

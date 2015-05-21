@@ -1,0 +1,147 @@
+﻿@model PagedList.IPagedList<LinqModel.Permission>
+@using PagedList;
+@using PagedList.Mvc;
+@using LinqModel;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManagePermission/Index" class="form-search" method="get">
+
+            <div class="input-append">
+
+                <label class="control-label">权限类型:</label><select class="medium m-wrap" tabindex="1" name="CategoryDDL" id="CategoryDDL">
+                    @{
+                        var mdata = ViewBag.selectlist;
+                        foreach (LinqModel.Category mm in mdata)
+                        {
+                            if ((@ViewBag.SelectCategory == @mm.CategoryID.ToString()))
+                            {
+                            <option value=@mm.CategoryID selected="selected">@mm.CategoryName</option>}
+                            else
+                            {
+                            <option value=@mm.CategoryID>@mm.CategoryName</option>}
+
+
+                        }
+
+                    }
+
+
+                </select><input class="btn green" type="submit" value="绑定类别" />
+
+
+
+            </div>
+            <div class="input-append">
+                <label class="control-label">关键字:</label>
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch"><input class="btn green" type="submit" value="检索" />
+
+            </div>
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>功能项管理</div>
+
+                <div class="actions">
+
+                    <a href="/ManagePermission/Add" class="btn blue"><i class="icon-pencil"></i> 新增</a>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+
+                            <th>名称</th>
+
+                            <th>类别</th>
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.PermissionID)" id="@m.PermissionID" style="background-color: #@classname">
+                                    <td id="ext_@m.PermissionID">+</td>
+                                    <td>@m.PermissionName</td>
+                                    @{ LinqModel.Category xian = new DAL.Category().GetModel(@m.CategoryID);
+
+                                    <td> @xian.CategoryName </td>}
+                                 
+
+                                    <td class="hidden-480"><a href="/ManagePermission/Update?id=@m.PermissionID">修改</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/ManagePermission/Del?id=@m.PermissionID';} ">删除</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.PermissionID">
+                                    <td colspan="7">
+                                        <div style="margin-left:25px;">
+                                            <span><a href="/ManagePermission/Update?id=@m.PermissionID">修改</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/ManagePermission/Del?id=@m.PermissionID';}">删除</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, CategoryDDL = ViewBag.SelectCategory }))
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    
+    function RowClick(obj) {
+
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+
+</script>
+<script type="text/javascript">
+    function on_idmbzd_change() {
+        var sel_obj = document.getElementByIdx("CategoryDDL");
+        var index = sel_obj.selectedIndex;
+        alert(sel_obj.options[index].value);
+        alert(sel_obj.options[index].text);
+    }
+</script>

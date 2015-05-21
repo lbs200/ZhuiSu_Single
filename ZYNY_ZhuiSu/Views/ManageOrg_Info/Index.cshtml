@@ -1,0 +1,119 @@
+﻿@model List<LinqModel.View_Org_Info>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+
+    <div class="span12">
+        <div style="margin-bottom:10px;">为【企业：@ViewBag.orgName】【产品：@ViewBag.prodName】【流程：@ViewBag.orgFlowName】设置信息元</div>
+
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>企业定制流程信息元列表</div>
+                <div class="actions">
+                    <a href="/ManageOrg_Flow/Index?orgID=@ViewBag.orgID&prodID=@ViewBag.prodID" class="btn blue"><i class="icon-pencil"></i> 返回企业定制追溯流程</a>
+                </div>
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th>名称</th>
+                            <th>必填项</th>
+                            <th>检索点</th>
+                            @*<th>是否必须有值</th>*@
+
+                            <th>选择项</th>
+
+                            <th>操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr id="@m.Org_Flow_ID" style="background-color: #@classname">
+                                    <td>@m.Info_Name</td>
+                                    <td>
+                                        @{
+                                if (m.Required.HasValue && (bool)m.Required)
+                                {
+                                    @:是
+                                }
+                                else
+                                {
+                                    @:否
+                                }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                if (m.Search_Point.HasValue && (bool)m.Search_Point)
+                                {
+                                    @:是
+                                }
+                                else
+                                {
+                                    @:否
+                                }
+                                        }
+                                    </td>
+                                    @*<td>
+                                                @{
+                                        if (m.Data_Type == "下拉框" || m.Data_Type == "多选框" || m.Data_Type == "单选框")
+                                        {
+                                            @:是
+                                                    }
+                                        else
+                                        {
+                                            @:否
+                                                    }
+                                                }
+                                            </td>*@
+                                    <td>@m.Data_Type_Value</td>
+
+                                    <td>
+                                        @{
+                                if (ViewBag.hidden != null && !ViewBag.hidden)
+                                {
+                                    <a href="/ManageOrg_Info/Update?id=@m.ID&orgID=@ViewBag.orgID&orgFlowID=@ViewBag.orgFlowID&prodID=@ViewBag.prodID">设置信息元</a>
+                                            @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;");
+                                            <a href="/ManageOrg_Info/Del?id=@m.ID&orgID=@ViewBag.orgID&orgFlowID=@ViewBag.orgFlowID&prodID=@ViewBag.prodID">删除</a>
+                                }
+                                else
+                                {
+                                    <span style="color:red;">已添加追溯信息，无法再次修改！</span>
+                                }
+                                        }
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

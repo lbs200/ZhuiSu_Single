@@ -1,0 +1,251 @@
+﻿@model LinqModel.Flow_User
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+
+        <div class="portlet box grey tabbable">
+
+            <div class="portlet-title">
+
+                <div class="caption">
+
+                    <i class="icon-reorder"></i>
+
+                    <span class="hidden-480">设置企业用户权限</span>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body form">
+
+                <div class="tabbable portlet-tabs">
+
+                    <ul class="nav nav-tabs">
+
+                        <li class="active"><a href="#portlet_tab1" data-toggle="tab">分配权限</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="portlet_tab1">
+
+                            <!-- BEGIN FORM-->
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <form action="#" class="form-horizontal">
+
+                                    @Html.ValidationSummary(true)
+                                    <div class="control-group">
+                                        @Html.Label("机构名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <input type="hidden" id="shengID" name="shengID" />
+                                        <input type="hidden" id="shiID" name="shiID" />
+                                        <input type="hidden" id="checkvalues" name="checkvalues" />
+                                        <input type="hidden" id="LSH" name="LSH" value="@ViewBag.ZIP" />
+                                        <input type="hidden" id="qz" name="qz" />
+                                        <input type="hidden" id="fgf" name="fgf" value="@ViewBag.FGF" />
+
+                                        <select class="medium m-wrap" tabindex="1" name="Province" id="Province" onchange="GetAddressShi(this.value)">
+
+                                            @{
+                                var mdata = ViewBag.selectlist;
+                                <option value="*">---请选择---</option>
+                                foreach (LinqModel.Organization mm in mdata)
+                                {
+
+                                    <option value="@mm.Org_ID">@mm.Name</option>
+
+
+                                }
+
+                                            }
+
+
+
+
+                                        </select>
+                                        @Html.ValidationMessage("Org_ID", new { @style = "color: #f70e0e;" })
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">用户姓名:</label>
+                                        <select class="medium m-wrap" tabindex="1" name="Use_ID" id="Use_ID" onchange="GetXian(this.value)">
+                                            <option value="*">---请选择---</option>
+                                        </select>
+                                        @Html.ValidationMessage("Use_ID", new { @style = "color: #f70e0e;" })
+                                    </div>
+
+
+                                    <div class="control-group">
+                                        @Html.LabelFor(model => model.Org_Flow_ID, "流程名称：", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div id="xuanxiang" class="controls" style="margin-left:50px">
+                                            <div id="xianshiquyu">
+                                                <div id="quanxuan"></div>
+
+                                                @*<input type="checkbox" name="chk_all" id="chk_all" /> 全选
+            <input type="checkbox" name="unchk_all" id="unchk_all" /> 全不选*@
+                                                @{
+                                                    <div id="getResult"></div>
+                                int i = 1;
+                                foreach (LinqModel.Products pn in ViewBag.pn)
+                                {
+                                        
+                                    i++;
+                                }
+                                        <input type="hidden" id="jsq" name="jsq" value="@i" />
+                                                }
+
+                                                <div id="anniu">
+
+                                                </div>
+                                            </div>
+                                            @*<input id="tijiao" class="btn blue" type="button" value="添加权限" onclick="hh()" />
+                                                <hr style="FILTER: alpha(opacity=10,finishopacity=0,style=1)">*@
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="确定" onclick="return CheckClick();" class="btn btn-default" />
+                                        </div>
+                                    </div>
+                                </form>
+                            }
+
+
+                            <!-- END FORM-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END SAMPLE FORM PORTLET-->
+
+    </div>
+
+</div>
+
+
+
+<div>
+    @Html.ActionLink("返回列表", "Create")
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+    });
+
+    function GetAddressShi(obj) {
+        document.getElementById("shengID").value = obj;
+        if (obj != "*") {
+            $.get("/ManageFlow_User/GetP?cid=" + obj, function (data, textStatus) {
+                var sid = document.getElementById("Use_ID");
+                $("#Use_ID").empty();
+                sid.options[sid.options.length] = new Option("---请选择---", "*");
+                $.each(data, function () {
+                    sid.options[sid.options.length] = new Option(this["UserName"], this["ID"]);
+                });
+            });
+
+
+
+        }
+        else {
+            //$("#xianshiquyu").hide();
+
+        }
+
+    }
+    function GetXian(obj) {
+        document.getElementById("shiID").value = obj;
+        if (obj != "*") {
+            $("#xianshiquyu").show();
+            var OID = document.getElementById("shengID").value;
+            var jsq = document.getElementById("jsq").value;
+            var BidCategory = $('#Use_ID option:selected').val();//Users选中的值
+
+            //alert("#qxlb_" + j + "");
+            $.get("/ManageFlow_User/GetZIP?oid=" + OID, function (data, textStatus) {
+                $("#quanxuan").html('');
+                $("#anniu").html('');
+                $("#quanxuan").append("<label class='checkbox' ><input type='checkbox' name='chk_all' id='chk_all'/> 全选    </label>   ");
+                $("#quanxuan").append("<label class='checkbox' ><input type='checkbox' name='unchk_all' id='unchk_all'/> 取消全选  </label></br>");
+                $("#quanxuan").append("<HR style='FILTER: alpha(opacity=10,finishopacity=0,style=1)'></br>");
+                
+                document.getElementById("getResult").innerHTML = data;
+
+                $.get("/ManageFlow_User/Getxy?uid=" + BidCategory, function (data, textStatus) {
+                   
+                    $.each(data, function () {
+                      
+                            $("input[id='checkb_" + this['Org_Flow_ID'] +"']").attr("checked", true);
+
+
+                        });
+                    
+                });
+
+
+                $("#anniu").append("<input id='tijiao' class='btn blue' type='button' value='添加权限'  onclick='hh()' />");
+                $("#anniu").append("<HR style='FILTER: alpha(opacity=10,finishopacity=0,style=1)' color=#987cb9 ></br>");
+
+                $("#chk_all").click(function () {
+                    $("input[name='Org_Flow_ID']").attr("checked", $(this).attr("checked"));
+                    $("input[name='unchk_all']").attr("checked", false);
+                });
+                $("#unchk_all").click(function () {
+                    $("input[name='Org_Flow_ID']").attr("checked", false);
+                    $("input[name='chk_all']").attr("checked", false);
+                });
+            });
+
+
+
+
+
+
+        }
+      
+
+    }
+    function hh() {
+
+        //获取到所有name为'chk_list'并选中的checkbox(集合)
+        var arrChk = $("input[name='Org_Flow_ID']:checked");
+        //遍历得到每个checkbox的value值
+        $(arrChk).each(function () {
+            document.getElementById("checkvalues").value += this.value + "*";
+        });
+        $("#tijiao").val("已选择");
+        $("#tijiao").attr({ "disabled": "disabled" });
+
+    }
+
+    function CheckClick() {
+        if (document.getElementById("Province").value == "") {
+            alert("请选择机构！");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

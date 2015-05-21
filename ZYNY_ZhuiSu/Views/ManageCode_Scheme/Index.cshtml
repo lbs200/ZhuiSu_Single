@@ -1,0 +1,95 @@
+﻿@model List<LinqModel.Code_Scheme>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>公共编码方案管理</div>
+
+                <div class="actions">
+                    <a href="/ManageCode_Scheme/Add" class="btn blue"><i class="icon-pencil"></i> 新增</a>
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>方案名称</th>
+                            <th>前缀缩写</th>
+                            <th>码段分隔符</th>
+                            <th>主从码分隔符</th>
+                            <th>流水号号段位置</th>
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.Scheme_ID)" id="@m.Scheme_ID" style="background-color: #@classname">
+                                    <td id="ext_@m.Scheme_ID">+</td>
+                                    <td>@m.Name</td>
+                                    <td>@m.Prefix</td>
+                                    <td>@m.Separator</td>
+                                    <td>@m.P_S_separator</td>
+                                    <td>@m.SN_Position</td>
+                                    <td class="hidden-480"><a href="/ManageCode_Seg_Info/Index?Scheme_ID=@m.Scheme_ID">码段位信息管理</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.Scheme_ID">
+                                    <td colspan="10">
+                                        <div style="margin-left:25px;">
+                                            <span><a href="/ManageCode_Seg_Info/Index?Scheme_ID=@m.Scheme_ID">码段位信息管理</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>

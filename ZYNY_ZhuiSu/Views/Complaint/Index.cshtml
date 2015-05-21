@@ -1,0 +1,145 @@
+﻿@model PagedList.IPagedList<LinqModel.View_Complaint>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+    <form id="form1" action="/Complaint/Index" class="form-search" method="get">
+
+        <div class="row-details">
+            投诉产品：
+            <select id="products" name="products">
+                <option value="0">全部</option>
+                @{
+                    foreach (var m in (List<LinqModel.Products>)ViewBag.products)
+                    {
+                        if (ViewBag.prodC != null && m.ID == int.Parse(ViewBag.prodC))
+                        {
+                            <option value="@m.ID" selected>@m.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@m.ID">@m.Name</option>
+                        }
+                    }
+                }
+            </select>
+            时间：<input type="text" style="width:80px;" id="timeS" name="timeS" value="@ViewBag.timeS" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+            -
+            <input type="text" style="width:80px;" id="timeE" name="timeE" value="@ViewBag.timeE" readonly="readonly" onclick="WdatePicker();" onfocus="WdatePicker()" />
+
+            产品追溯码：<input type="text" style="width:160px;" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch" />
+            <input class="btn green" type="submit" value="查询" />
+        </div>
+    </form>
+    <div class="portlet box grey">
+
+        <div class="portlet-title">
+
+            <div class="caption"><i class="icon-globe"></i>投诉信息列表</div>
+
+        </div>
+        <div class="portlet-body">
+
+            <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                <thead>
+
+                    <tr>
+                        <th width="10"></th>
+                        <th>产品名称</th>
+                        <th>产品追溯码</th>
+                        <th>投诉日期</th>
+                        <th class="hidden-480">联系人</th>
+                        <th class="hidden-480">联系电话</th>
+                        <th class="hidden-480">邮件地址</th>
+                        <th class="hidden-480">投诉内容</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @{
+                    int count = 0;
+                    foreach (var m in Model)
+                    {
+                        count++;
+                        string classname = "fafafb";
+                        if (count % 2 == 0)
+                        { classname = "ecf3fa"; }
+                <tr onclick="RowClick(@m.Complaint_ID)" id="@m.Complaint_ID" style="background-color: #@classname">
+                    <td id="ext_@m.Complaint_ID">+</td>
+                    <td>@m.Name</td>
+                    <td>@m.Prod_Code</td>
+                    <td>@m.Complaint_Date.ToString("yyyy-MM-dd")</td>
+                    <th class="hidden-480">@m.Complaint_Customer</th>
+                    <th class="hidden-480">@m.Complaint_Tel</th>
+                    <th class="hidden-480">@m.E_mail</th>
+                    <th class="hidden-480"><a href="javascript:void(0);" title="@m.Content">点击查看</a></th>
+                </tr>
+                <tr style="display:none; " id="detail_@m.Complaint_ID">
+                    <td colspan="10">
+                        <div style="margin-left:25px;">
+                            <table>
+                                <tr>
+                                    <th style="text-align:left;">产品名称：</th>
+                                    <td>@m.Name</td>
+                                </tr>
+                                <tr>
+                                    <th style="text-align:left;">产品追溯码：</th>
+                                    <td>@m.Prod_Code</td>
+                                </tr>
+                                <tr>
+                                    <th style="text-align:left;">投诉日期：</th>
+                                    <td>@m.Complaint_Date.ToString("yyyy-MM-dd")</td>
+                                </tr>
+                                <tr>
+                                    <th style="text-align:left;">联系人：</th>
+                                    <td>@m.Complaint_Customer</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-align:left;">联系电话：</th>
+                                            <td>@m.Complaint_Tel</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-align:left;">邮件地址：</th>
+                                            <td>@m.E_mail</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-align:left;">投诉内容：</th>
+                                            <td>@m.Content</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    }
+                </tbody>
+            </table>
+            当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页，总共 @Model.TotalItemCount 条投诉信息
+
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, timeS = ViewBag.timeS, timeE = ViewBag.timeE, products = ViewBag.prodC }))
+
+        </div>
+        </div>
+    </div>
+<script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>
+

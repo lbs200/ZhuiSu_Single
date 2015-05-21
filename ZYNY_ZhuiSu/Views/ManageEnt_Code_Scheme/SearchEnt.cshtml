@@ -1,0 +1,100 @@
+﻿@model PagedList.PagedList<LinqModel.Organization>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "SearchEnt";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageEnt_Code_Scheme/SearchEnt" class="form-search" method="get">
+
+            <div class="input-append">
+
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch"><input class="btn green" type="submit" value="检索" />
+
+            </div>
+        </form>
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>机构列表</div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>名称</th>
+
+                            <th>地址</th>
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.Org_ID)" id="@m.Org_ID" style="background-color: #@classname">
+                                    <td id="ext_@m.Org_ID">+</td>
+                                    <td>@m.Name</td>
+
+                                    <td>@m.Address</td>
+
+                                    <td class="hidden-480"><a href="/ManageEnt_Code_Scheme/Index?orgID=@m.Org_ID">设置编码方案</a></td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.Org_ID">
+                                    <td colspan="10">
+                                        <div style="margin-left:25px;">
+                                            <span><a href="/ManageEnt_Code_Scheme/Index?orgID=@m.Org_ID">设置编码方案</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch }))
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>

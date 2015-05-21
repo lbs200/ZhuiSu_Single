@@ -1,0 +1,54 @@
+﻿@model LinqModel.ORG_Photo
+
+@{
+    ViewBag.Title = "详情";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div>
+    <h4>权限类别</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            机构名称：
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Org_ID)
+        </dd>
+        <dt>
+            图片：
+        </dt>
+        <dd>
+            <img id="Photo" width="300" height="200" src="@Model.Photo" /><br>
+        </dd>
+        <dt>
+            是否背景：
+        </dt>
+        @{
+            if (Model.Sque == 1)
+            {
+                <dd>
+                    背景
+                </dd>
+            }
+            else
+            {
+                <dd>
+                    展示图片
+                </dd>
+            }
+        }
+        <dt>
+            描述：
+        </dt>
+
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("返回列表", "Index")
+</p>

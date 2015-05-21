@@ -1,0 +1,157 @@
+﻿@model PagedList.IPagedList<LinqModel.View_Org_Flow>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/ManageOrg_Flow/Index" class="form-search" method="post">
+
+            <div class="row-details">
+                <input type="hidden" id="orgID" name="orgID" value="@ViewBag.orgID" />
+                请选择要设置的产品：
+                <select id="prods" name="prods">
+                    @{
+                        foreach (var m in ViewBag.prods as List<LinqModel.Products>)
+                        {
+                            if (m.ID == ViewBag.prodsCurrent)
+                            {
+                                <option value="@m.ID" selected>@m.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@m.ID">@m.Name</option>
+                            }
+                        }
+                    }
+                </select>
+                @*<input class="m-wrap small" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch">*@<input class="btn green" type="submit" value="查询" />
+                <a href="/ManageOrg_Flow/Cycle?orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent" class="btn blue">设置循环节点</a>
+            </div>
+        </form>
+        <div>
+            <span style="color:red;">追溯流程设定完毕请仔细审核，一旦开始录入追溯信息，则该流程不可修改！</span>
+        </div>
+        @ViewBag.titleFlow  现行追溯流程：<br />
+        @Html.Raw(ViewBag.listFlow)
+        <br />
+        <div class="portlet box grey">
+
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>企业定制追溯流程管理</div>
+
+                <div class="actions">
+                    @{
+                        if (ViewBag.hidden != null && !ViewBag.hidden)
+                        {
+                            <a href="/ManageOrg_Flow/Add?orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent" class="btn blue"><i class="icon-pencil"></i> 新增追溯流程</a>
+                        }
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="portlet-body">
+
+                <table class="table  table-bordered table-hover table-full-width" id="sample_1">
+
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>名称</th>
+
+                            <th>序号</th>
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.Org_Flow_ID)" id="@m.Org_Flow_ID" style="background-color: #@classname">
+                                    <td id="ext_@m.Org_Flow_ID">+</td>
+                                    <td>@m.Flow_Name</td>
+
+                                    <td>@m.Seq_No</td>
+
+                                    <td class="hidden-480">
+                                        <a href="/ManageOrg_Flow/Flow_Info?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent">管理流程信息元</a>　<a href="/ManageOrg_Flow/DownFlowInfo?id=@m.Org_Flow_ID">查看后续流程</a>　
+                                        @{
+                                if (ViewBag.hidden != null && !ViewBag.hidden)
+                                {
+                                    <a href="/ManageOrg_Flow/DownFlowAdd?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent">设置后续流程</a>　
+                                            <a href="/ManageOrg_Flow/SepUp?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent&page=@ViewBag.page&txtSearch=@ViewBag.txtSearch">上移</a>　　
+                                            <a href="/ManageOrg_Flow/SepDown?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent&page=@ViewBag.page&txtSearch=@ViewBag.txtSearch">下移</a>　
+                                            <a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/ManageOrg_Flow/Del?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&page=@ViewBag.page&prodID=@ViewBag.prodsCurrent';} ">删除</a>
+                                }
+                                        }
+
+                                    </td>
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.Org_Flow_ID">
+                                    <td colspan="7">
+                                        <div style="margin-left:25px;">
+                                            <span><a href="/ManageOrg_Flow/Flow_Info?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent">管理流程信息元</a>　<a href="/ManageOrg_Flow/DownFlowInfo?id=@m.Org_Flow_ID">查看后续流程</a>　
+                                                @{
+                                if (ViewBag.hidden != null && !ViewBag.hidden)
+                                {
+                                            <a href="/ManageOrg_Flow/DownFlowAdd?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent">设置后续流程</a>　
+                                                    <a href="/ManageOrg_Flow/SepUp?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent&page=@ViewBag.page&txtSearch=@ViewBag.txtSearch">上移</a>　　
+                                                    <a href="/ManageOrg_Flow/SepDown?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent&page=@ViewBag.page&txtSearch=@ViewBag.txtSearch">下移</a>　
+    <a href="javascript:if(confirm('确定要删除么？')){window.location.href ='/ManageOrg_Flow/Del?id=@m.Org_Flow_ID&orgID=@ViewBag.orgID&page=@ViewBag.page&prodID=@ViewBag.prodsCurrent';} ">删除</a>
+                                }
+}
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch, orgID = ViewBag.orgID, prods = ViewBag.prodsCurrent }))
+
+            </div>
+
+        </div>
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<script type="text/javascript">
+    function RowClick(obj) {
+        var m = document.getElementById("detail_" + obj);
+
+        if (m.style.display == "none") {
+            document.getElementById("ext_" + obj).innerHTML = "-";
+            m.style.display = "";
+        }
+        else {
+            document.getElementById("ext_" + obj).innerHTML = "+";
+            m.style.display = "none";
+        }
+    }
+</script>
