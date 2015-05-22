@@ -339,7 +339,6 @@
     <None Include="Properties\PublishProfiles\tfruit - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\ZYCSZS.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="mov_bbb.mp4" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
