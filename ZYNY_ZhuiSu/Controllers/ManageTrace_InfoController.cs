@@ -241,7 +241,7 @@ namespace ZYNY_ZhuiSu.Controllers
                 if (modelInfo.Public || m.Public == 1)
                 {
                     #region 判断必填项错误
-                    if (m.Required != null && (bool)m.Required)
+                    if (m.Required != null && (bool)m.Required)//判断企业追溯信息元是否为必填
                     {
                         try
                         {
@@ -254,7 +254,20 @@ namespace ZYNY_ZhuiSu.Controllers
                         {
                             sbErrorInfo.Append(m.Info_Name + "为必填项；");
                         }
-
+                    }
+                    else if(modelInfo.Required)//如果企业追溯信息元不为必填，则判断信息元中是否为必填
+                    {
+                        try
+                        {
+                            if (string.IsNullOrEmpty(Request[m.Info_ID.ToString()].ToString()))
+                            {
+                                sbErrorInfo.Append(m.Info_Name + "为必填项；");
+                            }
+                        }
+                        catch
+                        {
+                            sbErrorInfo.Append(m.Info_Name + "为必填项；");
+                        }
                     }
                     #endregion
                     #region 判断链接格式错误
@@ -345,7 +358,7 @@ namespace ZYNY_ZhuiSu.Controllers
             {
                 ViewBag.error = 1;
                 ViewBag.errorMsg = sbErrorInfo.ToString();
-                return Content("<script>alert('" + sbErrorInfo.ToString() + "');history.go(-1);</script>");
+                return Content("<script>alert('" + sbErrorInfo.ToString() + "');</script>");
             }
             else
             {
