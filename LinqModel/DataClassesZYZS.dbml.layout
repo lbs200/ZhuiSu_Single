@@ -380,12 +380,6 @@
         <elementListCompartment Id="50690bdc-77d6-41b1-9df8-d725e3df6862" absoluteBounds="0.76499999999999968, 12.085, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="3b7d3236-3c20-4a2d-8630-4a04473d5193" isExpanded="false" absoluteBounds="0.75, 6.625, 2, 0.45">
-      <DataClassMoniker Name="/DataClassesZYZSDataContext/Organization" />
-      <nestedChildShapes>
-        <elementListCompartment Id="42ae397e-0326-42fc-866a-d9ce353f2a45" absoluteBounds="0.76499999999999968, 7.085, 1.9700000000000002, 3.3037821451822915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="307496d7-79a1-4e23-a33b-46c7ca8b9228" isExpanded="false" absoluteBounds="5, 2.125, 2, 0.45">
       <DataClassMoniker Name="/DataClassesZYZSDataContext/View_Org" />
       <nestedChildShapes>
@@ -420,6 +414,12 @@
       <DataClassMoniker Name="/DataClassesZYZSDataContext/Products" />
       <nestedChildShapes>
         <elementListCompartment Id="4f62fd8b-ea37-40d5-adc3-b6d26d4150f2" absoluteBounds="0.76499999999999968, 9.085, 1.9700000000000002, 4.067860921223958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3cff0174-4a31-46a8-9833-aff8b89296c2" isExpanded="false" absoluteBounds="0.75, 6.625, 2, 0.45">
+      <DataClassMoniker Name="/DataClassesZYZSDataContext/Organization" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2903c970-92cb-4bb7-8fdf-977b8d225e34" absoluteBounds="0.76499999999999968, 7.085, 1.9700000000000002, 3.494801839192708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

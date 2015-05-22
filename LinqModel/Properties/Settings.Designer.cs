@@ -77,5 +77,16 @@ namespace LinqModel.Properties {
                 return ((string)(this["ZY_ZhuiSuConnectionString4"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=121.42.12.155;Initial Catalog=ZhuiSu_Single;User ID=ZhuiSu_SingleAdmi" +
+            "n")]
+        public string ZhuiSu_SingleConnectionString {
+            get {
+                return ((string)(this["ZhuiSu_SingleConnectionString"]));
+            }
+        }
     }
 }

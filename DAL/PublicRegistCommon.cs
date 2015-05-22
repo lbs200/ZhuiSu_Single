@@ -22,7 +22,6 @@ namespace DAL
             {
                 using (LinqModel.DataClassesZYZSDataContext dc = GetDataContext())
                 {
-                   
                 }
             }
             catch { result = false; }
