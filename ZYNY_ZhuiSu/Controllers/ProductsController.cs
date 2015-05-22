@@ -186,9 +186,13 @@ namespace ZYNY_ZhuiSu.Controllers
                             new DAL.Products().UpdateID(products);
 
                             #region 添加模板流程，信息元，权限
-                            var modelUser = dc.User.FirstOrDefault(m => m.Org_ID == (int)products.Org_ID);
-                            var modelOrg = dc.Organization.FirstOrDefault(m => m.Org_ID == (int)products.Org_ID);
-                            new DAL.PublicRegistCommon().AddFlowAndPermission((int)products.Org_ID, modelUser.ID, (int)modelOrg.HangYeID, products.ID);
+                            try
+                            {
+                                var modelUser = dc.User.FirstOrDefault(m => m.Org_ID == (int)products.Org_ID);
+                                var modelOrg = dc.Organization.FirstOrDefault(m => m.Org_ID == (int)products.Org_ID);
+                                new DAL.PublicRegistCommon().AddFlowAndPermission((int)products.Org_ID, modelUser.ID, (int)modelOrg.HangYeID, products.ID);
+                            }
+                            catch { }
                             #endregion
 
                             return RedirectToAction("Index");

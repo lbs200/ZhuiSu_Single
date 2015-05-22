@@ -20,7 +20,6 @@ namespace ZYNY_ZhuiSu.Controllers
 
         public ActionResult Index()
         {
-            new DAL.PublicRegistCommon().AddFlowAndPermission(1, 1, 1, 1);
             if (Request.QueryString["txtSearch"] != null && !string.IsNullOrEmpty(Request.QueryString["txtSearch"]))
             {
                 string ewm = Server.UrlDecode(Request.QueryString["txtSearch"]);
