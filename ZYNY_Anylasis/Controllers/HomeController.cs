@@ -123,7 +123,7 @@ namespace ZYNY_Anylasis.Controllers
                 ViewBag.videoUrl = "aaa";
                 if (string.IsNullOrEmpty(model.EWMUrl))
                 {
-                    ViewBag.urlProd = System.Configuration.ConfigurationManager.AppSettings["UrlSite"] + "/Products/ProInfo?oid=" + model.Org_ID + "&pid=" + model.ID;
+                    ViewBag.urlProd = "#";// System.Configuration.ConfigurationManager.AppSettings["UrlSite"] + "/Products/ProInfo?oid=" + model.Org_ID + "&pid=" + model.ID;
                 }
             }
             else if (usageID > 0)
@@ -220,7 +220,7 @@ namespace ZYNY_Anylasis.Controllers
             ViewBag.urlEnt = model.EWMUrl;
             if (string.IsNullOrEmpty(model.EWMUrl))
             {
-                ViewBag.urlEnt = System.Configuration.ConfigurationManager.AppSettings["UrlSite"] + "/Home/Index?oid=" + orgID;
+                ViewBag.urlEnt = "#";// System.Configuration.ConfigurationManager.AppSettings["UrlSite"] + "/Home/Index?oid=" + orgID;
             }
             return View(model);
         }
