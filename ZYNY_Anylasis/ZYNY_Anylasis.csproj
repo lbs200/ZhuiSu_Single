@@ -335,6 +335,7 @@
     <Content Include="Content\js\.DS_Store" />
     <None Include="Properties\PublishProfiles\123.pubxml" />
     <None Include="Properties\PublishProfiles\anylasis_test.pubxml" />
+    <None Include="Properties\PublishProfiles\single_t.pubxml" />
     <None Include="Properties\PublishProfiles\tfruit - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\tfruit - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\ZYCSZS.pubxml" />

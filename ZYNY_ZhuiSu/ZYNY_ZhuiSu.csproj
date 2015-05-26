@@ -1871,6 +1871,7 @@
     <Content Include="ckeditor\skins\BootstrapCK-Skin\README.md" />
     <Content Include="ckeditor\skins\moono\readme.md" />
     <None Include="Properties\PublishProfiles\houtai.pubxml" />
+    <None Include="Properties\PublishProfiles\single_trace.pubxml" />
     <None Include="Properties\PublishProfiles\tracefruit - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\tracefruit - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\tracefruit - Web Deploy %282%29.pubxml" />
