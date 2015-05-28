@@ -1,0 +1,238 @@
+﻿@model PagedList.IPagedList<LinqModel.RegisterCheck>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageManage.cshtml";
+}
+
+<div class="row-fluid">
+
+    <div class="span12">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <form id="form1" action="/RegisterCheck/Index" class="form-search" method="get">
+
+            <div class="input-append">
+
+                <input class="m-wrap" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch"><input class="btn green" type="submit" value="检索" />
+
+            </div>
+        </form>
+        <div class="portlet box grey">
+            <div class="portlet-title">
+
+                <div class="caption"><i class="icon-globe"></i>机构列表</div>
+
+                <div class="actions">
+                    @{
+                        if ((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 5 || (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 2)//系统管理员、实施人员
+                        {
+                            <a href="/RegisterCheck/Create" class="btn blue"><i class="icon-pencil"></i> 新增机构</a>
+                        }
+                    }
+
+
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <table class="table table-bordered table-hover table-full-width" id="sample_1">
+                    <thead>
+
+                        <tr>
+                            <th width="10"></th>
+                            <th>
+                                机构名称
+                            </th>
+                            <th class="hidden-480">
+                                省份
+                            </th>
+                            <th class="hidden-480">
+                                市
+                            </th>
+                            <th class="hidden-480">
+                                区县
+                            </th>
+                            <th class="hidden">
+                                地址
+                            </th>
+                            <th>
+                                联系人
+                            </th>
+                            <th class="hidden-480">
+                                电话
+                            </th>
+                            <th class="hidden">
+                                邮件
+                            </th>
+                            <th class="hidden">
+                                网址
+                            </th>
+                            <th>
+                                审核状态
+                            </th>
+                            <th class="hidden">
+                                上级
+                            </th>
+                            <th class="hidden">
+                                简介
+                            </th>
+                            <th class="hidden">
+                                品牌
+                            </th>
+                            <th class="hidden">
+                                证书图片
+                            </th>
+                            <th class="hidden">
+                                编码
+                            </th>
+
+                            <th class="hidden-480">操作</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+
+                        @{
+                            int count = 0;
+                            foreach (var m in Model)
+                            {
+                                count++;
+                                string classname = "fafafb";
+                                if (count % 2 == 0)
+                                { classname = "ecf3fa"; }
+                                <tr onclick="RowClick(@m.ID)" id="@m.ID" style="background-color: #@classname">
+                                    <td id="ext_@m.ID">+</td>
+                                    <td>@m.OrgName</td>
+
+                                    @{ LinqModel.AdministrationRegion sheng = new DAL.Region().GetModel(Convert.ToInt32(@m.Province));
+
+                                    <td class="hidden-480"> @sheng.Province </td>}
+                                    @{ LinqModel.AdministrationRegion shi = new DAL.Region().GetModel(Convert.ToInt32(@m.City));
+
+                                    <td class="hidden-480"> @shi.Province </td>}
+                                    @{ LinqModel.AdministrationRegion xian = new DAL.Region().GetModel(Convert.ToInt32(@m.District));
+
+                                    <td class="hidden-480"> @xian.Province </td>}
+
+                                    <td class="hidden">@m.Address</td>
+                                    <td>@m.Contact</td>
+
+                                    <td class="hidden-480">@m.Tel</td>
+                                    <td class="hidden">@m.Email</td>
+
+                                    <td class="hidden">@m.Org_URL</td>
+                                    @{
+                                    switch (m.CheckStatus)
+                                    {
+                                        case 0:
+                                            <td>未审核</td>
+                                            break;
+                                        case 1:
+                                            <td>审核通过</td>
+                                            break;
+                                        case 2:
+                                            <td>审核中</td>
+                                            break;
+                                        default:
+                                            <td>审核失败</td>
+                                            break;
+                                    }
+}
+                                    @{
+                                if (m.Sup_Org == 0)
+                                {
+                                    <td class="hidden">无上级</td>
+
+                                }
+                                else
+                                {
+                                    LinqModel.Organization shangji = new DAL.Organization().GetModel(Convert.ToInt32(@m.Sup_Org));
+
+                                    <td class="hidden"> @shangji.Name </td>
+                                }
+
+
+}
+
+                                    <td class="hidden">@m.Intro</td>
+                                    <td class="hidden">@m.Brand</td>
+
+                                    <td class="hidden">@m.Cert</td>
+                                    <td class="hidden">@m.Org_Code</td>
+                                    @{
+                                if ((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 5 || (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 2)//系统管理员、实施人员
+                                {
+                                    <td class="hidden-480"><a href="/RegisterCheck/Update?id=@m.ID">审核</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/RegisterCheck/Details?id=@m.ID ">详情</a>|&nbsp;&nbsp;<a href="/RegisterCheck/Delete?id=@m.ID ">删除</a></td>
+
+                                }
+                                else
+                                {
+
+
+                                    <td class="hidden-480"><a href="/RegisterCheck/Update?id=@m.ID">审核</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/RegisterCheck/Details?id=@m.ID ">详情</a></td>
+
+
+                                }
+                                    }
+                                </tr>
+                                <tr style="display:none; " id="detail_@m.ID">
+                                    <td colspan="7">
+                                        <div style="margin-left:25px;">
+                                            <span>地址： @m.Address</span><br />
+
+                                            <span>邮箱： @m.Email</span><br />
+                                            <span>网址： @m.Org_URL</span><br />
+                                            <span>企业官网网址： @m.EWMUrl</span><br />
+                                            @*<span>简介： @m.Intro</span><br />
+                                                <span>品牌： @m.Brand</span><br />
+                                                <span>认证图片： @m.Cert</span><br />*@
+                                            @{
+                                if ((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 5 || (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 2)//系统管理员、实施人员
+                                {
+                                    <span><a href="/RegisterCheck/Update?id=@m.ID">审核</a>&nbsp;&nbsp;|<a href="/RegisterCheck/Details?id=@m.ID ">详情</a>|&nbsp;&nbsp;<a href="/RegisterCheck/Delete?id=@m.ID ">删除</a></span>
+
+                                }
+                                else
+                                {
+
+                                    <span><a href="/RegisterCheck/Update?id=@m.ID">审核</a>&nbsp;&nbsp;|<a href="/RegisterCheck/Details?id=@m.ID ">详情</a></span>
+
+
+                                }
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+
+                当前第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，总共 @Model.PageCount 页
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, txtSearch = ViewBag.txtSearch }))
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+        function RowClick(obj) {
+            var m = document.getElementById("detail_" + obj);
+
+            if (m.style.display == "none") {
+                document.getElementById("ext_" + obj).innerHTML = "-";
+                m.style.display = "";
+            }
+            else {
+                document.getElementById("ext_" + obj).innerHTML = "+";
+                m.style.display = "none";
+            }
+        }
+</script>

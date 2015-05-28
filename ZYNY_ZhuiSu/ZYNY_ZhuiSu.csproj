@@ -236,6 +236,7 @@
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\Prod_categoryController.cs" />
     <Compile Include="Controllers\PublicController.cs" />
+    <Compile Include="Controllers\RegisterCheckController.cs" />
     <Compile Include="Controllers\S_TreeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1790,6 +1791,12 @@
     <Content Include="images\7\2014\10\16\130579061071790919.jpg" />
     <Content Include="images\7\2014\10\16\130579061314212016.jpg" />
     <Content Include="images\7\2014\10\16\130579061441541878.jpg" />
+    <Content Include="images\adminss\20130910043915_57151.jpg" />
+    <Content Include="images\adminss\chanpin.jpg" />
+    <Content Include="images\adminss\dalou.jpg" />
+    <Content Include="images\ADMINS\20130910043915_57151.jpg" />
+    <Content Include="images\ADMINS\chanpin.jpg" />
+    <Content Include="images\ADMINS\dalou.jpg" />
     <Content Include="images\admin\images\Koala.jpg" />
     <Content Include="images\admin\_thumbs\Images\Koala.jpg" />
     <Content Include="images\cadmin\images\16054073%281%29.jpg" />
@@ -1822,6 +1829,19 @@
     <Content Include="images\_thumbs\Images\小骏枣.jpg" />
     <Content Include="images\_thumbs\Images\灰枣.jpg" />
     <Content Include="images\_thumbs\Images\骏枣.jpg" />
+    <Content Include="images\乔典\Desert.jpg" />
+    <Content Include="images\乔典\Hydrangeas.jpg" />
+    <Content Include="images\乔典\Jellyfish.jpg" />
+    <Content Include="images\乔典\Koala.jpg" />
+    <Content Include="images\乔典\Lighthouse.jpg" />
+    <Content Include="images\乔典\Penguins.jpg" />
+    <Content Include="images\工伤事故\Hydrangeas.jpg" />
+    <Content Include="images\工伤事故\Lighthouse.jpg" />
+    <Content Include="images\工伤事故\Penguins.jpg" />
+    <Content Include="images\工伤事故\psb.jpg" />
+    <Content Include="images\李云\20130906090727_95151.jpg" />
+    <Content Include="images\李云\20130910043915_57151.jpg" />
+    <Content Include="images\李云\img.png" />
     <Content Include="Scripts\autoComplete\jquery.autocomplete.css" />
     <Content Include="Scripts\autoComplete\jquery.autocomplete.js" />
     <Content Include="Scripts\autoComplete\jquery.js" />
@@ -2166,12 +2186,19 @@
     <Content Include="Views\ManageOrg_UsageAttribute\Update.cshtml" />
     <Content Include="Views\ManageOrg_Flow\Cycle.cshtml" />
     <Content Include="Views\ManageOrg_Flow\CycleCondition.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\RegisterResult.cshtml" />
+    <Content Include="Views\RegisterCheck\Delete.cshtml" />
+    <Content Include="Views\RegisterCheck\Details.cshtml" />
+    <Content Include="Views\RegisterCheck\Index.cshtml" />
+    <Content Include="Views\RegisterCheck\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ckfinder\jigou\" />
     <Folder Include="errorLog\" />
     <Folder Include="images\7\2014\10\10\" />
+    <Folder Include="images\adminss\images\" />
     <Folder Include="images\files\" />
     <Folder Include="images\flash\" />
     <Folder Include="txt\" />

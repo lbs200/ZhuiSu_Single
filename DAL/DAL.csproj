@@ -104,6 +104,7 @@
     <Compile Include="Org_UsageInfo.cs" />
     <Compile Include="Org_UsageType.cs" />
     <Compile Include="PublicRegistCommon.cs" />
+    <Compile Include="RegisterCheck.cs" />
     <Compile Include="RuKu_PaiMa.cs" />
     <Compile Include="View_User.cs" />
     <Compile Include="View_Org.cs" />

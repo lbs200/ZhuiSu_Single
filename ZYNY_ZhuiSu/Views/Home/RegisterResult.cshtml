@@ -1,0 +1,287 @@
+﻿@model LinqModel.RegisterCheck
+@using DAL;
+@{
+    ViewBag.Title = "注册结果页";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta charset="utf-8">
+    <title>农产品质量安全社会化追溯平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="农产品质量安全社会化追溯平台">
+    <meta name="keywords" content="">
+    <!-- Site CSS -->
+    <link href="~/Content/css/homeIndex/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/css/homeIndex/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/css/homeIndex/homeIndex.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/assets/js/html5shiv.min.js?v=801791b415"></script>
+      <script src="/assets/js/respond.min.js?v=801791b415"></script>
+    <![endif]-->
+    <!-- Favicons -->
+    <style type="text/css">
+        #table td{vertical-align:middle;border:1px solid gray;}
+        .addBold{font-weight:bold}
+    </style>
+    <script src="/ckeditor/ckeditor.js" type="text/javascript"></script>
+    <script src="/ckfinder/ckfinder.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+    <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+    <script src="/Content/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.validate.js" type="text/javascript"></script>
+    <script src="/Content/js/bootstrap.min.js" type="text/javascript"></script>
+    <!--[if lt IE 9]>
+
+    <script src="/Content/js/excanvas.min.js"></script>
+
+    <script src="/Content/js/respond.min.js"></script>
+
+    <![endif]-->
+    <script src="/Content/js/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery.blockui.min.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery.cookie.min.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery.uniform.min.js" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="/Content/js/app.js" type="text/javascript"></script>
+    <script src="/Content/js/index.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand hidden-sm" href="/">农产品质量安全社会化追溯平台</a>
+            </div>
+            <div class="navbar-collapse collapse" role="navigation">
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/Home/Login">登录</a></li>
+                    <li><a href="/Home/Register">注册</a></li>
+                    <li><a href="/Home/RegisterResult">查看审核结果</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container projects">
+        <div class="projects-header" style="width:100%;">
+
+           
+                <div class="form-horizontal">
+                    <div id="result" style="color:#f70e0e;font-size:20px;margin-top:3px;text-align:center;font-weight:bold;">@ViewData["err"]</div>
+                    @if (ViewBag.Register)
+                    {
+                        <h4>机构注册结果</h4>
+
+                        <hr />
+                        @:您已成功提交申请，请等待管理员审批！  <br /><br />
+                    }
+                    @if (ViewBag.Login)
+                    {
+                        <h4>用户登陆</h4>
+
+                        <hr />
+                        <form action="/Home/RegisterResult" method="post" id="form1">
+                            <div class="form-group">
+
+
+                                @Html.Label("用户名：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @placeholder = "请输入用户名" } })
+                                    <div style="color:#f70e0e;font-size:20px;margin-top:3px;text-align:center;font-weight:bold;"></div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+
+
+                                @Html.Label("密码：", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(model => model.UserPwd, new { @class = "form-control", @placeholder = "请输入密码" })
+
+                                    <div style="color:#f70e0e;font-size:20px;margin-top:3px;text-align:center;font-weight:bold;"></div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <div class="col-md-offset-1 col-md-10">
+                                    <input type="submit" value="查看审核结果" onclick="return CheckEntity();" class="btn btn-default" />
+                                </div>
+                            </div>
+                        </form>
+                    }
+                    @if (ViewBag.Result)
+                    {
+                        <h4>审核详细信息</h4>
+
+                        
+                        if (ViewBag.registerResult != null)
+                        {
+                            var regResult = ViewBag.registerResult as LinqModel.RegisterCheck;
+                            
+                            <table class="table" id="table">
+                                <tr>
+                                    <td class="col-md-3 addBold">机构名称：</td>
+                                    <td colspan="2">@regResult.OrgName</td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold">机构所在地：</td>
+                                    <td colspan="2">
+                                        @{ var address = new RegisterCheck().GetAdministrationRegion(regResult.Province, regResult.City, regResult.District);} 
+                                        @address &nbsp;@regResult.Address
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold">联系人信息：</td>
+                                    <td><span class="addBold">姓名：</span>@regResult.Contact </td>
+                                    <td><span class="addBold">电话：</span>@regResult.Tel</td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold" rowspan="4">机构信息：</td>
+                                    <td class="addBold">机构品牌：</td>
+                                    <td>@regResult.Brand</td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold">LOGO图片：</td>
+                                    <td>
+                                        <img src="@regResult.Cert" width="300" height="200" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold">
+                                        营业执照：
+                                    </td>
+                                    <td>
+                                        <img src="@regResult.BusiLice" width="300" height="200" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold">
+                                        机构代码证：
+                                    </td>
+                                    <td>
+                                        <img src="@regResult.OrgCodeCard" width="300" height="200" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold">公司邮箱：</td>
+                                    <td colspan="2">@regResult.Email</td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold">申请时间：</td>
+                                    <td colspan="2">@regResult.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                </tr>
+                                <tr>
+                                    <td class="addBold">审批状态：</td>
+                                    <td colspan="2">
+                                        @{
+                                            switch (@regResult.CheckStatus)
+                                              {
+                                                case 0:
+                                                    <span style="color:#f70e0e">未审核</span>
+                                                      break;
+                                                case 1:
+                                                    <span style="color:#73e42e">审核通过</span>
+                                                      break;
+                                                case 2:
+                                                    <span style="color:#e3f21c">审核中</span>
+                                                      break;
+                                                default:
+                                                    <span style="color:#f70e0e">审核失败</span>
+                                                      break;
+                                              }
+                                          }
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <form method="post" action="/Home/ExitRegister">
+                                <input type="submit" class="btn btn-default" name="exit" value="安全退出此页" />
+                                <a href="/Home/Index" class="btn btn-default">返回首页</a>
+                            </form>
+
+
+                        }
+                    }
+                </div>
+            <br />
+            
+            <h3 style="color:#73e42e">小提示：审核通过后，点击右上角的登陆按钮，进入后台。</h3>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div><!-- /.container -->
+
+
+    <footer class="footer ">
+        <div class="container">
+            <div class="row footer-bottom">
+                <ul class="list-inline text-center">
+                    <li><a href="http://www.miibeian.gov.cn/" target="_blank">鲁ICP备11000253号-1</a></li>
+                    @*<li>京公网安备</li>*@
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/Content/css/homeIndex/jquery.min.js"></script>
+    <script src="/Content/css/homeIndex/bootstrap.min.js"></script>
+    <script src="/Content/css/homeIndex/jquery.unveil.min.js"></script>
+    <script src="/Content/css/homeIndex/jquery.scrollUp.min.js"></script>
+    <script src="/Content/css/homeIndex/toc.min.js"></script>
+    <script src="/Content/css/homeIndex/site.min.js"></script>
+    
+
+</body>
+</html>
+<script>
+    var i = 3;
+    var result = $("#result").html();
+    if (result != "") {
+        var time = window.setInterval(function () {
+            $("#result").html(result + "（ " + i + " 秒后自动关闭）");
+            if (i == 0) {
+                $("#result").html("");
+                window.clearInterval(time);
+            }
+            i--;
+        }, 1000);
+    }
+</script>

@@ -422,5 +422,11 @@
         <elementListCompartment Id="2903c970-92cb-4bb7-8fdf-977b8d225e34" absoluteBounds="0.76499999999999968, 7.085, 1.9700000000000002, 3.494801839192708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="80fb78bf-ae9a-445a-bf1a-443ed19a56da" isExpanded="false" absoluteBounds="7.25, 1.125, 2, 0.45">
+      <DataClassMoniker Name="/DataClassesZYZSDataContext/RegisterCheck" />
+      <nestedChildShapes>
+        <elementListCompartment Id="586daf67-20a6-4c81-ba5b-47144d3b3456" absoluteBounds="7.265, 1.585, 1.9700000000000002, 4.640920003255208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

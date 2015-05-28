@@ -174,6 +174,9 @@ namespace LinqModel
     partial void InsertOrganization(Organization instance);
     partial void UpdateOrganization(Organization instance);
     partial void DeleteOrganization(Organization instance);
+    partial void InsertRegisterCheck(RegisterCheck instance);
+    partial void UpdateRegisterCheck(RegisterCheck instance);
+    partial void DeleteRegisterCheck(RegisterCheck instance);
     #endregion
 		
 		public DataClassesZYZSDataContext() : 
@@ -763,6 +766,14 @@ namespace LinqModel
 			get
 			{
 				return this.GetTable<Organization>();
+			}
+		}
+		
+		public System.Data.Linq.Table<RegisterCheck> RegisterCheck
+		{
+			get
+			{
+				return this.GetTable<RegisterCheck>();
 			}
 		}
 	}
@@ -13930,6 +13941,596 @@ namespace LinqModel
 					this._HangYeID = value;
 					this.SendPropertyChanged("HangYeID");
 					this.OnHangYeIDChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RegisterCheck")]
+	public partial class RegisterCheck : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _OrgName;
+		
+		private string _Province;
+		
+		private string _City;
+		
+		private string _District;
+		
+		private string _Address;
+		
+		private string _Contact;
+		
+		private string _Tel;
+		
+		private string _Email;
+		
+		private string _Org_URL;
+		
+		private int _Sup_Org;
+		
+		private string _Intro;
+		
+		private string _Brand;
+		
+		private string _Cert;
+		
+		private string _BusiLice;
+		
+		private string _OrgCodeCard;
+		
+		private string _Org_Code;
+		
+		private string _EWMUrl;
+		
+		private int _HangYeID;
+		
+		private string _UserName;
+		
+		private string _UserPwd;
+		
+		private System.DateTime _CreateTime;
+		
+		private int _CheckStatus;
+		
+    #region 可扩展性方法定义
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnOrgNameChanging(string value);
+    partial void OnOrgNameChanged();
+    partial void OnProvinceChanging(string value);
+    partial void OnProvinceChanged();
+    partial void OnCityChanging(string value);
+    partial void OnCityChanged();
+    partial void OnDistrictChanging(string value);
+    partial void OnDistrictChanged();
+    partial void OnAddressChanging(string value);
+    partial void OnAddressChanged();
+    partial void OnContactChanging(string value);
+    partial void OnContactChanged();
+    partial void OnTelChanging(string value);
+    partial void OnTelChanged();
+    partial void OnEmailChanging(string value);
+    partial void OnEmailChanged();
+    partial void OnOrg_URLChanging(string value);
+    partial void OnOrg_URLChanged();
+    partial void OnSup_OrgChanging(int value);
+    partial void OnSup_OrgChanged();
+    partial void OnIntroChanging(string value);
+    partial void OnIntroChanged();
+    partial void OnBrandChanging(string value);
+    partial void OnBrandChanged();
+    partial void OnCertChanging(string value);
+    partial void OnCertChanged();
+    partial void OnBusiLiceChanging(string value);
+    partial void OnBusiLiceChanged();
+    partial void OnOrgCodeCardChanging(string value);
+    partial void OnOrgCodeCardChanged();
+    partial void OnOrg_CodeChanging(string value);
+    partial void OnOrg_CodeChanged();
+    partial void OnEWMUrlChanging(string value);
+    partial void OnEWMUrlChanged();
+    partial void OnHangYeIDChanging(int value);
+    partial void OnHangYeIDChanged();
+    partial void OnUserNameChanging(string value);
+    partial void OnUserNameChanged();
+    partial void OnUserPwdChanging(string value);
+    partial void OnUserPwdChanged();
+    partial void OnCreateTimeChanging(System.DateTime value);
+    partial void OnCreateTimeChanged();
+    partial void OnCheckStatusChanging(int value);
+    partial void OnCheckStatusChanged();
+    #endregion
+		
+		public RegisterCheck()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgName", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string OrgName
+		{
+			get
+			{
+				return this._OrgName;
+			}
+			set
+			{
+				if ((this._OrgName != value))
+				{
+					this.OnOrgNameChanging(value);
+					this.SendPropertyChanging();
+					this._OrgName = value;
+					this.SendPropertyChanged("OrgName");
+					this.OnOrgNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Province", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Province
+		{
+			get
+			{
+				return this._Province;
+			}
+			set
+			{
+				if ((this._Province != value))
+				{
+					this.OnProvinceChanging(value);
+					this.SendPropertyChanging();
+					this._Province = value;
+					this.SendPropertyChanged("Province");
+					this.OnProvinceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_City", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string City
+		{
+			get
+			{
+				return this._City;
+			}
+			set
+			{
+				if ((this._City != value))
+				{
+					this.OnCityChanging(value);
+					this.SendPropertyChanging();
+					this._City = value;
+					this.SendPropertyChanged("City");
+					this.OnCityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_District", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string District
+		{
+			get
+			{
+				return this._District;
+			}
+			set
+			{
+				if ((this._District != value))
+				{
+					this.OnDistrictChanging(value);
+					this.SendPropertyChanging();
+					this._District = value;
+					this.SendPropertyChanged("District");
+					this.OnDistrictChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(300) NOT NULL", CanBeNull=false)]
+		public string Address
+		{
+			get
+			{
+				return this._Address;
+			}
+			set
+			{
+				if ((this._Address != value))
+				{
+					this.OnAddressChanging(value);
+					this.SendPropertyChanging();
+					this._Address = value;
+					this.SendPropertyChanged("Address");
+					this.OnAddressChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Contact", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Contact
+		{
+			get
+			{
+				return this._Contact;
+			}
+			set
+			{
+				if ((this._Contact != value))
+				{
+					this.OnContactChanging(value);
+					this.SendPropertyChanging();
+					this._Contact = value;
+					this.SendPropertyChanged("Contact");
+					this.OnContactChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tel", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Tel
+		{
+			get
+			{
+				return this._Tel;
+			}
+			set
+			{
+				if ((this._Tel != value))
+				{
+					this.OnTelChanging(value);
+					this.SendPropertyChanging();
+					this._Tel = value;
+					this.SendPropertyChanged("Tel");
+					this.OnTelChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				if ((this._Email != value))
+				{
+					this.OnEmailChanging(value);
+					this.SendPropertyChanging();
+					this._Email = value;
+					this.SendPropertyChanged("Email");
+					this.OnEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Org_URL", DbType="NVarChar(300)")]
+		public string Org_URL
+		{
+			get
+			{
+				return this._Org_URL;
+			}
+			set
+			{
+				if ((this._Org_URL != value))
+				{
+					this.OnOrg_URLChanging(value);
+					this.SendPropertyChanging();
+					this._Org_URL = value;
+					this.SendPropertyChanged("Org_URL");
+					this.OnOrg_URLChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sup_Org", DbType="Int NOT NULL")]
+		public int Sup_Org
+		{
+			get
+			{
+				return this._Sup_Org;
+			}
+			set
+			{
+				if ((this._Sup_Org != value))
+				{
+					this.OnSup_OrgChanging(value);
+					this.SendPropertyChanging();
+					this._Sup_Org = value;
+					this.SendPropertyChanged("Sup_Org");
+					this.OnSup_OrgChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Intro", DbType="NVarChar(MAX)")]
+		public string Intro
+		{
+			get
+			{
+				return this._Intro;
+			}
+			set
+			{
+				if ((this._Intro != value))
+				{
+					this.OnIntroChanging(value);
+					this.SendPropertyChanging();
+					this._Intro = value;
+					this.SendPropertyChanged("Intro");
+					this.OnIntroChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Brand", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Brand
+		{
+			get
+			{
+				return this._Brand;
+			}
+			set
+			{
+				if ((this._Brand != value))
+				{
+					this.OnBrandChanging(value);
+					this.SendPropertyChanging();
+					this._Brand = value;
+					this.SendPropertyChanged("Brand");
+					this.OnBrandChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Cert", DbType="NVarChar(300) NOT NULL", CanBeNull=false)]
+		public string Cert
+		{
+			get
+			{
+				return this._Cert;
+			}
+			set
+			{
+				if ((this._Cert != value))
+				{
+					this.OnCertChanging(value);
+					this.SendPropertyChanging();
+					this._Cert = value;
+					this.SendPropertyChanged("Cert");
+					this.OnCertChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BusiLice", DbType="NVarChar(300) NOT NULL", CanBeNull=false)]
+		public string BusiLice
+		{
+			get
+			{
+				return this._BusiLice;
+			}
+			set
+			{
+				if ((this._BusiLice != value))
+				{
+					this.OnBusiLiceChanging(value);
+					this.SendPropertyChanging();
+					this._BusiLice = value;
+					this.SendPropertyChanged("BusiLice");
+					this.OnBusiLiceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgCodeCard", DbType="NVarChar(300) NOT NULL", CanBeNull=false)]
+		public string OrgCodeCard
+		{
+			get
+			{
+				return this._OrgCodeCard;
+			}
+			set
+			{
+				if ((this._OrgCodeCard != value))
+				{
+					this.OnOrgCodeCardChanging(value);
+					this.SendPropertyChanging();
+					this._OrgCodeCard = value;
+					this.SendPropertyChanged("OrgCodeCard");
+					this.OnOrgCodeCardChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Org_Code", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Org_Code
+		{
+			get
+			{
+				return this._Org_Code;
+			}
+			set
+			{
+				if ((this._Org_Code != value))
+				{
+					this.OnOrg_CodeChanging(value);
+					this.SendPropertyChanging();
+					this._Org_Code = value;
+					this.SendPropertyChanged("Org_Code");
+					this.OnOrg_CodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EWMUrl", DbType="NVarChar(300)")]
+		public string EWMUrl
+		{
+			get
+			{
+				return this._EWMUrl;
+			}
+			set
+			{
+				if ((this._EWMUrl != value))
+				{
+					this.OnEWMUrlChanging(value);
+					this.SendPropertyChanging();
+					this._EWMUrl = value;
+					this.SendPropertyChanged("EWMUrl");
+					this.OnEWMUrlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HangYeID", DbType="Int NOT NULL")]
+		public int HangYeID
+		{
+			get
+			{
+				return this._HangYeID;
+			}
+			set
+			{
+				if ((this._HangYeID != value))
+				{
+					this.OnHangYeIDChanging(value);
+					this.SendPropertyChanging();
+					this._HangYeID = value;
+					this.SendPropertyChanged("HangYeID");
+					this.OnHangYeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this.OnUserNameChanging(value);
+					this.SendPropertyChanging();
+					this._UserName = value;
+					this.SendPropertyChanged("UserName");
+					this.OnUserNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserPwd", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string UserPwd
+		{
+			get
+			{
+				return this._UserPwd;
+			}
+			set
+			{
+				if ((this._UserPwd != value))
+				{
+					this.OnUserPwdChanging(value);
+					this.SendPropertyChanging();
+					this._UserPwd = value;
+					this.SendPropertyChanged("UserPwd");
+					this.OnUserPwdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateTime", DbType="DateTime NOT NULL")]
+		public System.DateTime CreateTime
+		{
+			get
+			{
+				return this._CreateTime;
+			}
+			set
+			{
+				if ((this._CreateTime != value))
+				{
+					this.OnCreateTimeChanging(value);
+					this.SendPropertyChanging();
+					this._CreateTime = value;
+					this.SendPropertyChanged("CreateTime");
+					this.OnCreateTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CheckStatus", DbType="Int NOT NULL")]
+		public int CheckStatus
+		{
+			get
+			{
+				return this._CheckStatus;
+			}
+			set
+			{
+				if ((this._CheckStatus != value))
+				{
+					this.OnCheckStatusChanging(value);
+					this.SendPropertyChanging();
+					this._CheckStatus = value;
+					this.SendPropertyChanged("CheckStatus");
+					this.OnCheckStatusChanged();
 				}
 			}
 		}
