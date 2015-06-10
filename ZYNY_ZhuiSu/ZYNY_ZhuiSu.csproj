@@ -237,6 +237,7 @@
     <Compile Include="Controllers\Prod_categoryController.cs" />
     <Compile Include="Controllers\PublicController.cs" />
     <Compile Include="Controllers\RegisterCheckController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\S_TreeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2192,6 +2193,14 @@
     <Content Include="Views\RegisterCheck\Details.cshtml" />
     <Content Include="Views\RegisterCheck\Index.cshtml" />
     <Content Include="Views\RegisterCheck\Update.cshtml" />
+    <Content Include="Views\Shared\_LayoutPageResgister.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\Register\Head.cshtml" />
+    <Content Include="Views\Register\Left.cshtml" />
+    <Content Include="Views\Register\Navigate.cshtml" />
+    <Content Include="Views\Register\Result.cshtml" />
+    <Content Include="Views\Register\Register.cshtml" />
+    <Content Include="Views\Register\RegisterResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

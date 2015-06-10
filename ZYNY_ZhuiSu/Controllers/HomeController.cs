@@ -105,6 +105,13 @@ namespace ZYNY_ZhuiSu.Controllers
                     case 2:
                         return RedirectToAction("Login", "Home", new { id = result, username = login.username, password = login.password });
                     default:
+                        LinqModel.RegisterCheck model = null;
+                        if (new DAL.RegisterCheck().CheckUser(login.username, login.password, out model))
+                        {
+                            //通过验证
+                            Session.Add("regModel", model);
+                            return RedirectToAction("RegisterResult","Register");
+                        }
                         return RedirectToAction("Login", "Home", new { id = result, username = login.username, password = login.password });
                 }
             }
@@ -204,6 +211,9 @@ namespace ZYNY_ZhuiSu.Controllers
             //ViewBag.ZIP = Convert.ToInt32(new DAL.Organization().GetMaxID()) + 1;
             return View();
         }
+
+        
+
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Register(LinqModel.RegisterCheck model)
@@ -235,33 +245,42 @@ namespace ZYNY_ZhuiSu.Controllers
                     else
                     {
 
-                        cert.SaveAs(filePhysicalPath + cert.FileName);
-                        model.Cert = "/images/" + model.UserName + "/" + cert.FileName; ;
-
-                        busiLice.SaveAs(filePhysicalPath + busiLice.FileName);
-                        model.BusiLice = "/images/" + model.UserName + "/" + busiLice.FileName;
-
-                        orgCodeCard.SaveAs(filePhysicalPath + orgCodeCard.FileName);
-                        model.OrgCodeCard = "/images/" + model.UserName + "/" + orgCodeCard.FileName;
-
-                        try
+                        if (new DAL.RegisterCheck().CheckImgFormat(cert.FileName) && new DAL.RegisterCheck().CheckImgFormat(busiLice.FileName) && new DAL.RegisterCheck().CheckImgFormat(orgCodeCard.FileName))
                         {
-                            model.HangYeID = new DAL.RegisterCheck().GetHangYeId(Request.Form["Category"]);
-                            model.Sup_Org = 0;
-                            model.CreateTime = DateTime.Now;
-                            model.CheckStatus = 0;
-                            var ret = new DAL.RegisterCheck().Add(model);
-                            if (ret.IsSuccess)
+                            cert.SaveAs(filePhysicalPath + cert.FileName);
+                            model.Cert = "/images/" + model.UserName + "/" + cert.FileName; ;
+
+                            busiLice.SaveAs(filePhysicalPath + busiLice.FileName);
+                            model.BusiLice = "/images/" + model.UserName + "/" + busiLice.FileName;
+
+                            orgCodeCard.SaveAs(filePhysicalPath + orgCodeCard.FileName);
+                            model.OrgCodeCard = "/images/" + model.UserName + "/" + orgCodeCard.FileName;
+
+                            try
                             {
-                                Session.Add("regUserId", model);
-                                Session.Add("isRegister", true);
-                                return RedirectToAction("RegisterResult", "Home");
+                                model.HangYeID = new DAL.RegisterCheck().GetHangYeId(Request.Form["Category"]);
+                                model.Sup_Org = 0;
+                                model.CreateTime = DateTime.Now;
+                                model.CheckStatus = 0;
+                                var ret = new DAL.RegisterCheck().Add(model);
+                                if (ret.IsSuccess)
+                                {
+                                    Session.Add("regUserId", model);
+                                    Session.Add("isRegister", true);
+                                    return RedirectToAction("RegisterResult", "Home");
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                ViewData["result"] = "申请失败！请尝试重新操作！";
                             }
                         }
-                        catch (Exception)
+                        else
                         {
-                            ViewData["result"] = "申请失败！请尝试重新操作！";
+                           ViewData["result"] = "你上传格式不正确，正确格式:.jpg、.png、.bmp、.gif";
                         }
+
+                        
                     }
 
 

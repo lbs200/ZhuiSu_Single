@@ -9,8 +9,22 @@ namespace DAL
 {
     public class RegisterCheck : DALBase
     {
-        
-        
+        /// <summary>
+        /// 检查图片格式
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckImgFormat(string fileName)
+        {
+            var Imageformat = (fileName.Substring(fileName.LastIndexOf("."))).ToLower();
+            if (Imageformat == ".jpg" || Imageformat == ".bmp" || Imageformat == ".png" || Imageformat == ".gif")//限制图片格式
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         
         public List<LinqModel.RegisterCheck> GetAll()
         {

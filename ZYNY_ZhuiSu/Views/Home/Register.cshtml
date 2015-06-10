@@ -31,7 +31,6 @@
     <script src="/Content/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
     <script src="/Content/js/jquery.validate.min.js" type="text/javascript"></script>
     <script src="/Scripts/jquery.validate.js" type="text/javascript"></script>
-    <script src="/Content/js/bootstrap.min.js" type="text/javascript"></script>
     <!--[if lt IE 9]>
 
     <script src="/Content/js/excanvas.min.js"></script>
@@ -250,6 +249,7 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="file" id="Cert" name="Cert" class="btn btn-file" />
+                                <div style="font-size:20px;margin-top:3px;text-align:center;font-weight:bold;"></div>
                                @* <input type="text" readonly="readonly" class="m-wrap small form-control" id="Cert" name="Cert" value="" />*@
                             </div>
                             <div class="col-md-4">
@@ -275,7 +275,7 @@
                             <div class="col-md-8">
                                
                                 <input type="file" id="BusiLice" name="BusiLice" class="btn btn-file" />
-                               
+                                <div style="font-size:20px;margin-top:3px;text-align:center;font-weight:bold;"></div>
                                 
                             </div>
                             <div class="col-md-4">
@@ -297,6 +297,7 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="file" id="OrgCodeCard" name="OrgCodeCard" class="btn btn-file" />
+                                <div style="font-size:20px;margin-top:3px;text-align:center;font-weight:bold;"></div>
                                @* <input type="text" readonly="readonly" class="m-wrap small form-control" id="OrgCodeCard" name="OrgCodeCard" value="" />*@
                             </div>
                             <div class="col-md-4">
@@ -514,7 +515,12 @@
         } else if ($("#Cert").val() == "") {
             $("#Cert").next("div").css("color","#f70e0e").html("请上传LOGO图片！");
             return false;
-        } else if ($("#BusiLice").val() == "") {
+        }
+        //else if ($("#Cert").val().IndexOf(".jpg", 0) > 0) {
+        //    $("#Cert").next("div").css("color", "#f70e0e").html("只支持.jpg格式的图片！");
+        //    return false;
+        //}
+        else if ($("#BusiLice").val() == "") {
             $("#BusiLice").next("div").css("color","#f70e0e").html("请上传营业执照照片！");
             return false;
         } else if ($("#OrgCodeCard").val() == "") {

@@ -202,7 +202,7 @@
 
                     </label>
                     <label class="radio ">
-                        <input type="radio" id="rdo_3" name="CheckStatus" value="3" />审核失败
+                        <input type="radio" id="rdo_3" name="CheckStatus" value="3" />审核不通过
 
                     </label>
 
@@ -214,7 +214,9 @@
     
 
         <div class="form-actions no-color">
-            <input type="button" id="btnCheck" value="审核" class="btn btn-default" /> | <input type="submit" value="审核并更新到系统" class="btn btn-default" /> | @Html.ActionLink("返回列表", "Index")
+            <input type="button" id="btnCheck" value="保存" class="btn btn-default" /> &nbsp;&nbsp; <input type="submit" value="保存并更新到系统" class="btn btn-default" /> 
+            <br />
+             @Html.ActionLink("返回列表", "Index")
         </div>
     }
     

@@ -1,0 +1,99 @@
+﻿@model LinqModel.RegisterCheck
+@using DAL;
+@{
+    Layout = "~/Views/Shared/_LayoutPageResgister.cshtml";
+}
+
+@if (ViewBag.Result)
+{
+    <h4>审核详细信息</h4>
+
+
+    if (ViewBag.registerResult != null)
+    {
+        var regResult = ViewBag.registerResult as LinqModel.RegisterCheck;
+
+        <table class="table" id="table">
+            <tr>
+                <td class="col-md-3 addBold">机构名称：</td>
+                <td colspan="2">@regResult.OrgName</td>
+            </tr>
+            <tr>
+                <td class="addBold">机构所在地：</td>
+                <td colspan="2">
+                    @{ var address = new RegisterCheck().GetAdministrationRegion(regResult.Province, regResult.City, regResult.District);}
+                    @address &nbsp;@regResult.Address
+                </td>
+            </tr>
+            <tr>
+                <td class="addBold">联系人信息：</td>
+                <td><span class="addBold">姓名：</span>@regResult.Contact </td>
+                <td><span class="addBold">电话：</span>@regResult.Tel</td>
+            </tr>
+            <tr>
+                <td class="addBold" rowspan="4">机构信息：</td>
+                <td class="addBold">机构品牌：</td>
+                <td>@regResult.Brand</td>
+            </tr>
+            <tr>
+                <td class="addBold">LOGO图片：</td>
+                <td>
+                    <img src="@regResult.Cert" width="300" height="200" />
+                </td>
+            </tr>
+            <tr>
+                <td class="addBold">
+                    营业执照：
+                </td>
+                <td>
+                    <img src="@regResult.BusiLice" width="300" height="200" />
+                </td>
+            </tr>
+            <tr>
+                <td class="addBold">
+                    机构代码证：
+                </td>
+                <td>
+                    <img src="@regResult.OrgCodeCard" width="300" height="200" />
+                </td>
+            </tr>
+            <tr>
+                <td class="addBold">公司邮箱：</td>
+                <td colspan="2">@regResult.Email</td>
+            </tr>
+            <tr>
+                <td class="addBold">申请时间：</td>
+                <td colspan="2">@regResult.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+            </tr>
+            <tr>
+                <td class="addBold">审批状态：</td>
+                <td colspan="2">
+                    @{
+        switch (@regResult.CheckStatus)
+        {
+            case 0:
+                <span style="color:#f70e0e">未审核</span>
+                break;
+            case 1:
+            <span style="color:#73e42e">审核通过</span>
+                break;
+            case 2:
+            <span style="color:#e3f21c">审核中</span>
+                break;
+            default:
+            <span style="color:#f70e0e">审核不通过</span>
+                break;
+        }
+                    }
+                </td>
+            </tr>
+        </table>
+
+        @*<form method="post" action="/Home/ExitRegister">
+            <input type="submit" class="btn btn-default" name="exit" value="安全退出此页" />
+            <a href="/Home/Index" class="btn btn-default">返回首页</a>
+        </form>*@
+    <a href="/Home/Index" class="btn btn-default">返回首页</a>
+
+    }
+}

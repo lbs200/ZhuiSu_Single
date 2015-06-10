@@ -9,6 +9,7 @@ namespace ZYNY_ZhuiSu.Controllers
 {
     public class RegisterCheckController : BaseController
     {
+
         public ActionResult Index(int? page)
         {
             string txtSearch = Request["txtSearch"];
@@ -64,11 +65,7 @@ namespace ZYNY_ZhuiSu.Controllers
             
             return Content("操作失败！");
         }
-        public bool CopyUpdate(int id)
-        {
-            var ret = new DAL.RegisterCheck().CopyToUserAndOrg(id);
-            return false;
-        }
+        
 
         [HttpPost]
         public ActionResult Update()
