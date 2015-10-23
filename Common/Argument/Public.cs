@@ -207,7 +207,7 @@ namespace Common.Argument
                         sb.Append("<div class=\"controls\">");
                         sb.Append("<input title=\"" + dataType + "\"  type=\"hidden\" class=\"m-wrap\" id=\"" + id + "\" name=\"" + id + "\" value=\"\" /><br> ");
                         sb.Append("<input type=\"button\" value=\"选择\" onclick=\"BrowseServer('" + id + "');\" /><input type=\"button\" value=\"选择后预览\" onclick=\"Yulan('" + id + "');\" /><br/>");
-                        sb.Append("<img id=\"stuPic\" width=\"300\" height=\"200\"  style=\"display:none;\" />");
+                        sb.Append("<img id=\"stuPic" + id + "\" width=\"300\" height=\"200\"  style=\"display:none;\" />");
                         sb.Append("</div></div>");
 
                         #endregion

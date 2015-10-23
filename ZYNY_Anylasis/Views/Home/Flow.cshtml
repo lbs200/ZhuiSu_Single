@@ -1,4 +1,5 @@
 ﻿@model List<LinqModel.Trace_Info_Pics_New>
+
 @{
     Layout = null;
 }
@@ -27,7 +28,7 @@
 
                         <div>
                             <div>
-                                @{
+                                @*@{
             if (!string.IsNullOrEmpty(m.Pic_Path))
             {
                 for (int i = 0; i < m.Pic_Path.Split('$').Count(); i++)
@@ -53,14 +54,14 @@
 
                 }
             }
-                                }
+                                }*@
 
                                 <p style="clear:both; ">
                                     <table>
                                         @{
-            if (m.Trace_Info_Value.Descendants("info").Count() > 0)
+            if (m.Trace_Info_Value!=null)
             {
-                foreach (var mt in m.Trace_Info_Value.Descendants("info"))
+                foreach (var mt in m.Trace_Info_Value.Descendants().Where(xxx=>xxx.Name=="info"|| xxx.Name=="img"))
                 {
                     try
                     {
@@ -71,6 +72,15 @@
                                 <tr>
                                     <th style="text-align:left; width:95px;">@mt.Attribute("InfoName").Value ：</th>
                                     <td style="text-align:left;"><a href="@mt.Attribute("InfoValue").Value.Split('|')[1]" target="_blank">@mt.Attribute("InfoValue").Value.Split('|')[0]</a> </td>
+                                </tr>
+                            }
+                            else if (mt.Attribute("Type").Value == "图片")
+                            {
+                                <tr>
+                                    <th style="text-align:left; width:95px;">@mt.Attribute("InfoName").Value ：</th>
+                                    <td style="text-align:left;">
+                                        <img style="width:98%;" src="@System.Configuration.ConfigurationManager.AppSettings["urlImg"]@mt.Attribute("InfoValue").Value" alt="">
+                                    </td>
                                 </tr>
                             }
                             else
@@ -85,7 +95,9 @@
                     catch { }
                 }
             }
-                                        }
+
+            
+}
                                     </table>
                                 </p>
                             </div> <!-- /.product-item -->

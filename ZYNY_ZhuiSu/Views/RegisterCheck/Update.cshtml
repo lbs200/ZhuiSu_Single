@@ -214,7 +214,9 @@
     
 
         <div class="form-actions no-color">
-            <input type="button" id="btnCheck" value="保存" class="btn btn-default" /> &nbsp;&nbsp; <input type="submit" value="保存并更新到系统" class="btn btn-default" /> 
+            @*<input type="button" id="btnCheck" value="保存" class="btn btn-default" /> &nbsp;&nbsp;
+    <input type="submit" value="保存并更新到系统" class="btn btn-default" /> *@ 
+            <input type="submit" value="确定" onclick="return Confirm();" class="btn btn-default" />
             <br />
              @Html.ActionLink("返回列表", "Index")
         </div>
@@ -222,7 +224,21 @@
     
 </div>
 <script>
+
+    function Confirm() {
+        if ($("#rdo_1").attr("checked") == "checked") {
+            if (!window.confirm("确定要通过该用户的审核申请吗？")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     $(function () {
+
+        
+
+
         var num = $("#CheckStatus").val();
         $("#rdo_" + num).attr("checked", "checked");
 

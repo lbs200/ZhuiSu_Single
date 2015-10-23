@@ -79,11 +79,17 @@ namespace ZYNY_ZhuiSu.Controllers
                     var ret = new DAL.RegisterCheck().UpdateStatusById(id, checkStatus);
                     if (ret.IsSuccess && checkStatus == 1)
                     {
-                        ret = new DAL.RegisterCheck().CopyToUserAndOrg(id);
-                        if (ret.IsSuccess)
-                        {
-                            return RedirectToAction("Index");
-                        }
+                        var registerCheckModel = new DAL.RegisterCheck().GetModel(id);
+                        //核实数据库中是否存在名称相同的企业和用户名相同的用户
+                        if (!new DAL.Organization().Exist(registerCheckModel.OrgName) && !new DAL.User().Exist(registerCheckModel.UserName))
+	                    {
+                            ret = new DAL.RegisterCheck().CopyToUserAndOrg(id);
+                            if (ret.IsSuccess)
+                            {
+                                return RedirectToAction("Index");
+                            }
+	                    }
+                        
                     }
                     
                 }

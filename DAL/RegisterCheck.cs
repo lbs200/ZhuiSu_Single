@@ -209,6 +209,8 @@ namespace DAL
                     };
                     dc.Organization.InsertOnSubmit(orgModel);
                     dc.SubmitChanges();
+                    //修改企业的编码表，增加官网地址
+                    new DAL.Organization().UpdateID(orgModel);
                     var user = new LinqModel.User()
                     {
                         UserName = model.UserName,

@@ -34,7 +34,7 @@
                     }
                 </select>
                 @*<input class="m-wrap small" type="text" id="txtSearch" name="txtSearch" value="@ViewBag.txtSearch">*@<input class="btn green" type="submit" value="查询" />
-                <a href="/ManageOrg_Flow/Cycle?orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent" class="btn blue">设置循环节点</a>
+                @*<a href="/ManageOrg_Flow/Cycle?orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent" class="btn blue">设置循环节点</a>*@
             </div>
         </form>
         <div>
@@ -53,7 +53,7 @@
                     @{
                         if (ViewBag.hidden != null && !ViewBag.hidden)
                         {
-                            <a href="/ManageOrg_Flow/Add?orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent" class="btn blue"><i class="icon-pencil"></i> 新增追溯流程</a>
+                            @*<a href="/ManageOrg_Flow/Add?orgID=@ViewBag.orgID&prodID=@ViewBag.prodsCurrent" class="btn blue"><i class="icon-pencil"></i> 新增追溯流程</a>*@
                         }
                     }
 

@@ -73,7 +73,7 @@
                     @{
                         if ((int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 5 || (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 2 || (int)((Common.Argument.LoginInfo)Session[System.Configuration.ConfigurationManager.AppSettings["LoginSession"]]).user.Role_ID == 1)//系统管理员、实施人员
                         {
-                            @*<a href="/ManageUsers/Create" class="btn blue"><i class="icon-pencil"></i> 新增用户</a>*@
+                            <a href="/ManageUsers/Create" class="btn blue"><i class="icon-pencil"></i> 新增用户</a>
                         }
                     }
                   

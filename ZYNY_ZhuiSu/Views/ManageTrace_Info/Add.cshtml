@@ -219,8 +219,8 @@
             alert("请先点击左边按钮选择图片！");
         }
         else {
-            $("#stuPic").attr("src", $("#" + inputId).val());
-            document.getElementById("stuPic").style.display = "";
+            $("#stuPic" + inputId).attr("src", $("#" + inputId).val());
+            document.getElementById("stuPic" + inputId).style.display = "";
         }
     }
     function SetFileField(fileUrl, data) {

@@ -364,7 +364,7 @@ namespace DAL
         {
             using (LinqModel.DataClassesZYZSDataContext dc = GetDataContext())
             {
-                if (dc.Organization.Where(m => m.Name == name) != null)
+                if (dc.Organization.FirstOrDefault(m => m.Name == name) != null)
                 {
                     return true;
                 }

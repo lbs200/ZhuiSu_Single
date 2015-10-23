@@ -64,15 +64,18 @@ namespace DAL
                                 #region 添加企业流程信息元
                                 for (int j = 0; j < listInfo.Count; j++)
                                 {
-                                    listInfo[j].Org_Flow_ID = listFlow[i].Org_Flow_ID;
-                                    var modelTempInfo = new LinqModel.Org_Info();
-                                    modelTempInfo.Data_Type_Value = listInfo[j].Data_Type_Value;
-                                    modelTempInfo.Info_ID = listInfo[j].Info_ID;
-                                    modelTempInfo.Org_Flow_ID = modelTempFlow.Org_Flow_ID;
-                                    modelTempInfo.Public = listInfo[j].Public;
-                                    modelTempInfo.Required = listInfo[j].Required;
-                                    modelTempInfo.Search_Point = listInfo[j].Search_Point;
-                                    listInsert.Add(modelTempInfo);
+                                    if (listInfo[j].Info_ID == 1)
+                                    {
+                                        listInfo[j].Org_Flow_ID = listFlow[i].Org_Flow_ID;
+                                        var modelTempInfo = new LinqModel.Org_Info();
+                                        modelTempInfo.Data_Type_Value = listInfo[j].Data_Type_Value;
+                                        modelTempInfo.Info_ID = listInfo[j].Info_ID;
+                                        modelTempInfo.Org_Flow_ID = modelTempFlow.Org_Flow_ID;
+                                        modelTempInfo.Public = listInfo[j].Public;
+                                        modelTempInfo.Required = listInfo[j].Required;
+                                        modelTempInfo.Search_Point = listInfo[j].Search_Point;
+                                        listInsert.Add(modelTempInfo);
+                                    }
                                 }
                                 if (listInsert.Count > 0)
                                 {
